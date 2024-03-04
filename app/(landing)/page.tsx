@@ -8,6 +8,7 @@ import Report from "@/app/(landing)/report";
 import Pointbar from "@/app/(landing)/pointbar";
 import WheelOfLuck from "@/app/(landing)/wheelOfLuck";
 import SpecialOffers from "@/app/(landing)/specialOffers";
+import Footer from "@/app/(landing)/footer";
 
 function AbsoluteBackground() {
   return (
@@ -38,6 +39,7 @@ const Page = () => {
         <Report />
         <SpecialOffers />
       </main>
+      <Footer />
     </>
   );
 };
