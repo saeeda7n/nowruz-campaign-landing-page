@@ -18,7 +18,9 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
       <body
         className={cn(estedadFont.variable, "font-estedad overflow-x-hidden")}
       >
-        <div className="relative mx-auto max-w-[1940px]">{children}</div>
+        <div className="relative mx-auto max-w-[1940px] overflow-x-hidden">
+          {children}
+        </div>
         <Toaster />
       </body>
     </html>

@@ -161,7 +161,7 @@ function Wheel() {
     useWheel(p, wheelRef);
   }, []);
   return (
-    <div className="wheel  relative mb-14 rotate-0 overflow-hidden duration-1000 hover:rotate-[360deg]">
+    <div className="wheel relative mb-14 rotate-0 overflow-hidden duration-1000 hover:rotate-[360deg]">
       <canvas
         ref={wheelRef}
         height={288}
