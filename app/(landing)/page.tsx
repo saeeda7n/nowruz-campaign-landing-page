@@ -32,6 +32,7 @@ const Page = () => {
       <main className="container">
         <AbsoluteBackground />
         <Hero />
+        <Timer />
         <Game />
         <Pointbar />
         <WheelOfLuck />

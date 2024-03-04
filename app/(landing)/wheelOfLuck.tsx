@@ -40,7 +40,7 @@ function CopyReferralCodeButton({ code }: { code?: string }) {
 
 function WheelOfLuckGame() {
   return (
-    <div className="relative flex flex-1 items-center justify-center md:min-w-[42rem]">
+    <div className="relative flex flex-1 items-center justify-center sm:min-w-[28rem]">
       <Image
         src="/landing/images/right-gifts.webp"
         alt="Gift box"
@@ -62,7 +62,7 @@ function WheelOfLuckGame() {
           height={450}
           width={400}
           draggable={false}
-          className="absolute z-10 h-full"
+          className="absolute z-10 h-auto w-full max-w-96 sm:h-full sm:w-auto sm:max-w-none"
         />
         <Wheel />
         <div className="absolute -bottom-8 z-50">
@@ -122,7 +122,7 @@ function GameGuideline() {
         </p>
       </div>
 
-      <div className="flex flex-col  gap-3 rounded-2xl border-2 border-[#FEC421] bg-[#F9DBAD] px-6 py-5">
+      <div className="flex flex-col gap-3 rounded-2xl border-2 border-[#FEC421] bg-[#F9DBAD] px-6 py-5">
         <div className="space-y-2">
           <h5 className="text-sm font-semibold">
             برای بدست آوردن امتیازات بیشتر شما می توانید دوستان خود را با
@@ -141,7 +141,7 @@ function GameGuideline() {
 
 const WheelOfLuck = () => {
   return (
-    <section className="text-brown flex flex-wrap items-center gap-10 overflow-hidden py-24">
+    <section className="text-brown flex flex-wrap items-center gap-10 gap-y-16 py-24">
       <GameGuideline />
       <WheelOfLuckGame />
     </section>

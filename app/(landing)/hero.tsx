@@ -3,13 +3,14 @@ import Image from "next/image";
 
 const Hero = () => {
   return (
-    <section className="flex min-h-[min(100lvh,60rem)] flex-col items-center justify-end pt-24">
+    <section className="flex min-h-96 flex-col items-center justify-end pt-32 sm:min-h-[min(100lvh,60rem)] ">
       <Image
         draggable={false}
         src="/landing/hero/offering.webp"
         alt="CTelecom special offer"
         width={434}
         height={234}
+        className="w-[70vw] md:w-96 lg:w-auto"
       />
 
       <Image
