@@ -15,7 +15,7 @@ function AbsoluteBackground() {
     <div className="absolute left-0 right-0 top-0 -z-10 flex justify-center overflow-hidden">
       <Image
         draggable={false}
-        className="min-w-[1820px] select-none object-center"
+        className="min-w-[1200px] select-none object-center sm:min-w-[1820px]"
         src="/landing/hero/background.webp"
         alt="Absolute backgound"
         height={1490}

@@ -11,10 +11,10 @@ const points = [20, 40, 60, 200, 500, 40, 60, , 200, 20, 20];
 function CopyReferralCodeButton({ code }: { code?: string }) {
   if (!code) return "";
   return (
-    <div className="flex gap-2">
+    <div className="flex flex-col gap-2 sm:flex-row">
       <button
         onClick={() => copy(code)}
-        className="ms-auto flex h-10 items-center gap-2  rounded-full bg-white/30 px-5 font-medium"
+        className="flex h-10 items-center gap-2 rounded-full bg-white/30 px-5 font-medium"
       >
         <Copy size={16} />
         <span>{code}</span>
@@ -82,7 +82,7 @@ function Header() {
       <div className="space-y-2">
         <h3 className="text-lg font-bold">بازی گردونه شانس</h3>
       </div>
-      <div className="ms-auto flex flex-wrap justify-end gap-4 gap-y-2">
+      <div className="ms-auto hidden flex-wrap justify-end gap-4 gap-y-2 sm:flex">
         <Chip className="text-brown border-gold">
           <span className="text-xs">
             {invited > 0
@@ -103,13 +103,13 @@ function GameGuideline() {
   const invited = 0;
 
   return (
-    <div className="z-40 flex-1 space-y-8 md:min-w-[34rem]">
+    <div className="z-40 min-w-72 flex-1 space-y-8 sm:min-w-[34rem]">
       <Header />
       <div className="space-y-4">
-        <h5 className="text-base font-semibold">
+        <h5 className="text-sm font-semibold sm:text-base">
           چگونه در گردونه شانس شرکت کنم؟
         </h5>
-        <p className="text-base">
+        <p className="text-sm sm:text-base">
           با شرکت در مسابقه شما 10 امتیاز بدست می آورید. اما برای کسب امتیاز های
           بیشتر باید پاسخ درست بدهید. با جواب دادن به هر سوال به صورت درست شما
           می توانید 10 امتیاز کسب کنید. یعنی در این 13 روز همه سوالات را به صورت
@@ -124,12 +124,12 @@ function GameGuideline() {
 
       <div className="flex flex-col gap-3 rounded-2xl border-2 border-[#FEC421] bg-[#F9DBAD] px-6 py-5">
         <div className="space-y-2">
-          <h5 className="text-sm font-semibold">
+          <h5 className="text-xs font-semibold sm:text-sm">
             برای بدست آوردن امتیازات بیشتر شما می توانید دوستان خود را با
             استفاده از کد روبه رو دعوت کنید
           </h5>
-          <p className="flex  items-center gap-2 text-xs">
-            <Info />
+          <p className="flex items-center gap-2 text-xs">
+            <Info className="hidden sm:block" />
             با هر دعوت از دوستان خود 20 امتیاز دریافت می کنید
           </p>
         </div>

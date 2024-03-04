@@ -35,7 +35,7 @@ function TimeDivider({ className }: React.HTMLAttributes<HTMLDivElement>) {
 
 const Timer = () => {
   return (
-    <div className="mx-auto mt-8 flex min-h-[40rem] max-w-[1180px] flex-col gap-10 rounded-b-3xl bg-[#020836] py-16 sm:gap-10 md:gap-y-12">
+    <div className="mx-auto mt-8 flex min-h-[32rem] max-w-[1180px] flex-col gap-10 rounded-b-3xl bg-[#020836] py-16 sm:min-h-[38rem] sm:gap-10 md:min-h-[40rem] md:gap-y-12">
       <div className="flex items-center justify-center gap-2 px-5 text-[4vw] text-gray-50 sm:text-2xl md:text-3xl">
         <TimerIcon size={36} />
         <h2>زمان شروع مسابقه پیک نوروزی سی تلکام</h2>
