@@ -24,6 +24,7 @@ const Report = () => {
           <Image
             src="/images/ct-report-book.webp"
             alt="Ct report book"
+            draggable={false}
             height={768}
             width={554}
             className="relative mx-auto max-w-64 rotate-[21deg] md:max-w-80"

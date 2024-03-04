@@ -53,41 +53,10 @@
 }
 
 
-.wheel {
-    --_w: 11rem;
-    --_r: calc(var(--_w) / 2);
-    --_ow: 24rem;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    container-type: inline;
-    display: grid;
-    height: var(--_ow);
-    place-content: center;
-    position: relative;
-    width: var(--_ow);
+.reward-card {
+    box-shadow: 0 3px 0 0 var(--light-brown);
 }
 
-
-.wheel div {
-    --_x: calc(var(--_r) + (var(--_r) * cos(var(--_d))));
-    --_y: calc(var(--_r) + (var(--_r) * sin(var(--_d))));
-    --_sz: 10.85cqi;
-    display: grid;
-    height: var(--_sz);
-    left: var(--_x);
-    place-content: center;
-    position: absolute;
-    top: var(--_y);
-    width: var(--_sz);
+.reward-card-second-shadow {
+    box-shadow: 0 3px 0 0 var(--light-brown), 0 0 0 10px color-mix(in srgb, var(--gold) 25%, transparent);
 }
-
-.wheel div {
-    clip-path: polygon(0 50%, 100% 75%, 100% 25%);
-    @apply bg-white z-40 text-red-600;
-}
-
-.wheel div:nth-child(odd) {
-    @apply bg-blue-900 z-50 text-gray-50;
-}
-
-

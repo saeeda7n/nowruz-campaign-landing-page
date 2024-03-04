@@ -18,7 +18,7 @@ const Header = () => {
   return (
     <header
       className={cn(
-        "fixed left-0 right-0 top-0 z-50 h-20 bg-black/60 text-gray-50 backdrop-blur",
+        "fixed left-0 right-0 top-0 z-[9999] h-20 bg-black/60 text-gray-50 backdrop-blur",
       )}
     >
       <div className="container flex h-full items-center justify-between font-normal">

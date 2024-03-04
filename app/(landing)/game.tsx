@@ -126,6 +126,7 @@ function TheGame() {
 }
 
 const Game = () => {
+  //todo:fix this
   return (
     <section className="relative -mt-32">
       <FloatingGiftBoxes />

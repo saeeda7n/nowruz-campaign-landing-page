@@ -3,7 +3,7 @@
     "id": 1,
     "title": "شما برنده تخفیف 60 درصدی خرید",
     "body": "ساعت هوشمند سامسونگ گلگسی واچ 6 شدید",
-    "required_points": 15,
+    "required_points": 10,
     "image": "/images/watch.png",
     "attached_link": "http://anylink.com"
   },
@@ -19,7 +19,7 @@
     "id": 3,
     "title": "شما برنده تخفیف 60 درصدی خرید",
     "body": "ساعت هوشمند سامسونگ گلگسی واچ 6 شدید",
-    "required_points": 60,
+    "required_points": 55,
     "image": "/images/watch.png",
     "attached_link": "http://anylink.com"
   },
@@ -35,7 +35,7 @@
     "id": 5,
     "title": "شما برنده تخفیف 60 درصدی خرید",
     "body": "ساعت هوشمند سامسونگ گلگسی واچ 6 شدید",
-    "required_points": 90,
+    "required_points": 45,
     "image": "/images/watch.png",
     "attached_link": "http://anylink.com"
   },
@@ -43,7 +43,7 @@
     "id": 6,
     "title": "شما برنده تخفیف 60 درصدی خرید",
     "body": "ساعت هوشمند سامسونگ گلگسی واچ 6 شدید",
-    "required_points": 120,
+    "required_points": 38,
     "image": "/images/watch.png",
     "attached_link": "http://anylink.com"
   },
@@ -51,7 +51,7 @@
     "id": 7,
     "title": "شما برنده تخفیف 60 درصدی خرید",
     "body": "ساعت هوشمند سامسونگ گلگسی واچ 6 شدید",
-    "required_points": 160,
+    "required_points": 170,
     "image": "/images/watch.png",
     "attached_link": "http://anylink.com"
   }

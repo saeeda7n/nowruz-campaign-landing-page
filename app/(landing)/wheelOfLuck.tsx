@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useRef } from "react";
-import { Chip } from "@/app/(landing)/pointbar";
-import { Copy, Info } from "lucide-react";
+import { Chip } from "@/app/(landing)/pointbar/pointBar";
+import { Copy, Info, Ticket } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
 import { useWheel } from "@/lib/useWheel";
@@ -11,7 +11,7 @@ const points = [20, 40, 60, 200, 500, 40, 60, , 200, 20, 20];
 function CopyReferralCodeButton({ code }: { code?: string }) {
   if (!code) return "";
   return (
-    <>
+    <div className="flex gap-2">
       <button
         onClick={() => copy(code)}
         className="ms-auto flex h-10 items-center gap-2  rounded-full bg-white/30 px-5 font-medium"
@@ -27,7 +27,7 @@ function CopyReferralCodeButton({ code }: { code?: string }) {
         <Copy size={16} />
         <span>کپی کردن لینک</span>
       </button>
-    </>
+    </div>
   );
 
   function copy(text: string) {
@@ -75,27 +75,36 @@ function WheelOfLuckGame() {
   );
 }
 
+function Header() {
+  const invited = 0;
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-y-5">
+      <div className="space-y-2">
+        <h3 className="text-lg font-bold">بازی گردونه شانس</h3>
+      </div>
+      <div className="ms-auto flex flex-wrap justify-end gap-4 gap-y-2">
+        <Chip className="text-brown border-gold">
+          <span className="text-xs">
+            {invited > 0
+              ? "افراد دعوت شده توسط شما 4 نفر"
+              : "شما تا کنون کسی را دعوت نکرده اید :("}
+          </span>
+        </Chip>
+
+        <Chip className="text-brown bg-gold border-none">
+          <span className="text-xs">امتیاز شما 100 سی تی</span>
+        </Chip>
+      </div>
+    </div>
+  );
+}
+
 function GameGuideline() {
   const invited = 0;
 
   return (
     <div className="z-40 flex-1 space-y-8 md:min-w-[34rem]">
-      <div className="flex items-center justify-between">
-        <h3 className="text-xl font-bold">بازی گردونه شانس</h3>
-        <div className="flex gap-2">
-          <Chip className="text-brown border-gold">
-            <span className="text-xs">
-              {invited > 0
-                ? "افراد دعوت شده توسط شما 4 نفر"
-                : "شما تا کنون کسی را دعوت نکرده اید :("}
-            </span>
-          </Chip>
-
-          <Chip className="text-brown bg-gold border-none">
-            <span className="text-xs">امتیاز شما 100 سی تی</span>
-          </Chip>
-        </div>
-      </div>
+      <Header />
       <div className="space-y-4">
         <h5 className="text-base font-semibold">
           چگونه در گردونه شانس شرکت کنم؟
@@ -113,7 +122,7 @@ function GameGuideline() {
         </p>
       </div>
 
-      <div className="flex flex-wrap items-center gap-3 rounded-2xl border-2 border-[#FEC421] bg-[#F9DBAD] px-6 py-5">
+      <div className="flex flex-col  gap-3 rounded-2xl border-2 border-[#FEC421] bg-[#F9DBAD] px-6 py-5">
         <div className="space-y-2">
           <h5 className="text-sm font-semibold">
             برای بدست آوردن امتیازات بیشتر شما می توانید دوستان خود را با
@@ -132,7 +141,7 @@ function GameGuideline() {
 
 const WheelOfLuck = () => {
   return (
-    <section className="text-brown  flex flex-wrap items-center gap-10 py-24">
+    <section className="text-brown flex flex-wrap items-center gap-10 overflow-hidden py-24">
       <GameGuideline />
       <WheelOfLuckGame />
     </section>

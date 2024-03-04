@@ -3,10 +3,10 @@ import React from "react";
 import { MoveLeft, PartyPopper, Truck } from "lucide-react";
 import { special_offers } from "@/data/landing/content.json";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { FreeMode } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/pagination";
-import { FreeMode } from "swiper/modules";
 
 const colors = [
   { name: "مشکی", cssColor: "#4A4A4A" },
@@ -49,12 +49,13 @@ function ProductCard({
       <div className="mt-5 w-full">
         <div className="relative mx-auto flex aspect-video h-60 w-44 items-center  ">
           <img
+            alt={title}
             draggable={false}
             src={thumbnail}
             className="h-full w-full object-contain object-center"
           />
           {discount > 0 && (
-            <div className="absolute mb-5 flex size-[4.2rem] items-center justify-center rounded-full border-4 border-dashed border-red-900 bg-[red] pt-0.5 text-2xl font-bold text-gray-50">
+            <div className="absolute mb-5 flex size-[4.2rem] items-center justify-center rounded-full bg-[red] pt-0.5 text-2xl font-bold text-gray-50">
               {discount}%
             </div>
           )}
@@ -127,8 +128,8 @@ const SpecialOffers = () => {
             className="mySwiper !overflow-visible"
           >
             {special_offers.map(({ id, ...product }) => (
-              <SwiperSlide className="!w-[19rem]">
-                <ProductCard {...product} key={id} />
+              <SwiperSlide className="!w-[19rem]" key={id}>
+                <ProductCard {...product} />
               </SwiperSlide>
             ))}
           </Swiper>
