@@ -1,0 +1,170 @@
+{
+  "help_content": [
+    {
+      "title": "چگونه در مسابقه شرکت کنم؟",
+      "body": "در قسمت روبه رو پیک نوروزی خودتان را حل کنید. هر روز سوالاتی برای شما باز خواهد شد که باید به آن جواب بدهید. نگران نباشید اگر چند روزی را از دست دادید، می توانید با کلیک بر روی آن روز سوالات را پاسخ دهید. اما در این صورت شما کارت هزار آفرین و صد آفرین ندارید. فقط امتیاز خودتان را جهت گردونه شانس می توانید زیاد کنید"
+    },
+    {
+      "title": "کارت های هزار آفرین و صد آفرین چه کاربردی دارند؟",
+      "body": "شما با پاسخ صحیح  به همه سوالات پیک نوروزی در یک روز یک کارت هزار آفرین دریافت خواهید کرد و اگر به یک پاسخ یا دو پاسخ درست در پیک نوروزی در یک روز برسید کارت صد آفرین دریافت خواهید کرد. اگر همان روز به سوالات پیک نوروزی همان روز جواب ندهید با هر تعداد جواب درست باز هم کارت صد آفرین و هزار آفرین دریافت نخواهید کرد"
+    }
+  ],
+  "ticked_guide": [
+    {
+      "description": "برای دریافت هزار آفرین تمامی سئوالات روز را پاسخ دهید",
+      "image": "/landing/images/gold.webp",
+      "title": "هزار آفرین (10 بُن)"
+    },
+    {
+      "description": "برای دریافت صد آفرین حداقل به 2 سوال از 3 مطرح شده پاسخ دهید",
+      "image": "/landing/images/silver.webp",
+      "title": "صد آفرین (5 بُن)"
+    }
+  ],
+  "special_offers": [
+    {
+      "id": 1,
+      "title": "Samsung s22",
+      "price": 42000000,
+      "discount": 23,
+      "colors": [
+        {
+          "name": "مشکی",
+          "cssColor": "#4A4A4A"
+        },
+        {
+          "name": "طلایی",
+          "cssColor": "#FDB913"
+        }
+      ],
+      "attachedUrl": "string",
+      "body": "دو سیم کارت ظرفیت ۱۲۸ گیگابایت و رم ۶ گیگابایت - هند",
+      "thumbnail": "/images/rog.png",
+      "freeDelivery": true
+    },
+    {
+      "id": 4,
+      "title": "Iphone 13",
+      "price": 35000000,
+      "discount": 8,
+      "colors": [
+        {
+          "name": "مشکی",
+          "cssColor": "#4A4A4A"
+        },
+        {
+          "name": "طلایی",
+          "cssColor": "#FDB913"
+        },
+        {
+          "name": "نقره ای",
+          "cssColor": "#EFEFF0"
+        },
+        {
+          "name": "بنقش",
+          "cssColor": "#815F91"
+        }
+      ],
+      "attachedUrl": "string",
+      "body": "دو سیم کارت ظرفیت ۱۲۸ گیگابایت و رم ۶ گیگابایت - هند",
+      "thumbnail": "/images/iphone-13_2.png",
+      "freeDelivery": true
+    },
+    {
+      "id": 5,
+      "title": "Iphone 13",
+      "price": 35000000,
+      "discount": 15,
+      "colors": [
+        {
+          "name": "مشکی",
+          "cssColor": "#4A4A4A"
+        },
+        {
+          "name": "طلایی",
+          "cssColor": "#FDB913"
+        },
+        {
+          "name": "نقره ای",
+          "cssColor": "#EFEFF0"
+        },
+        {
+          "name": "بنقش",
+          "cssColor": "#815F91"
+        }
+      ],
+      "attachedUrl": "string",
+      "body": "دو سیم کارت ظرفیت ۱۲۸ گیگابایت و رم ۶ گیگابایت - هند",
+      "thumbnail": "/images/iphone-13_2.png",
+      "freeDelivery": true
+    },
+    {
+      "id": 6,
+      "title": "Iphone 13",
+      "price": 35000000,
+      "discount": 8,
+      "colors": [
+        {
+          "name": "مشکی",
+          "cssColor": "#4A4A4A"
+        },
+        {
+          "name": "طلایی",
+          "cssColor": "#FDB913"
+        },
+        {
+          "name": "نقره ای",
+          "cssColor": "#EFEFF0"
+        }
+      ],
+      "attachedUrl": "string",
+      "body": "دو سیم کارت ظرفیت ۱۲۸ گیگابایت و رم ۶ گیگابایت - هند",
+      "thumbnail": "/images/iphone-13_2.png",
+      "freeDelivery": true
+    },
+    {
+      "id": 7,
+      "title": "Iphone 13",
+      "price": 35000000,
+      "discount": 3,
+      "colors": [
+        {
+          "name": "مشکی",
+          "cssColor": "#4A4A4A"
+        },
+        {
+          "name": "بنقش",
+          "cssColor": "#815F91"
+        }
+      ],
+      "attachedUrl": "string",
+      "body": "دو سیم کارت ظرفیت ۱۲۸ گیگابایت و رم ۶ گیگابایت - هند",
+      "thumbnail": "/images/iphone-13_2.png",
+      "freeDelivery": true
+    },
+    {
+      "id": 8,
+      "title": "Iphone 13",
+      "price": 35000000,
+      "discount": 5,
+      "colors": [
+        {
+          "name": "طلایی",
+          "cssColor": "#FDB913"
+        },
+        {
+          "name": "نقره ای",
+          "cssColor": "#EFEFF0"
+        },
+        {
+          "name": "بنقش",
+          "cssColor": "#815F91"
+        }
+      ],
+      "attachedUrl": "string",
+      "body": "دو سیم کارت ظرفیت ۱۲۸ گیگابایت و رم ۶ گیگابایت - هند",
+      "thumbnail": "/images/iphone-13_2.png",
+      "freeDelivery": true
+    }
+  ]
+}
