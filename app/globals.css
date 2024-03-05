@@ -61,11 +61,7 @@
     box-shadow: 0 3px 0 0 var(--light-brown), 0 0 0 10px color-mix(in srgb, var(--gold) 25%, transparent);
 }
 
-.test {
-    transition: 1s;
-    transform-origin: left center;
-    animation: te infinite  4s ease;
-}
+
 
 
 

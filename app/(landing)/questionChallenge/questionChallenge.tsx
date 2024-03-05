@@ -1,6 +1,7 @@
-import React, { PropsWithChildren } from "react";
+import React from "react";
 import Image from "next/image";
-import { help_content, ticked_guide } from "@/data/landing/content.json";
+import content from "@/data/landing/content.json";
+import Book from "@/app/(landing)/questionChallenge/book";
 
 type GameGuidelineTicketHelpProps = {
   title: string;
@@ -88,7 +89,7 @@ function GameGuidelineHelpCard({ title, body }: GameGuidelineHelpCardProps) {
 
 function GameGuideline() {
   return (
-    <div className="flex flex-col gap-5 overflow-hidden pb-2 2xl:w-[520px]">
+    <div className="flex flex-col gap-5 self-center overflow-hidden pb-2 2xl:w-[520px]">
       <div className="relative flex-1">
         <img
           src="/landing/images/guide-paper.webp"
@@ -96,80 +97,38 @@ function GameGuideline() {
           alt="paper background"
         />
         <div className="text-brown relative space-y-5 px-5 py-5 pb-8 sm:px-12">
-          {help_content.map((content) => (
+          {content.help_content.map((content) => (
             <GameGuidelineHelpCard {...content} key={content.title} />
           ))}
           <div className="!mt-12 flex flex-col gap-4 md:flex-row 2xl:flex-col">
-            {ticked_guide.map((data) => (
+            {content.ticket_guide.map((data) => (
               <GameGuidelineTickedHelp {...data} key={data.title} />
             ))}
           </div>
-        </div>
-      </div>
-      <button className="mx-5 h-12 rounded-full bg-[#ff9100] font-bold text-gray-50 [box-shadow:0_4px_0_0_#99502F]">
-        شروع
-      </button>
-    </div>
-  );
-}
-
-function Paper({
-  children,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement> & PropsWithChildren) {
-  return (
-    <div className="test -me-[1.5%] -mt-[0.4%] flex-1 bg-green-600/50">
-      <div className="relative ms-auto flex w-[81%] flex-row-reverse">
-        <Image
-          draggable="false"
-          className="pointer-events-none z-30"
-          src="/images/book-paper.png"
-          width={434}
-          height={620}
-          alt="Book paper"
-        />
-        <div className="front absolute inset-0 z-40 overflow-hidden px-[10%] py-[10%]">
-          Front
-        </div>
-        <div className="back absolute inset-0 z-40 overflow-hidden px-[10%] py-[10%]">
-          Back
+          <div className="flex w-full">
+            <button
+              id="play"
+              className="mx-5 h-12 flex-1 rounded-full bg-[#ff9100] font-bold text-gray-50 [box-shadow:0_4px_0_0_#99502F]"
+            >
+              شروع
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-function TheGame() {
-  return (
-    <div className="flex flex-1">
-      <div className="relative mx-auto">
-        <Image
-          src="/landing/images/open-book.png"
-          alt="Open book"
-          width={1070}
-          height={738}
-          className="ms-auto w-auto [filter:drop-shadow(0_23px_46px_#581C01)]"
-        />
-        <div className="absolute inset-0 flex border-2">
-          <Paper>Hello World</Paper>
-          <div className="flex-1"></div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const Game = () => {
-  //todo:fix this
+const QuestionChallenge = () => {
   return (
     <section className="relative -mt-32">
       <FloatingGiftBoxes />
       <div className="flex flex-wrap justify-between gap-16">
         <GameGuideline />
-        <TheGame />
+        <Book />
       </div>
     </section>
   );
 };
 
-export default Game;
+export default QuestionChallenge;

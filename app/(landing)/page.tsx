@@ -3,7 +3,7 @@ import Image from "next/image";
 import Header from "@/app/(landing)/header";
 import Hero from "@/app/(landing)/hero";
 import Timer from "@/app/(landing)/timer";
-import Game from "@/app/(landing)/game";
+import QuestionChallenge from "@/app/(landing)/questionChallenge/questionChallenge";
 import Report from "@/app/(landing)/report";
 import Pointbar from "@/app/(landing)/pointbar/pointBar";
 import WheelOfLuck from "@/app/(landing)/wheelOfLuck";
@@ -33,7 +33,7 @@ const Page = () => {
         <AbsoluteBackground />
         <Hero />
         <Timer />
-        <Game />
+        <QuestionChallenge />
         <Pointbar />
         <WheelOfLuck />
         <Report />

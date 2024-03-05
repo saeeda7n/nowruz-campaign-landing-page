@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { MoveLeft, PartyPopper, Truck } from "lucide-react";
-import { special_offers } from "@/data/landing/content.json";
+import content from "@/data/landing/content.json";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode } from "swiper/modules";
 import "swiper/css";
@@ -127,7 +127,7 @@ const SpecialOffers = () => {
             modules={[FreeMode]}
             className="mySwiper !overflow-visible"
           >
-            {special_offers.map(({ id, ...product }) => (
+            {content.special_offers.map(({ id, ...product }) => (
               <SwiperSlide className="!w-[19rem]" key={id}>
                 <ProductCard {...product} />
               </SwiperSlide>
