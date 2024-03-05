@@ -122,14 +122,17 @@ function Paper({
       <div className="relative ms-auto flex w-[81%] flex-row-reverse">
         <Image
           draggable="false"
-          className="pointer-events-none"
+          className="pointer-events-none z-30"
           src="/images/book-paper.png"
           width={434}
           height={620}
           alt="Book paper"
         />
-        <div className="absolute inset-0 overflow-hidden px-[10%] py-[10%]">
-          {children}
+        <div className="front absolute inset-0 z-40 overflow-hidden px-[10%] py-[10%]">
+          Front
+        </div>
+        <div className="back absolute inset-0 z-40 overflow-hidden px-[10%] py-[10%]">
+          Back
         </div>
       </div>
     </div>
