@@ -53,7 +53,7 @@ const Header = () => {
           </div>
         </div>
       </header>
-      <div className="pointer-events-none fixed bottom-0 left-0 right-0 top-0 z-[8888] bg-black/50 opacity-0 backdrop-blur transition-opacity duration-300 peer-[.open]:opacity-100" />
+      <div className="pointer-events-none fixed bottom-0 left-0 right-0 top-0 z-[8888] bg-black/50 opacity-0 backdrop-blur transition-opacity duration-300 peer-[.open]:opacity-100 md:peer-[.open]:opacity-0" />
     </>
   );
 };
