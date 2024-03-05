@@ -57,7 +57,7 @@ function GameGuidelineTickedHelp({
   image,
 }: GameGuidelineTicketHelpProps) {
   return (
-    <div className="flex min-h-[5.5rem] w-full items-center gap-4 rounded-[3rem] bg-[#e9a56e]/50 p-3 pe-6 sm:p-2">
+    <div className="flex min-h-[5.5rem] w-full items-center gap-2 rounded-[3rem] bg-[#e9a56e]/50 p-3 pe-6 sm:gap-4 sm:p-2">
       <div className="flex size-16 flex-shrink-0 items-center justify-center self-start rounded-full bg-black px-1 sm:size-20">
         <Image
           src={image}
@@ -67,7 +67,7 @@ function GameGuidelineTickedHelp({
           height={48}
         />
       </div>
-      <div className="space-y-2">
+      <div className="space-y-1 sm:space-y-2">
         <h4 className="text-lg font-semibold sm:text-xl lg:text-2xl">
           {title}
         </h4>

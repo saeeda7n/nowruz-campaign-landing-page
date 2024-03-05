@@ -1,7 +1,9 @@
-import React from "react";
-import { PartyPopper } from "lucide-react";
+"use client";
+import React, { useState } from "react";
+import { GanttChart, PartyPopper, Text } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { CloseIcon } from "next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon";
 
 const items = [
   { name: "عیدانه", url: "", icon: null },
@@ -15,30 +17,45 @@ const items = [
   { name: "محصولات شگفت انگیز", url: "", icon: <PartyPopper /> },
 ];
 const Header = () => {
+  const [open, setOpen] = useState(false);
   return (
-    <header
-      className={cn(
-        "fixed left-0 right-0 top-0 z-[9999] h-20 bg-black/60 text-gray-50 backdrop-blur",
-      )}
-    >
-      <div className="container flex h-full items-center justify-between font-normal">
-        <Image
-          className="max-w-28"
-          src={"/images/ctelecom-logo.webp"}
-          alt="CTelecom brand logo"
-          height="300"
-          width="650"
-        />
-        <ul className="mx-auto flex items-center gap-8 pe-28">
-          {items.map((item) => (
-            <li className="flex items-center gap-2" key={item.name}>
-              {item.icon}
-              <a href="">{item.name}</a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </header>
+    <>
+      <header
+        className={cn(
+          "group peer fixed left-0 right-0 top-0 z-[9999] h-20 bg-black/60 text-gray-50 backdrop-blur",
+          { open },
+        )}
+      >
+        <div className="container flex h-full items-center justify-between font-normal">
+          <Image
+            className="max-w-28"
+            src={"/images/ctelecom-logo.webp"}
+            alt="CTelecom brand logo"
+            height="300"
+            width="650"
+          />
+          <ul className="absolute left-0 top-full mx-auto flex min-h-lvh w-full -translate-x-full flex-col gap-8 bg-black/60 px-8 py-5 backdrop-blur transition-transform duration-300 group-[.open]:translate-x-0 sm:w-auto sm:min-w-72 sm:px-5 md:relative md:top-0 md:min-h-0 md:min-w-[unset] md:translate-x-0 md:flex-row md:items-center md:bg-transparent md:py-0 md:ps-0 md:backdrop-blur-[unset] lg:pe-28">
+            {items.map((item) => (
+              <li
+                className="flex items-center gap-2 border-b border-gray-50/50 pb-3 text-sm md:border-0 md:pb-0 lg:text-base"
+                key={item.name}
+              >
+                {item.icon}
+                <a href="">{item.name}</a>
+              </li>
+            ))}
+          </ul>
+          <div
+            className="md:invisible"
+            role="button"
+            onClick={() => setOpen((p) => !p)}
+          >
+            {open ? <CloseIcon size={28} /> : <Text size={28} />}
+          </div>
+        </div>
+      </header>
+      <div className="pointer-events-none fixed bottom-0 left-0 right-0 top-0 z-[8888] bg-black/50 opacity-0 backdrop-blur transition-opacity duration-300 peer-[.open]:opacity-100" />
+    </>
   );
 };
 
