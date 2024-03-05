@@ -6,10 +6,12 @@ import Image from "next/image";
 
 type Props = React.HTMLAttributes<HTMLDivElement> &
   PropsWithChildren & {
-    back: boolean;
+    back?: boolean;
     index: number;
+    front?: React.ReactNode;
+    rear?: React.ReactNode;
   };
-const Paper = ({ children, back, index, ...props }: Props) => {
+const Paper = ({ front, rear, back, index, ...props }: Props) => {
   const scope = useRef<any>(null);
   const [tl, setTl] = useState<gsap.core.Timeline>();
   useGSAP(
@@ -48,7 +50,7 @@ const Paper = ({ children, back, index, ...props }: Props) => {
 
   return (
     <div
-      className="relative -me-[1.5%] -mt-[0.4%] flex-1"
+      className="relative -me-[1.5%] -mt-[0.4%] flex-1 select-none"
       ref={scope}
       style={{ zIndex: index }}
     >
@@ -63,13 +65,13 @@ const Paper = ({ children, back, index, ...props }: Props) => {
             alt="Book paper"
           />
           <div className="front absolute inset-0 z-40 flex overflow-hidden px-[10%] py-[10%]">
-            صفحه جلویی
+            {front}
           </div>
           <div
             className="back absolute inset-0 z-40 hidden overflow-hidden px-[10%] py-[10%]"
             style={{ transform: "rotateY(180deg)" }}
           >
-            صفحه پشتی
+            {rear}
           </div>
         </div>
       </div>

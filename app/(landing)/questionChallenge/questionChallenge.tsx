@@ -92,8 +92,9 @@ function GameGuideline() {
     <div className="flex flex-col gap-5 self-center overflow-hidden pb-2 2xl:w-[520px]">
       <div className="relative flex-1">
         <img
+          draggable={false}
           src="/landing/images/guide-paper.webp"
-          className="absolute h-full w-full"
+          className="absolute h-full w-full select-none"
           alt="paper background"
         />
         <div className="text-brown relative space-y-5 px-5 py-5 pb-8 sm:px-12">
@@ -108,7 +109,7 @@ function GameGuideline() {
           <div className="flex w-full">
             <button
               id="play"
-              className="mx-5 h-12 flex-1 rounded-full bg-[#ff9100] font-bold text-gray-50 [box-shadow:0_4px_0_0_#99502F]"
+              className="mx-5 h-12 flex-1 select-none rounded-full bg-[#ff9100] font-bold text-gray-50 [box-shadow:0_4px_0_0_#99502F]"
             >
               شروع
             </button>
