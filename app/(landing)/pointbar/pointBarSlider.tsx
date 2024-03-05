@@ -183,14 +183,6 @@ const PointBarSlider = () => {
           </div>
         </SwiperSlide>
       </Swiper>
-      <input
-        defaultValue={0}
-        onChange={(e) => setPoint(+e.target.value)}
-        className="mt-32 w-full"
-        type={"range"}
-        min={0}
-        max={170}
-      />
     </>
   );
 };

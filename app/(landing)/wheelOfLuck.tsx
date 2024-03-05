@@ -5,6 +5,7 @@ import { Copy, Info, Ticket } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
 import { useWheel } from "@/lib/useWheel";
+import { cn } from "@/lib/utils";
 
 const points = [20, 40, 60, 200, 500, 40, 60, , 200, 20, 20];
 
@@ -36,43 +37,6 @@ function CopyReferralCodeButton({ code }: { code?: string }) {
       .then(() => toast.success("لینک زیر مجموعه گیری با موفقیت کپی شد"))
       .catch(() => toast.error("خطایی در کپی کردن لینک وجود دارد!"));
   }
-}
-
-function WheelOfLuckGame() {
-  return (
-    <div className="relative flex flex-1 items-center justify-center sm:min-w-[28rem]">
-      <Image
-        src="/landing/images/right-gifts.webp"
-        alt="Gift box"
-        height={198}
-        width={320}
-        className="absolute -bottom-10 z-20 me-[36rem]"
-      />
-      <Image
-        src="/landing/images/left-gifts.webp"
-        alt="Gift box"
-        height={196}
-        width={340}
-        className="absolute -bottom-10 z-20 ms-[42rem]"
-      />
-      <div className="relative bottom-0 flex h-[28rem] w-full items-center justify-center">
-        <Image
-          src="/landing/images/wheel-of-luck.webp"
-          alt="Wheel of luck"
-          height={450}
-          width={400}
-          draggable={false}
-          className="absolute z-10 h-auto w-full max-w-96 sm:h-full sm:w-auto sm:max-w-none"
-        />
-        <Wheel />
-        <div className="absolute -bottom-8 z-50">
-          <button className="me-auto mt-8 flex h-14 items-center gap-2 rounded-full bg-red-500 px-16 font-bold text-gray-50 [box-shadow:0_4px_0_0_#821F14]">
-            بزن بریم
-          </button>
-        </div>
-      </div>
-    </div>
-  );
 }
 
 function Header() {
@@ -139,18 +103,49 @@ function GameGuideline() {
   );
 }
 
-const WheelOfLuck = () => {
+function WheelOfLuckGame() {
+  function Turn() {}
+
   return (
-    <section className="text-brown flex flex-wrap items-center gap-10 gap-y-16 py-24">
-      <GameGuideline />
-      <WheelOfLuckGame />
-    </section>
+    <div className="relative flex flex-1 items-center justify-center sm:min-w-[28rem]">
+      <Image
+        src="/landing/images/right-gifts.webp"
+        alt="Gift box"
+        height={198}
+        width={320}
+        className="absolute -bottom-10 z-20 me-[36rem]"
+      />
+      <Image
+        src="/landing/images/left-gifts.webp"
+        alt="Gift box"
+        height={196}
+        width={340}
+        className="absolute -bottom-10 z-20 ms-[42rem]"
+      />
+      <div className="relative bottom-0 flex h-[28rem] w-full items-center justify-center">
+        <Image
+          src="/landing/images/wheel-of-luck.webp"
+          alt="Wheel of luck"
+          height={450}
+          width={400}
+          draggable={false}
+          className="absolute z-10 h-auto w-full max-w-96 sm:h-full sm:w-auto sm:max-w-none"
+        />
+        <Wheel />
+        <div className="absolute -bottom-8 z-50">
+          <button
+            onClick={() => Turn()}
+            className="me-auto mt-8 flex h-14 items-center gap-2 rounded-full bg-red-500 px-16 font-bold text-gray-50 [box-shadow:0_4px_0_0_#821F14] disabled:bg-red-400"
+          >
+            بزن بریم
+          </button>
+        </div>
+      </div>
+    </div>
   );
-};
+}
 
-export default WheelOfLuck;
-
-function Wheel() {
+function Wheel({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   const p = useMemo(
     () => points.sort(() => (Math.random() > 0.5 ? 1 : -1)),
     [],
@@ -161,7 +156,12 @@ function Wheel() {
     useWheel(p, wheelRef);
   }, []);
   return (
-    <div className="wheel relative mb-14 rotate-0 overflow-hidden duration-1000 hover:rotate-[360deg]">
+    <div
+      className={cn(
+        "wheel relative mb-14 rotate-0 overflow-hidden duration-1000 hover:rotate-[360deg]",
+        className,
+      )}
+    >
       <canvas
         ref={wheelRef}
         height={288}
@@ -171,3 +171,14 @@ function Wheel() {
     </div>
   );
 }
+
+const WheelOfLuck = () => {
+  return (
+    <section className="text-brown flex flex-wrap items-center gap-10 gap-y-16 py-24">
+      <GameGuideline />
+      <WheelOfLuckGame />
+    </section>
+  );
+};
+
+export default WheelOfLuck;

@@ -48,7 +48,7 @@ function Header() {
 
 const PointBar = () => {
   return (
-    <section className="text-brown flex flex-col gap-12 overflow-hidden  py-16 pt-24">
+    <section className="text-brown flex flex-col gap-12 overflow-hidden py-16 pt-24">
       <Header />
       <div className="min-h-96 pt-12">
         <PointBarSlider />

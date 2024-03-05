@@ -1,4 +1,4 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import Image from "next/image";
 import { help_content, ticked_guide } from "@/data/landing/content.json";
 
@@ -113,6 +113,29 @@ function GameGuideline() {
   );
 }
 
+function Paper({
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement> & PropsWithChildren) {
+  return (
+    <div className="test -me-[1.5%] -mt-[0.4%] flex-1 bg-green-600/50">
+      <div className="relative ms-auto flex w-[81%] flex-row-reverse">
+        <Image
+          draggable="false"
+          className="pointer-events-none"
+          src="/images/book-paper.png"
+          width={434}
+          height={620}
+          alt="Book paper"
+        />
+        <div className="absolute inset-0 overflow-hidden px-[10%] py-[10%]">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function TheGame() {
   return (
     <div className="flex flex-1">
@@ -124,6 +147,10 @@ function TheGame() {
           height={738}
           className="ms-auto w-auto [filter:drop-shadow(0_23px_46px_#581C01)]"
         />
+        <div className="absolute inset-0 flex border-2">
+          <Paper>Hello World</Paper>
+          <div className="flex-1"></div>
+        </div>
       </div>
     </div>
   );

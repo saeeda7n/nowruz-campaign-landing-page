@@ -60,3 +60,25 @@
 .reward-card-second-shadow {
     box-shadow: 0 3px 0 0 var(--light-brown), 0 0 0 10px color-mix(in srgb, var(--gold) 25%, transparent);
 }
+
+.test {
+    transition: 1s;
+    transform-origin: left center;
+    animation: te infinite  4s ease;
+}
+
+
+
+@keyframes te {
+    0% {
+        transform: rotateY(0deg) rotateX(0deg);
+    }
+
+    50% {
+        transform:  rotateZ(-2deg);
+    }
+
+    100% {
+        transform: rotateY(180deg) rotateX(0deg);
+    }
+}
