@@ -4,8 +4,9 @@ import Image from "next/image";
 import Paper from "@/app/(landing)/questionChallenge/paper";
 import questions from "@/data/landing/questions.json";
 import { cn } from "@/lib/utils";
-import { ChevronDown, ChevronUp, Star } from "lucide-react";
+import { ChevronUp, Star } from "lucide-react";
 
+type ID = number;
 const days = [
   "اول",
   "دوم",
@@ -21,6 +22,16 @@ const days = [
   "دوازدهم",
   "سیزدهم",
 ];
+
+type QuestionProps = {
+  id: ID;
+  question: string;
+  correctOption: ID;
+  answers: {
+    id: ID;
+    answer: string;
+  }[];
+};
 
 type StartCardProps = {
   name: string;
@@ -102,13 +113,14 @@ const SelectDayPaper = () => {
       >
         <defs>
           <linearGradient x1="0.258" y1="0.115" x2="0.5" y2="1" id="MyGradient">
-            <stop offset="0" stop-color="#FFFEB1" />
-            <stop offset="1" stop-color="#FFF" />
+            <stop offset="0" stopColor="#FFFEB1" />
+            <stop offset="1" stopColor="#FFF" />
           </linearGradient>
         </defs>
       </svg>
       {new Array(13).fill(0).map((_, index) => (
         <StarCard
+          key={index}
           name={days[index]}
           active={index <= 8}
           stars={index % 4}
@@ -120,7 +132,28 @@ const SelectDayPaper = () => {
     </div>
   );
 };
-
+const QuestionPaper = ({ questions }: { questions: QuestionProps[] }) => {
+  return (
+    <div className="text-brown flex flex-col gap-y-8">
+      {questions.map((question) => (
+        <div className="flex flex-col gap-y-4" key={question.id}>
+          <p className="text-base font-bold">{question.question}</p>
+          <div className="flex flex-col gap-3">
+            {question.answers.map((answer) => (
+              <div className="group flex items-center gap-2" key={answer.id}>
+                <label className="flex flex-shrink-0">
+                  <input type="checkbox" className="peer" hidden />
+                  <span className="border-brown group-hover:bg-brown peer-checked:bg-brown size-5 rounded-full border-4 bg-transparent" />
+                </label>
+                <p className="text-sm font-medium">{answer.answer}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
 const Book = () => {
   const [test, setTest] = useState(false);
   return (
@@ -138,8 +171,20 @@ const Book = () => {
         />
         <div className="absolute inset-0 flex">
           <div className="relative flex-1">
-            <Paper index={2} front={<SelectDayPaper />} back={test} />
-            <Paper index={1}>Hello World</Paper>
+            <Paper
+              index={2}
+              front={<SelectDayPaper />}
+              rear={
+                <QuestionPaper questions={questions[0].questions.slice(2, 3)} />
+              }
+              back={test}
+            />
+            <Paper
+              index={1}
+              front={
+                <QuestionPaper questions={questions[0].questions.slice(0, 2)} />
+              }
+            />
           </div>
           <div className="flex-1" />
         </div>
