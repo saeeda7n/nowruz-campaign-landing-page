@@ -1,9 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import { GanttChart, PartyPopper, Text } from "lucide-react";
+import { X, PartyPopper, Text } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { CloseIcon } from "next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon";
 
 const items = [
   { name: "عیدانه", url: "", icon: null },
@@ -50,7 +49,7 @@ const Header = () => {
             role="button"
             onClick={() => setOpen((p) => !p)}
           >
-            {open ? <CloseIcon size={28} /> : <Text size={28} />}
+            {open ? <X size={28} /> : <Text size={28} />}
           </div>
         </div>
       </header>
