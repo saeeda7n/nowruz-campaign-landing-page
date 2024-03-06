@@ -3,21 +3,32 @@ import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Image from "next/image";
+import { useBook } from "@/app/(landing)/questionChallenge/bookContext";
 
 type Props = React.HTMLAttributes<HTMLDivElement> &
   PropsWithChildren & {
     back?: boolean;
-    index: number;
+    page: number;
     front?: React.ReactNode;
     rear?: React.ReactNode;
   };
-const Paper = ({ front, rear, back, index, ...props }: Props) => {
+const Paper = ({ front, rear, back, page, ...props }: Props) => {
   const scope = useRef<any>(null);
+  const { setAllowSwitch } = useBook();
   const [tl, setTl] = useState<gsap.core.Timeline>();
   useGSAP(
     () => {
       const tl = gsap
-        .timeline({ defaults: { duration: 0 }, paused: true })
+        .timeline({
+          defaults: { duration: 0 },
+          paused: true,
+          onStart() {
+            setAllowSwitch(false);
+          },
+          onComplete() {
+            setAllowSwitch(true);
+          },
+        })
         .fromTo(
           ".paper",
           { rotateY: 0, duration: 1.5 },
@@ -52,7 +63,7 @@ const Paper = ({ front, rear, back, index, ...props }: Props) => {
     <div
       className="relative -me-[1.5%] -mt-[0.4%] flex-1 select-none"
       ref={scope}
-      style={{ zIndex: index }}
+      style={{ zIndex: page }}
     >
       <div className="paper absolute inset-0 origin-left">
         <div className="relative ms-[20%] flex w-[81%] max-w-[25.3rem] overflow-hidden md:ms-auto md:flex-row-reverse">

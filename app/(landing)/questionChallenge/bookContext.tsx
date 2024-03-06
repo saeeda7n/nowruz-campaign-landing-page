@@ -9,29 +9,75 @@ import React, {
   useState,
 } from "react";
 import { useWindowDimensions } from "@/lib/useScreenSize";
+import { useQuery } from "@tanstack/react-query";
+import { getQuestionGameData } from "@/server/actions/questions";
 
+type QuestionProps = {
+  id: string;
+  order: string;
+  questions: {
+    id: string;
+    question: string;
+    correctOption?: string;
+    answers: {
+      id: string;
+      answer: string;
+    }[];
+  }[];
+};
 type BookContextProps = {
   page: number;
-  canNext: boolean;
+  allowSwitch: boolean;
   singlePage: boolean;
+  question: QuestionProps | undefined;
   setPage: Dispatch<SetStateAction<number>>;
-  setCanNext: Dispatch<SetStateAction<boolean>>;
+  setAllowSwitch: Dispatch<SetStateAction<boolean>>;
   setSinglePage: Dispatch<SetStateAction<boolean>>;
+  setQuestion: Dispatch<SetStateAction<QuestionProps | undefined>>;
+  gameData:
+    | {
+        today: number;
+        activeQuestionIds: string[];
+        currentDayId: string | undefined;
+        totalQuestions: number;
+      }
+    | undefined;
 };
 const bookContext = createContext<BookContextProps | null>(null);
 export const useBook = () => useContext(bookContext) as BookContextProps;
 const BookContext = ({ children }: PropsWithChildren) => {
+  const { data } = useQuery({
+    queryKey: ["qsData"],
+    queryFn: () => getQuestionGameData(),
+  });
   const [page, setPage] = useState(0);
-  const [canNext, setCanNext] = useState(true);
+  const [allowSwitch, setAllowSwitch] = useState(true);
   const [singlePage, setSinglePage] = useState(true);
+  const [question, setQuestion] = useState<QuestionProps>();
   const { width } = useWindowDimensions();
+
   useEffect(() => {
-    if (width < 768) setSinglePage(true);
+    if (width < 848) setSinglePage(true);
     else setSinglePage(false);
   }, []);
+
+  useEffect(() => {
+    if (question) setPage(1);
+  }, [question]);
+
   return (
     <bookContext.Provider
-      value={{ page, canNext, singlePage, setCanNext, setPage, setSinglePage }}
+      value={{
+        page,
+        allowSwitch,
+        singlePage,
+        question,
+        setAllowSwitch,
+        setPage,
+        setSinglePage,
+        setQuestion,
+        gameData: data,
+      }}
     >
       {children}
     </bookContext.Provider>
