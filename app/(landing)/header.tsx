@@ -21,7 +21,7 @@ const Header = () => {
     <>
       <header
         className={cn(
-          "group peer fixed left-0 right-0 top-0 z-[9999] h-20 bg-black/60 text-gray-50 backdrop-blur",
+          "group peer fixed left-0 right-0 top-0 z-[999999] h-20 bg-black/60 text-gray-50 backdrop-blur",
           { open },
         )}
       >

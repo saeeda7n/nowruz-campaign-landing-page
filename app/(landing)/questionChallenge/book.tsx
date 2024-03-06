@@ -72,6 +72,7 @@ const QuestionPaper = ({
                     className="peer"
                     hidden
                     name={`q-${question.id}`}
+                    value={answer.id}
                   />
                   <span className="size-5 rounded-full border-4 border-brown bg-transparent peer-checked:bg-white" />
                 </label>
@@ -100,6 +101,7 @@ const Book = () => {
         />
         <div className="absolute inset-0 flex">
           <form className="relative flex-1">
+            <input hidden name="dayId" value={question?.id} />
             <Paper
               show={[0, 1].includes(page)}
               back={page > 0}

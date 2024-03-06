@@ -22,6 +22,8 @@ function getCurrentDay() {
   return differenceInDays(Date.now(), START);
 }
 
+function correction(dayId: string, answers: any) {}
+
 function Sleep() {
   return new Promise((resolve) => setTimeout(resolve, 4000));
 }

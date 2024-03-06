@@ -81,7 +81,7 @@
 }
 
 .paper.invisible {
-    transition: visibility step-end 2s, z-index step-end 0s;
+    transition: visibility step-end 2.4s, z-index step-end 0s;
 }
 
 .paper.visible {
