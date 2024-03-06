@@ -1,7 +1,9 @@
 "use client";
-import React, { useEffect } from "react";
-import { Dot, TimerIcon } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { TimerIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { differenceInSeconds, secondsToHours } from "date-fns";
+import { START } from "@/lib/consts";
 
 type TimerPartProps = {
   time: number;
@@ -9,7 +11,7 @@ type TimerPartProps = {
 } & React.HTMLAttributes<HTMLDivElement>;
 
 function TimerPart({ time, name, className }: TimerPartProps) {
-  if (time > 59) throw new Error("Time cannot be more than 59");
+  if (time > 60) throw new Error("Time cannot be more than 59 passed " + time);
   const strTime = time > 9 ? String(time) : `0${time}`;
   return (
     <div className={cn("flex flex-col gap-5", className)}>
@@ -35,9 +37,20 @@ function TimeDivider({ className }: React.HTMLAttributes<HTMLDivElement>) {
 }
 
 const Timer = () => {
+  const [time, setTime] = useState(0);
   useEffect(() => {
-    console.log("Hello World");
+    setTime(differenceInSeconds(START, Date.now()));
+    const interval = setInterval(() => {
+      setTime((t) => --t);
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, []);
+
+  const seconds = time % 60;
+  const minutes = (time / 60) % 60;
+  const hours = (time / 60 / 60) % 24;
+  const days = (time / 60 / 60 / 24) % 59;
 
   return (
     <div className="mx-auto mt-8 flex min-h-[32rem] max-w-[1180px] flex-col gap-10 rounded-b-3xl bg-[#020836] py-16 sm:min-h-[38rem] sm:gap-10 md:min-h-[40rem] md:gap-y-12">
@@ -46,13 +59,14 @@ const Timer = () => {
         <h2>زمان شروع مسابقه پیک نوروزی سی تلکام</h2>
       </div>
       <div className="mx-auto flex gap-2 text-3xl text-gray-50 sm:text-5xl md:text-6xl">
-        <TimerPart name="ثانیه" time={55} className="hidden sm:flex" />
+        {time}
+        <TimerPart name="ثانیه" time={seconds} className="hidden sm:flex" />
         <TimeDivider className="hidden sm:flex" />
-        <TimerPart name="دقیقه" time={16} />
+        <TimerPart name="دقیقه" time={minutes} />
         <TimeDivider />
-        <TimerPart name="ساعت" time={6} />
+        <TimerPart name="ساعت" time={hours} />
         <TimeDivider />
-        <TimerPart name="روز" time={13} />
+        <TimerPart name="روز" time={days} />
       </div>
     </div>
   );
