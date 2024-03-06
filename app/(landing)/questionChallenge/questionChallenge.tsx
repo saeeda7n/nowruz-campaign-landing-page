@@ -44,7 +44,7 @@ function FloatingGiftBoxes() {
         alt="Floating gift box"
         width={138}
         height={142}
-        className="pointer-events-none absolute -end-6 bottom-5 z-[555] max-w-20 rotate-[16deg] sm:bottom-12 sm:max-w-none"
+        className="pointer-events-none absolute -bottom-16 -end-6 z-[555] rotate-[16deg] sm:bottom-12"
       />
     </>
   );
