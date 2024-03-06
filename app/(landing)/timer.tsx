@@ -38,7 +38,7 @@ function TimeDivider({ className }: React.HTMLAttributes<HTMLDivElement>) {
 
 const Timer = () => {
   const [time, setTime] = useState(0);
-  const started = Date.now() > START;
+  const started = Date.now() > new Date(START).getTime();
 
   useEffect(() => {
     if (!started) setTime(differenceInSeconds(START, Date.now()));
