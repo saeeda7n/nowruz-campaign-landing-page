@@ -9,24 +9,11 @@ import { useBook } from "@/app/(landing)/questionChallenge/bookContext";
 import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
-import { Navigation } from "swiper/modules";
+import content from "@/data/landing/content.json";
+import { useQuery } from "@tanstack/react-query";
+import { getQuestionsLength } from "@/server/actions/questions";
 
 type ID = number;
-const days = [
-  "اول",
-  "دوم",
-  "سوم",
-  "چهارم",
-  "پنجم",
-  "ششم",
-  "هفتم",
-  "هشتم",
-  "نهم",
-  "دهم",
-  "یازدهم",
-  "دوازدهم",
-  "سیزدهم",
-];
 
 type QuestionProps = {
   id: ID;
@@ -110,41 +97,46 @@ const StarCard = ({
   );
 };
 
-const SelectDayPaper = () => {
+function StarsGradient() {
   return (
-    <div className="grid w-full grid-cols-3 gap-2 pe-[12%]">
-      <svg
-        version="1.1"
-        xmlns="http://www.w3.org/2000/svg"
-        className="pointer-events-none absolute opacity-0"
-      >
-        <defs>
-          <linearGradient
-            x1="0.258"
-            y1="0.115"
-            x2="0.5"
-            y2="1"
-            id="goldGradient"
-          >
-            <stop offset="0" stopColor="#FFFEB1" />
-            <stop offset="1" stopColor="#FFF" />
-          </linearGradient>
-        </defs>
-      </svg>
-      {new Array(13).fill(0).map((_, index) => (
+    <svg
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      className="pointer-events-none absolute opacity-0"
+    >
+      <defs>
+        <linearGradient x1="0.258" y1="0.115" x2="0.5" y2="1" id="goldGradient">
+          <stop offset="0" stopColor="#FFFEB1" />
+          <stop offset="1" stopColor="#FFF" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
+
+const SelectDayPaper = () => {
+  const { data } = useQuery({
+    queryKey: ["qsLen"],
+    queryFn: () => getQuestionsLength(),
+  });
+  return (
+    <div className="mb-auto grid w-full grid-cols-3 gap-2 pe-[12%]">
+      <StarsGradient />
+      {new Array(data).fill(0).map((_, index) => (
         <StarCard
           key={index}
-          name={days[index]}
-          active={index <= 8}
+          name={content.days[index]}
+          active={index <= 2}
           stars={index % 4}
           passed={index < 4}
           suggested={index === 4}
-          today={index === 8}
+          today={index === 2}
         />
       ))}
     </div>
   );
 };
+
 const QuestionPaper = ({ questions }: { questions: QuestionProps[] }) => {
   return (
     <div className="flex flex-col gap-y-8 text-brown">
@@ -270,9 +262,7 @@ function SpecialRewards() {
                   <SwiperSlide>
                     <SpecialRewardSliderCard />
                   </SwiperSlide>
-                  <SwiperSlide>
-                    <SpecialRewardSliderCard />
-                  </SwiperSlide>
+
                   <div className="pointer-events-none absolute inset-0 z-50 flex items-center justify-between pb-[15%] ">
                     <NextButton onClick={prev} disabled={!canPrev} />
                     <PrevButton onClick={next} disabled={!canNext} />

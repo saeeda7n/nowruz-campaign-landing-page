@@ -3,6 +3,15 @@ import Image from "next/image";
 import content from "@/data/landing/content.json";
 import Book from "@/app/(landing)/questionChallenge/book";
 import BookContext from "@/app/(landing)/questionChallenge/bookContext";
+import {
+  getQuestionsLength,
+  getUnlockedQuestions,
+} from "@/server/actions/questions";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 
 type GameGuidelineTicketHelpProps = {
   title: string;
@@ -121,16 +130,29 @@ function GameGuideline() {
   );
 }
 
-const QuestionChallenge = () => {
+const QuestionChallenge = async () => {
+  const query = new QueryClient();
+  await Promise.all([
+    query.prefetchQuery({
+      queryKey: ["qsLen"],
+      queryFn: getQuestionsLength,
+    }),
+    query.prefetchQuery({
+      queryKey: ["qsUnlock"],
+      queryFn: getUnlockedQuestions,
+    }),
+  ]);
   return (
     <section className="relative -mt-32">
       <FloatingGiftBoxes />
-      <BookContext>
-        <div className="flex flex-wrap justify-between gap-16">
-          <GameGuideline />
-          <Book />
-        </div>
-      </BookContext>
+      <HydrationBoundary state={dehydrate(query)}>
+        <BookContext>
+          <div className="flex flex-wrap justify-between gap-16">
+            <GameGuideline />
+            <Book />
+          </div>
+        </BookContext>
+      </HydrationBoundary>
     </section>
   );
 };

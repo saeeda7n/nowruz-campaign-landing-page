@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { PropsWithChildren } from "react";
 import { estedadFont } from "@/lib/fonts";
 import { Toaster } from "sonner";
+import ClientProviders from "@/app/clientProviders";
 
 const fallbackFont = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
@@ -16,11 +17,13 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
   return (
     <html lang="fa" dir="rtl">
       <body
-        className={cn(estedadFont.variable, "font-estedad overflow-x-hidden")}
+        className={cn(estedadFont.variable, "overflow-x-hidden font-estedad")}
       >
-        <div className="relative mx-auto max-w-[1940px] overflow-x-hidden">
-          {children}
-        </div>
+        <ClientProviders>
+          <div className="relative mx-auto max-w-[1940px] overflow-x-hidden">
+            {children}
+          </div>
+        </ClientProviders>
         <Toaster />
       </body>
     </html>
