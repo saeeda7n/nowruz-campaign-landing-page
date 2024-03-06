@@ -1,9 +1,16 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { PropsWithChildren, useEffect, useState } from "react";
 import Image from "next/image";
 import Paper from "@/app/(landing)/questionChallenge/paper";
 import { cn } from "@/lib/utils";
-import { ChevronUp, Star } from "lucide-react";
+import {
+  ChevronUp,
+  MoveLeft,
+  MoveRight,
+  Send,
+  SendHorizonal,
+  Star,
+} from "lucide-react";
 import { useBook } from "@/app/(landing)/questionChallenge/bookContext";
 import content from "@/data/landing/content.json";
 import { useQuery } from "@tanstack/react-query";
@@ -17,7 +24,7 @@ const SelectDayPaper = () => {
   const question = useQuery({
     enabled: false,
     queryKey: ["qs"],
-    queryFn: () => getQuestion(id),
+    queryFn: (context) => getQuestion(id),
   });
 
   useEffect(() => {
@@ -47,23 +54,26 @@ const SelectDayPaper = () => {
   );
 };
 
-const QuestionPaper = ({ questions }: { questions: QuestionProps[] }) => {
+const QuestionPaper = ({
+  questions,
+  children,
+}: { questions: QuestionProps[] } & PropsWithChildren) => {
   return (
     <div className="flex flex-col gap-y-8 text-brown">
       {questions.map((question) => (
         <div className="flex flex-col gap-y-4" key={question.id}>
-          <p className="text-base font-bold">{question.question}</p>
+          <p className="text-sm font-bold sm:text-base">{question.question}</p>
           <div className="flex flex-col gap-3">
             {question.answers.map((answer) => (
               <div className="group flex items-center gap-2" key={answer.id}>
                 <label className="flex flex-shrink-0">
                   <input
-                    type="checkbox"
+                    type="radio"
                     className="peer"
                     hidden
                     name={`q-${question.id}`}
                   />
-                  <span className="size-5 rounded-full border-4 border-brown bg-transparent group-hover:bg-brown peer-checked:bg-white" />
+                  <span className="size-5 rounded-full border-4 border-brown bg-transparent peer-checked:bg-white" />
                 </label>
                 <p className="text-sm font-medium">{answer.answer}</p>
               </div>
@@ -71,13 +81,13 @@ const QuestionPaper = ({ questions }: { questions: QuestionProps[] }) => {
           </div>
         </div>
       ))}
+      {children}
     </div>
   );
 };
 
 const Book = () => {
   const { setPage, page, singlePage, question } = useBook();
-  console.log(page);
   return (
     <div className="relative -ms-24 flex flex-1 select-none lg:ms-0">
       <div className="mx-auto flex w-[200%] max-w-[992px] items-center justify-start md:justify-center">
@@ -91,20 +101,77 @@ const Book = () => {
         <div className="absolute inset-0 flex">
           <form className="relative flex-1">
             <Paper
-              back={0 >= page}
-              page={2}
+              show={[0, 1].includes(page)}
+              back={page > 0}
+              page={3}
               front={<SelectDayPaper />}
               rear={
-                question && (
-                  <QuestionPaper questions={question.questions.slice(2, 3)} />
+                question &&
+                !singlePage && (
+                  <QuestionPaper questions={question.questions.slice(2, 3)}>
+                    <div className="absolute bottom-[1%] left-0 right-0 flex items-center justify-center">
+                      <button className="flex h-12 items-center justify-center gap-2 rounded-2xl bg-[--lighter-brown] px-8 font-bold text-gray-50 [box-shadow:0_4px_0_0_var(--brown)]">
+                        <Send className="fill-gray-50" />
+                        ثبت جواب ها
+                      </button>
+                    </div>
+                  </QuestionPaper>
                 )
               }
             />
             <Paper
-              page={1}
+              show={[1, 2].includes(page)}
+              page={2}
+              back={page > 1}
               front={
                 question && (
-                  <QuestionPaper questions={question.questions.slice(0, 2)} />
+                  <QuestionPaper questions={question.questions.slice(0, 2)}>
+                    <div className="absolute bottom-[1%] left-0 right-0 flex items-center justify-center gap-2">
+                      {singlePage && (
+                        <button
+                          type="button"
+                          onClick={() => setPage(2)}
+                          className="flex h-12 items-center justify-center gap-2 rounded-2xl bg-[--lighter-brown] px-8 font-bold text-gray-50 [box-shadow:0_4px_0_0_var(--brown)]"
+                        >
+                          <MoveRight className="fill-gray-50" />
+                          صفحه بعدی
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => setPage(0)}
+                        className="flex h-12 items-center justify-center gap-2 rounded-2xl bg-[--lighter-brown] px-8 font-bold text-gray-50 [box-shadow:0_4px_0_0_var(--brown)]"
+                      >
+                        بازگشت
+                        <MoveLeft className="fill-gray-50" />
+                      </button>
+                    </div>
+                  </QuestionPaper>
+                )
+              }
+            />
+            <Paper
+              show={[2, 3].includes(page)}
+              page={1}
+              back={page > 2}
+              front={
+                question && (
+                  <QuestionPaper questions={question.questions.slice(2, 3)}>
+                    <div className="absolute bottom-[1%] left-0 right-0 flex items-center justify-center gap-2">
+                      <button className="flex h-12 items-center justify-center gap-2 rounded-2xl bg-[--lighter-brown] px-8 font-bold text-gray-50 [box-shadow:0_4px_0_0_var(--brown)]">
+                        <SendHorizonal className="fill-gray-50" />
+                        ثبت جواب ها
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPage(1)}
+                        className="flex h-12 items-center justify-center gap-2 rounded-2xl bg-[--lighter-brown] px-8 font-bold text-gray-50 [box-shadow:0_4px_0_0_var(--brown)]"
+                      >
+                        بازگشت
+                        <MoveLeft className="fill-gray-50" />
+                      </button>
+                    </div>
+                  </QuestionPaper>
                 )
               }
             />

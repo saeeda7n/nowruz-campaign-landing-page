@@ -40,6 +40,7 @@
         --ripe-mango: #FEC421;
         --light-brown: #BC541B;
         --white-gold: #FFFEB1;
+        --lighter-brown: #99502F;
     }
 }
 
@@ -77,4 +78,12 @@
     100% {
         box-shadow: inset 0 0 15px 8px #FCF7BB;
     }
+}
+
+.paper.invisible {
+    transition: visibility step-end 2s, z-index step-end 0s;
+}
+
+.paper.visible {
+    transition: visibility step-end 0.2s, z-index step-end 0s;
 }

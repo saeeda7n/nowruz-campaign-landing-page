@@ -4,15 +4,17 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Image from "next/image";
 import { useBook } from "@/app/(landing)/questionChallenge/bookContext";
+import { cn } from "@/lib/utils";
 
 type Props = React.HTMLAttributes<HTMLDivElement> &
   PropsWithChildren & {
+    show?: boolean;
     back?: boolean;
     page: number;
     front?: React.ReactNode;
     rear?: React.ReactNode;
   };
-const Paper = ({ front, rear, back, page, ...props }: Props) => {
+const Paper = ({ front, rear, show, back, page, ...props }: Props) => {
   const scope = useRef<any>(null);
   const { setAllowSwitch } = useBook();
   const [tl, setTl] = useState<gsap.core.Timeline>();
@@ -20,7 +22,7 @@ const Paper = ({ front, rear, back, page, ...props }: Props) => {
     () => {
       const tl = gsap
         .timeline({
-          defaults: { duration: 0 },
+          defaults: { duration: 0, ease: "power2.inOut" },
           paused: true,
           onStart() {
             setAllowSwitch(false);
@@ -31,14 +33,28 @@ const Paper = ({ front, rear, back, page, ...props }: Props) => {
         })
         .fromTo(
           ".paper",
-          { rotateY: 0, duration: 1.5 },
-          { rotateY: 180, duration: 1.5 },
+          {
+            rotateY: 0,
+            duration: 2.5,
+            keyframes: {
+              "10%": { zIndex: 999 },
+              "100%": { zIndex: 9999 },
+            },
+          },
+          {
+            rotateY: 180,
+            duration: 2.5,
+            keyframes: {
+              "10%": { zIndex: 10 },
+              "100%": { zIndex: 10 },
+            },
+          },
         )
         .fromTo(
           ".front",
           { display: "flex", duration: 0.0001 },
           { display: "none", duration: 0.0001 },
-          0.4,
+          1.24,
         )
         .fromTo(
           ".back",
@@ -47,7 +63,7 @@ const Paper = ({ front, rear, back, page, ...props }: Props) => {
             display: "flex",
             duration: 0.0001,
           },
-          0.4,
+          1.24,
         );
       setTl(tl);
     },
@@ -55,15 +71,17 @@ const Paper = ({ front, rear, back, page, ...props }: Props) => {
   );
 
   useEffect(() => {
-    if (!back) tl?.play();
+    if (back) tl?.play();
     else tl?.reverse();
   }, [back]);
 
   return (
     <div
-      className="relative -me-[1.5%] -mt-[0.4%] flex-1 select-none"
+      className={cn(
+        "paper invisible relative -me-[1.5%] -mt-[0.4%] flex-1 select-none",
+        { visible: show },
+      )}
       ref={scope}
-      style={{ zIndex: page }}
     >
       <div className="paper absolute inset-0 origin-left">
         <div className="relative ms-[20%] flex w-[81%] max-w-[25.3rem] overflow-hidden md:ms-auto md:flex-row-reverse">

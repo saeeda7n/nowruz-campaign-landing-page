@@ -50,6 +50,7 @@ const BookContext = ({ children }: PropsWithChildren) => {
     queryKey: ["qsData"],
     queryFn: () => getQuestionGameData(),
   });
+  const [timeout, setTimeoutId] = useState<any>();
   const [page, setPage] = useState(0);
   const [allowSwitch, setAllowSwitch] = useState(true);
   const [singlePage, setSinglePage] = useState(true);
@@ -59,12 +60,24 @@ const BookContext = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     if (width < 848) setSinglePage(true);
     else setSinglePage(false);
-  }, []);
+  }, [width]);
 
   useEffect(() => {
-    if (question) setPage(1);
+    if (question) {
+      clearTimeout(timeout);
+      setPage(1);
+    }
   }, [question]);
 
+  useEffect(() => {
+    clearTimeout(timeout);
+    if (page <= 0 && question) {
+      const id = setTimeout(() => {
+        setQuestion(undefined);
+      }, 2000);
+      setTimeoutId(id);
+    }
+  }, [page]);
   return (
     <bookContext.Provider
       value={{
