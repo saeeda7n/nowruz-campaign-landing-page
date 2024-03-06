@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import content from "@/data/landing/content.json";
 import Book from "@/app/(landing)/questionChallenge/book";
+import BookContext from "@/app/(landing)/questionChallenge/bookContext";
 
 type GameGuidelineTicketHelpProps = {
   title: string;
@@ -97,7 +98,7 @@ function GameGuideline() {
           className="absolute h-full w-full select-none"
           alt="paper background"
         />
-        <div className="text-brown relative space-y-5 px-5 py-5 pb-8 sm:px-12">
+        <div className="relative space-y-5 px-5 py-5 pb-8 text-brown sm:px-12">
           {content.help_content.map((content) => (
             <GameGuidelineHelpCard {...content} key={content.title} />
           ))}
@@ -124,10 +125,12 @@ const QuestionChallenge = () => {
   return (
     <section className="relative -mt-32">
       <FloatingGiftBoxes />
-      <div className="flex flex-wrap justify-between gap-16">
-        <GameGuideline />
-        <Book />
-      </div>
+      <BookContext>
+        <div className="flex flex-wrap justify-between gap-16">
+          <GameGuideline />
+          <Book />
+        </div>
+      </BookContext>
     </section>
   );
 };
