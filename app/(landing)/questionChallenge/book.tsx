@@ -5,6 +5,7 @@ import Paper from "@/app/(landing)/questionChallenge/paper";
 import { cn } from "@/lib/utils";
 import {
   ChevronUp,
+  Loader,
   MoveLeft,
   MoveRight,
   Send,
@@ -14,7 +15,7 @@ import {
 import { useBook } from "@/app/(landing)/questionChallenge/bookContext";
 import content from "@/data/landing/content.json";
 import { useQuery } from "@tanstack/react-query";
-import { getQuestion } from "@/server/actions/questions";
+import { getQuestion, submitAnswer } from "@/server/actions/questions";
 import BookSlider from "@/app/(landing)/questionChallenge/bookSlider";
 
 const SelectDayPaper = () => {
@@ -36,21 +37,32 @@ const SelectDayPaper = () => {
   }, [question.data]);
 
   return (
-    <div className="mb-auto grid w-full grid-cols-3 gap-2 pe-[12%]">
-      <StarsGradient />
-      {new Array(gameData?.totalQuestions).fill(0).map((_, index) => (
-        <StarCard
-          key={index}
-          onClick={() => setId(gameData?.activeQuestionIds[index] || "")}
-          name={content.days[index]}
-          active={index < (gameData?.today || 0)} //activated or not
-          today={gameData?.activeQuestionIds[index] === gameData?.currentDayId} //the current and last day
-          stars={0} //user stars earned
-          passed={false} //user answered this
-          suggested={false} //first day not answered yet
-        />
-      ))}
-    </div>
+    <>
+      {question.isFetching && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="flex size-20 items-center justify-center  rounded-3xl bg-brown text-gray-50 opacity-50">
+            <Loader className="animate-spin" />
+          </div>
+        </div>
+      )}
+      <div className="relative mb-auto grid w-full grid-cols-3 gap-2 pe-[12%]">
+        <StarsGradient />
+        {new Array(gameData?.totalQuestions).fill(0).map((_, index) => (
+          <StarCard
+            key={index}
+            onClick={() => setId(gameData?.activeQuestionIds[index] || "")}
+            name={content.days[index]}
+            active={index < (gameData?.today || 0)} //activated or not
+            today={
+              gameData?.activeQuestionIds[index] === gameData?.currentDayId
+            } //the current and last day
+            stars={0} //user stars earned
+            passed={false} //user answered this
+            suggested={false} //first day not answered yet
+          />
+        ))}
+      </div>
+    </>
   );
 };
 
@@ -68,6 +80,7 @@ const QuestionPaper = ({
               <div className="group flex items-center gap-2" key={answer.id}>
                 <label className="flex flex-shrink-0">
                   <input
+                    defaultValue="0"
                     type="radio"
                     className="peer"
                     hidden
@@ -100,7 +113,14 @@ const Book = () => {
           className="ms-auto  max-w-[992px] [filter:drop-shadow(0_23px_46px_#581C01)] md:w-auto"
         />
         <div className="absolute inset-0 flex">
-          <form className="relative flex-1">
+          <form
+            className="relative flex-1"
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const data = new FormData(e.target as HTMLFormElement);
+              await submitAnswer(data);
+            }}
+          >
             <input hidden name="dayId" value={question?.id} />
             <Paper
               show={[0, 1].includes(page)}
