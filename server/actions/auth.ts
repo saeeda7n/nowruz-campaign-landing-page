@@ -68,7 +68,7 @@ export async function authLogin(phone: string, code: string) {
   }
 }
 
-export async function signOut() {
+export async function authSignOut() {
   const { session } = await validateRequest();
   if (!session) return { status: false, message: "کاربری یافت نشد!" };
   await lucia.invalidateSession(session.id);

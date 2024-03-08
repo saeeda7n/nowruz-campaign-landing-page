@@ -1,8 +1,24 @@
 "use client";
 import React, { useState } from "react";
-import { X, PartyPopper, Text } from "lucide-react";
+import {
+  X,
+  PartyPopper,
+  Text,
+  User,
+  UserRound,
+  Power,
+  Loader2,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { useUser } from "@/authProvider";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { authSignOut } from "@/server/actions/auth";
 
 const items = [
   { name: "عیدانه", url: "", icon: null },
@@ -17,6 +33,10 @@ const items = [
 ];
 const Header = () => {
   const [open, setOpen] = useState(false);
+  const user = useUser();
+  const signOut = useMutation({
+    mutationFn: () => authSignOut(),
+  });
   return (
     <>
       <header
@@ -44,12 +64,37 @@ const Header = () => {
               </li>
             ))}
           </ul>
-          <div
-            className="md:invisible"
-            role="button"
-            onClick={() => setOpen((p) => !p)}
-          >
-            {open ? <X size={28} /> : <Text size={28} />}
+
+          <div className="flex h-full items-center">
+            <button className="md:invisible" onClick={() => setOpen((p) => !p)}>
+              {open ? <X size={28} /> : <Text size={28} />}
+            </button>
+            {user && (
+              <Popover>
+                <PopoverTrigger>
+                  <UserRound />
+                </PopoverTrigger>
+                <PopoverContent
+                  align="end"
+                  className="dark w-52 border-none bg-black/50 text-gray-50 backdrop-blur"
+                >
+                  <div className="flex items-center justify-between text-sm">
+                    {user.phone}
+                    {signOut.isPending ? (
+                      <Loader2 className="animate-spin" size={16} />
+                    ) : (
+                      <Power
+                        role={"button"}
+                        onClick={() => signOut.mutate()}
+                        className="text-red-600"
+                        size={16}
+                        strokeWidth={3}
+                      />
+                    )}
+                  </div>
+                </PopoverContent>
+              </Popover>
+            )}
           </div>
         </div>
       </header>
