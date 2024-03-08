@@ -38,6 +38,7 @@ export async function getAuthOtp(phone: string) {
 
     return { message: "کد تایید برای شما ارسال شد.", status: true };
   } catch (e) {
+    console.log(e);
     return {
       status: false,
       message: "خطایی رخ داده است! لطفا دوباره تلاش کنید.",

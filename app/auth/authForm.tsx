@@ -109,7 +109,7 @@ const AuthForm = () => {
   );
 
   function onSubmit(values: z.infer<typeof authSchema>) {
-    if (!getOtp.data)
+    if (!getOtp.data?.status)
       getOtp.mutate(values.phone, {
         onError(error) {
           toast.error("خطایی رخ داده است! لطفا مجددا تلاش کنید.");
@@ -121,7 +121,7 @@ const AuthForm = () => {
           } else toast.error(data.message);
         },
       });
-    else
+    else if (getOtp.data.status)
       login.mutate(
         { ...values, code: values.code! },
         {
