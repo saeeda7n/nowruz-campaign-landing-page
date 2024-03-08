@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 
 import Image from "next/image";
 import PointBarSlider from "@/app/(landing)/pointbar/pointBarSlider";
+import { getSession } from "@/server/actions/auth";
 
 type ChipProps = { className?: string } & PropsWithChildren;
 
@@ -11,7 +12,7 @@ export function Chip({ children, className }: ChipProps) {
   return (
     <div
       className={cn(
-        "border-brown flex h-8 select-none items-center gap-2 rounded-xl border px-4 font-bold",
+        "flex h-8 select-none items-center gap-2 rounded-xl border border-brown px-4 font-bold",
         className,
       )}
     >
@@ -20,7 +21,10 @@ export function Chip({ children, className }: ChipProps) {
   );
 }
 
-function Header() {
+async function Header() {
+  const { user } = await getSession();
+  const hundred = user?.cards.filter((card) => card === "100").length;
+  const thousand = user?.cards.filter((card) => card === "1000").length;
   return (
     <div className="flex flex-wrap items-center justify-between gap-y-5">
       <div className="space-y-2">
@@ -31,24 +35,26 @@ function Header() {
           افزایش دهید
         </p>
       </div>
-      <div className="ms-auto flex flex-wrap justify-end gap-4 gap-y-2">
-        <Chip>
-          <Ticket size={16} className="fill-brown" />
-          <span className="text-xs">0 کارت صد آفرین</span>
-        </Chip>
+      {user && (
+        <div className="ms-auto flex flex-wrap justify-end gap-4 gap-y-2">
+          <Chip>
+            <Ticket size={16} className="fill-brown" />
+            <span className="text-xs">{hundred} کارت صد آفرین</span>
+          </Chip>
 
-        <Chip className="border-gold text-gold">
-          <Ticket size={16} className="fill-gold" />
-          <span className="text-xs">0 کارت هزار آفرین</span>
-        </Chip>
-      </div>
+          <Chip className="border-gold text-gold">
+            <Ticket size={16} className="fill-gold" />
+            <span className="text-xs">{thousand} کارت هزار آفرین</span>
+          </Chip>
+        </div>
+      )}
     </div>
   );
 }
 
 const PointBar = () => {
   return (
-    <section className="text-brown flex flex-col gap-12 overflow-hidden py-16 pt-24">
+    <section className="flex flex-col gap-12 overflow-hidden py-16 pt-24 text-brown">
       <Header />
       <div className="min-h-96 pt-12">
         <PointBarSlider />

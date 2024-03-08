@@ -102,8 +102,9 @@ const AuthForm = () => {
             getOtp.isPending || login.isPending || !form.formState.isValid
           }
         >
-          {getOtp.isPending ||
-            (login.isPending && <Loader2 className="animate-spin" size={16} />)}
+          {(getOtp.isPending || login.isPending) && (
+            <Loader2 className="animate-spin" size={16} />
+          )}
           {getOtp.data?.status ? "ورود" : "دریافت کد تایید"}
         </button>
       </form>

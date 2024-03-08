@@ -6,6 +6,8 @@ import { toast } from "sonner";
 import Image from "next/image";
 import { useWheel } from "@/lib/useWheel";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/authProvider";
+import Link from "next/link";
 
 const points = [20, 40, 60, 200, 500, 40, 60, , 200, 20, 20];
 
@@ -13,14 +15,6 @@ function CopyReferralCodeButton({ code }: { code?: string }) {
   if (!code) return "";
   return (
     <div className="flex flex-col gap-2 sm:flex-row">
-      <button
-        onClick={() => copy(code)}
-        className="flex h-10 items-center gap-2 rounded-full bg-white/30 px-5 font-medium"
-      >
-        <Copy size={16} />
-        <span>{code}</span>
-      </button>
-
       <button
         onClick={() => copy(`https://ctelecom.com/nowroz?ref=${code}`)}
         className="flex h-10 items-center gap-2 rounded-full  bg-white/30 px-5 text-sm font-medium"
@@ -34,36 +28,46 @@ function CopyReferralCodeButton({ code }: { code?: string }) {
   function copy(text: string) {
     navigator.clipboard
       .writeText(text)
-      .then(() => toast.success("لینک زیر مجموعه گیری با موفقیت کپی شد"))
+      .then(() =>
+        toast.success(
+          "لینک زیر مجموعه گیری با موفقیت کپی شد, کافیه اون رو با دوستات به اشتراک بزاری!",
+        ),
+      )
       .catch(() => toast.error("خطایی در کپی کردن لینک وجود دارد!"));
   }
 }
 
 function Header() {
+  const { user } = useAuth();
   const invited = 0;
   return (
     <div className="flex flex-wrap items-center justify-between gap-y-5">
       <div className="space-y-2">
         <h3 className="text-lg font-bold">بازی گردونه شانس</h3>
       </div>
-      <div className="ms-auto hidden flex-wrap justify-end gap-4 gap-y-2 sm:flex">
-        <Chip className="text-brown border-gold">
-          <span className="text-xs">
-            {invited > 0
-              ? "افراد دعوت شده توسط شما 4 نفر"
-              : "شما تا کنون کسی را دعوت نکرده اید :("}
-          </span>
-        </Chip>
+      {user && (
+        <div className="ms-auto hidden flex-wrap justify-end gap-4 gap-y-2 sm:flex">
+          <Chip className="border-gold text-brown">
+            <span className="text-xs">
+              {invited > 0
+                ? "افراد دعوت شده توسط شما 4 نفر"
+                : "شما تا کنون کسی را دعوت نکرده اید :("}
+            </span>
+          </Chip>
 
-        <Chip className="text-brown bg-gold border-none">
-          <span className="text-xs">امتیاز شما 100 سی تی</span>
-        </Chip>
-      </div>
+          <Chip className="border-none bg-gold text-brown">
+            <span className="text-xs">
+              امتیاز شما {user?.points.toLocaleString()} سی تی
+            </span>
+          </Chip>
+        </div>
+      )}
     </div>
   );
 }
 
 function GameGuideline() {
+  const { user } = useAuth();
   const invited = 0;
 
   return (
@@ -84,21 +88,33 @@ function GameGuideline() {
           بچرخانید و از هدایای بدست آمده یکی از بهترین ها را برای خودتان انتخاب
           کنید.
         </p>
+
+        {!user && (
+          <div className="!mt-2">
+            برای شروع کافیه یک حساب کاربری جدید بسازی یا وارد حسابت بشی! برای
+            ساخت حساب کاربری یا ورود به حسابت میتونی{" "}
+            <Link href="/auth" className="underline">
+              اینجا کلیک کنی.
+            </Link>
+          </div>
+        )}
       </div>
 
-      <div className="flex flex-col gap-3 rounded-2xl border-2 border-[#FEC421] bg-[#F9DBAD] px-6 py-5">
-        <div className="space-y-2">
-          <h5 className="text-xs font-semibold sm:text-sm">
-            برای بدست آوردن امتیازات بیشتر شما می توانید دوستان خود را با
-            استفاده از کد روبه رو دعوت کنید
-          </h5>
-          <p className="flex items-center gap-2 text-xs">
-            <Info className="hidden sm:block" />
-            با هر دعوت از دوستان خود 20 امتیاز دریافت می کنید
-          </p>
+      {user && (
+        <div className="flex flex-col gap-3 rounded-2xl border-2 border-[#FEC421] bg-[#F9DBAD] px-6 py-5">
+          <div className="space-y-2">
+            <h5 className="text-xs font-semibold sm:text-sm">
+              برای بدست آوردن امتیازات بیشتر شما می توانید دوستان خود را با
+              استفاده از کد روبه رو دعوت کنید
+            </h5>
+            <p className="flex items-center gap-2 text-xs">
+              <Info className="hidden sm:block" />
+              با هر دعوت از دوستان خود 20 امتیاز دریافت می کنید
+            </p>
+          </div>
+          <CopyReferralCodeButton code={user?.refId} />
         </div>
-        <CopyReferralCodeButton code="CX334SW" />
-      </div>
+      )}
     </div>
   );
 }
@@ -174,7 +190,7 @@ function Wheel({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
 
 const WheelOfLuck = () => {
   return (
-    <section className="text-brown flex flex-wrap items-center gap-10 gap-y-16 py-24">
+    <section className="flex flex-wrap items-center gap-10 gap-y-16 py-24 text-brown">
       <GameGuideline />
       <WheelOfLuckGame />
     </section>

@@ -15,30 +15,51 @@ datasource db {
 
 model User {
   id        String    @id @default(uuid())
+  refId     String    @unique @map("ref_id")
   phone     String    @unique
   sessions  Session[]
   otps      Otp[]
+  answers   Answer[]
+  points    Int       @default(0)
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
+  cards     String[]  @default([])
+  seenCards String[]  @default([]) @map("seen_cards")
 
   @@map("users")
 }
 
 model Session {
   id        String   @id @default(uuid())
-  userId    String
-  expiresAt DateTime
+  userId    String   @map("user_id")
+  expiresAt DateTime @map("expires_at")
   createdAt DateTime @default(now()) @map("created_at")
   user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
 model Otp {
   id        String   @id @default(uuid())
-  userId    String
-  createdAt DateTime @default(now()) @map("created_at")
+  userId    String   @map("user_id")
   code      String   @db.VarChar(6)
   used      Boolean  @default(false)
-  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id])
 
   @@map("otps")
+}
+
+model Answer {
+  id         String   @id @default(uuid())
+  userId     String   @map("user_id")
+  dayId      String   @map("day_id")
+  questionId String   @map("question_id")
+  answerId   String   @map("answer_id")
+  isCorrect  Boolean  @map("is_correct")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@map("answers")
 }

@@ -7,7 +7,7 @@ import { estedadFont } from "@/lib/fonts";
 import { Toaster } from "sonner";
 import ClientProviders from "@/app/clientProviders";
 import AuthProvider from "@/authProvider";
-import { validateRequest } from "@/lib/auth";
+import { getSession } from "@/server/actions/auth";
 
 const fallbackFont = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
 }: Readonly<PropsWithChildren>) {
-  const session = await validateRequest();
+  const session = await getSession();
   return (
     <html lang="fa" dir="rtl">
       <body
@@ -26,7 +26,10 @@ export default async function RootLayout({
       >
         <AuthProvider session={session}>
           <ClientProviders>{children}</ClientProviders>
-          <Toaster />
+          <Toaster
+            className="font-estedad"
+            toastOptions={{ className: "font-estedad" }}
+          />
         </AuthProvider>
       </body>
     </html>

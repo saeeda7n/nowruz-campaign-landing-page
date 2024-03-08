@@ -1,11 +1,12 @@
 "use server";
 import prisma from "@/prisma/prisma";
 import { authSchema } from "@/schemas/authSchemas";
-import { lucia, luciaCookieToNextCookie, validateRequest } from "@/lib/auth";
+import { lucia, luciaCookieToNextCookie, SessionProps } from "@/lib/auth";
 import { cookies } from "next/headers";
+import { subMinutes } from "date-fns";
 
 export async function getAuthOtp(phone: string) {
-  const session = await validateRequest();
+  const session = await getSession();
   if (session.user)
     return { status: false, message: "شما قبلا وارد حساب خود شده اید!" };
   const result = await authSchema.safeParseAsync({ phone });
@@ -22,7 +23,11 @@ export async function getAuthOtp(phone: string) {
       async (tx) => {
         await tx.user.upsert({
           where: { phone },
-          create: { phone, otps: { create: { code } } },
+          create: {
+            refId: Date.now().toString(36).replace("0.", ""),
+            phone,
+            otps: { create: { code } },
+          },
           update: {
             otps: { create: { code } },
           },
@@ -36,7 +41,7 @@ export async function getAuthOtp(phone: string) {
 
     //todo: send sms
 
-    return { message: "کد تایید برای شما ارسال شد.", status: true };
+    return { message: "کد ورود یک بار مصرف برای شمار ارسال شد.", status: true };
   } catch (e) {
     return {
       status: false,
@@ -49,7 +54,16 @@ export async function getAuthOtp(phone: string) {
 export async function authLogin(phone: string, code: string) {
   try {
     const user = await prisma.user.update({
-      where: { phone, otps: { some: { code, used: false } } },
+      where: {
+        phone,
+        otps: {
+          some: {
+            code,
+            used: false,
+            createdAt: { gte: subMinutes(Date.now(), 10) },
+          },
+        },
+      },
       data: {
         otps: {
           updateMany: {
@@ -62,18 +76,38 @@ export async function authLogin(phone: string, code: string) {
     const session = await lucia.createSession(user.id, {});
     const cookie = lucia.createSessionCookie(session.id);
     cookies().set(luciaCookieToNextCookie(cookie));
-    return { status: true, message: "شما با موفقیت وارد حسابتان شدید!" };
+    return { status: true, message: "با موفقیت وارد حسابتان شدید!" };
   } catch (e) {
     return { status: false, message: "کد وارد شده صحیح نمیباشد!" };
   }
 }
 
 export async function authSignOut() {
-  const { session } = await validateRequest();
+  const { session } = await getSession();
   if (!session) return { status: false, message: "کاربری یافت نشد!" };
   await lucia.invalidateSession(session.id);
   cookies().set(luciaCookieToNextCookie(lucia.createBlankSessionCookie()));
   return { status: true, message: "با موفقیت از حسابتان خارج شدید." };
+}
+
+export async function getSession(): Promise<SessionProps> {
+  const sessionId = lucia.readSessionCookie(cookies().toString());
+  if (!sessionId) {
+    return {
+      user: null,
+      session: null,
+    };
+  }
+  const result = await lucia.validateSession(sessionId);
+  if (result.session && result.session.fresh) {
+    const cookie = lucia.createSessionCookie(result.session.id);
+    cookies().set(luciaCookieToNextCookie(cookie));
+  }
+  if (!result.session) {
+    const cookie = lucia.createBlankSessionCookie();
+    cookies().set(luciaCookieToNextCookie(cookie));
+  }
+  return result;
 }
 
 function getRandomInt(min: number, max: number) {

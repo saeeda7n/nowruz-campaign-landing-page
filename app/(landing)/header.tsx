@@ -19,6 +19,7 @@ import {
 import { useUser } from "@/authProvider";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { authSignOut } from "@/server/actions/auth";
+import Link from "next/link";
 
 const items = [
   { name: "عیدانه", url: "", icon: null },
@@ -65,11 +66,8 @@ const Header = () => {
             ))}
           </ul>
 
-          <div className="flex h-full items-center">
-            <button className="md:invisible" onClick={() => setOpen((p) => !p)}>
-              {open ? <X size={28} /> : <Text size={28} />}
-            </button>
-            {user && (
+          <div className="flex h-full items-center gap-3">
+            {user ? (
               <Popover>
                 <PopoverTrigger>
                   <UserRound />
@@ -94,7 +92,14 @@ const Header = () => {
                   </div>
                 </PopoverContent>
               </Popover>
+            ) : (
+              <Link href="/auth">
+                <UserRound role={"button"} onClick={() => signOut.mutate()} />
+              </Link>
             )}
+            <button className="md:invisible" onClick={() => setOpen((p) => !p)}>
+              {open ? <X size={28} /> : <Text size={28} />}
+            </button>
           </div>
         </div>
       </header>

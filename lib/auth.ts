@@ -8,8 +8,13 @@ import { cookies } from "next/headers";
 const adapter = new PrismaAdapter(prisma.session, prisma.user);
 
 interface DatabaseUserAttributes {
-  id: number;
+  id: string;
   phone: string;
+  refId: string;
+  points: number;
+  createdAt: string;
+  updatedAt: string;
+  cards: string[];
 }
 
 export const lucia = new Lucia(adapter, {
@@ -35,26 +40,6 @@ declare module "lucia" {
 export type SessionProps =
   | { user: User; session: Session }
   | { user: null; session: null };
-
-export async function validateRequest(): Promise<SessionProps> {
-  const sessionId = lucia.readSessionCookie(cookies().toString());
-  if (!sessionId) {
-    return {
-      user: null,
-      session: null,
-    };
-  }
-  const result = await lucia.validateSession(sessionId);
-  if (result.session && result.session.fresh) {
-    const cookie = lucia.createSessionCookie(result.session.id);
-    cookies().set(luciaCookieToNextCookie(cookie));
-  }
-  if (!result.session) {
-    const cookie = lucia.createBlankSessionCookie();
-    cookies().set(luciaCookieToNextCookie(cookie));
-  }
-  return result;
-}
 
 export function luciaCookieToNextCookie(cookie: Cookie) {
   return {

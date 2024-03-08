@@ -1,10 +1,10 @@
 import React, { PropsWithChildren } from "react";
-import { validateRequest } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import { getSession } from "@/server/actions/auth";
 
 const Layout = async ({ children }: PropsWithChildren) => {
-  const { session } = await validateRequest();
-  await validateRequest();
+  const { session } = await getSession();
+  await getSession();
   if (session) redirect("/");
   return (
     <div className="flex min-h-lvh justify-center">
