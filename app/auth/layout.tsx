@@ -1,9 +1,14 @@
 import React, { PropsWithChildren } from "react";
+import { validateRequest } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
-const Layout = ({ children }: PropsWithChildren) => {
+const Layout = async ({ children }: PropsWithChildren) => {
+  const { session } = await validateRequest();
+  await validateRequest();
+  if (session) redirect("/");
   return (
     <div className="flex min-h-lvh justify-center">
-      <div className="flex max-w-[31rem] flex-1 flex-col items-center px-2 py-16 pb-8 sm:px-8">
+      <div className="flex max-w-[31rem] flex-1 flex-col items-center gap-8 px-2 py-16 pb-8 sm:px-8">
         {children}
         <div className="mt-auto w-full max-w-96 text-xs">سی تلکام</div>
       </div>

@@ -1,19 +1,19 @@
-import { webcrypto } from "node:crypto";
-
-globalThis.crypto = webcrypto as Crypto;
-import { DatabaseUser, Lucia, Session, User } from "lucia";
+// import { webcrypto } from "crypto";
+// globalThis.crypto = webcrypto as Crypto;
+import { Cookie, Lucia, Session, TimeSpan, User } from "lucia";
 import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
 import prisma from "@/prisma/prisma";
-import { IncomingMessage, ServerResponse } from "node:http";
+import { cookies } from "next/headers";
 
 const adapter = new PrismaAdapter(prisma.session, prisma.user);
 
 interface DatabaseUserAttributes {
+  id: number;
   phone: string;
-  otps: any[];
 }
 
 export const lucia = new Lucia(adapter, {
+  sessionExpiresIn: new TimeSpan(2, "w"),
   sessionCookie: {
     attributes: {
       secure: process.env.NODE_ENV === "production",
@@ -32,11 +32,12 @@ declare module "lucia" {
   }
 }
 
-export async function validateRequest(
-  req: IncomingMessage,
-  res: ServerResponse,
-): Promise<{ user: User; session: Session } | { user: null; session: null }> {
-  const sessionId = lucia.readSessionCookie(req.headers.cookie ?? "");
+export type SessionProps =
+  | { user: User; session: Session }
+  | { user: null; session: null };
+
+export async function validateRequest(): Promise<SessionProps> {
+  const sessionId = lucia.readSessionCookie(cookies().toString());
   if (!sessionId) {
     return {
       user: null,
@@ -45,16 +46,20 @@ export async function validateRequest(
   }
   const result = await lucia.validateSession(sessionId);
   if (result.session && result.session.fresh) {
-    res.appendHeader(
-      "Set-Cookie",
-      lucia.createSessionCookie(result.session.id).serialize(),
-    );
+    const cookie = lucia.createSessionCookie(result.session.id);
+    cookies().set(luciaCookieToNextCookie(cookie));
   }
   if (!result.session) {
-    res.appendHeader(
-      "Set-Cookie",
-      lucia.createBlankSessionCookie().serialize(),
-    );
+    const cookie = lucia.createBlankSessionCookie();
+    cookies().set(luciaCookieToNextCookie(cookie));
   }
   return result;
+}
+
+export function luciaCookieToNextCookie(cookie: Cookie) {
+  return {
+    name: cookie.name,
+    value: cookie.value,
+    ...cookie.attributes,
+  };
 }

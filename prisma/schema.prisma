@@ -33,12 +33,12 @@ model Session {
 }
 
 model Otp {
-  id        String    @id @default(uuid())
+  id        String   @id @default(uuid())
   userId    String
-  createdAt DateTime  @default(now()) @map("created_at")
-  code      String    @db.VarChar(6)
-  used      DateTime? @updatedAt
-  user      User      @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at")
+  code      String   @db.VarChar(6)
+  used      Boolean  @default(false)
+  user      User     @relation(fields: [userId], references: [id])
 
   @@map("otps")
 }
