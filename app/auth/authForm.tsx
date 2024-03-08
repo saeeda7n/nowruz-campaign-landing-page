@@ -98,7 +98,9 @@ const AuthForm = () => {
         <button
           type="submit"
           className="flex h-10 items-center gap-2 rounded-md bg-blue-600 px-5 text-sm text-gray-50 disabled:opacity-50"
-          disabled={getOtp.isPending || !form.formState.isValid}
+          disabled={
+            getOtp.isPending || login.isPending || !form.formState.isValid
+          }
         >
           {getOtp.isPending ||
             (login.isPending && <Loader2 className="animate-spin" size={16} />)}
