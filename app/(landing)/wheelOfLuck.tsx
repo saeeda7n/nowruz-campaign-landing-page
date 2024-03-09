@@ -90,7 +90,7 @@ function GameGuideline() {
         </p>
 
         {!user && (
-          <div className="!mt-2">
+          <div className="!mt-2 text-sm sm:text-base">
             برای شروع کافیه یک حساب کاربری جدید بسازی یا وارد حسابت بشی! برای
             ساخت حساب کاربری یا ورود به حسابت میتونی{" "}
             <Link href="/auth" className="underline">
