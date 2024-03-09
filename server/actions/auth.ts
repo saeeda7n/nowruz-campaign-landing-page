@@ -91,23 +91,30 @@ export async function authSignOut() {
 }
 
 export async function getSession(): Promise<SessionProps> {
-  const sessionId = lucia.readSessionCookie(cookies().toString());
-  if (!sessionId) {
+  try {
+    const sessionId = lucia.readSessionCookie(cookies().toString());
+    if (!sessionId) {
+      return {
+        user: null,
+        session: null,
+      };
+    }
+    const result = await lucia.validateSession(sessionId);
+    if (result.session && result.session.fresh) {
+      const cookie = lucia.createSessionCookie(result.session.id);
+      cookies().set(luciaCookieToNextCookie(cookie));
+    }
+    if (!result.session) {
+      const cookie = lucia.createBlankSessionCookie();
+      cookies().set(luciaCookieToNextCookie(cookie));
+    }
+    return result;
+  } catch (e) {
     return {
       user: null,
       session: null,
     };
   }
-  const result = await lucia.validateSession(sessionId);
-  if (result.session && result.session.fresh) {
-    const cookie = lucia.createSessionCookie(result.session.id);
-    cookies().set(luciaCookieToNextCookie(cookie));
-  }
-  if (!result.session) {
-    const cookie = lucia.createBlankSessionCookie();
-    cookies().set(luciaCookieToNextCookie(cookie));
-  }
-  return result;
 }
 
 function getRandomInt(min: number, max: number) {
