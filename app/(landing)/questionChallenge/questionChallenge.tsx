@@ -3,7 +3,7 @@ import Image from "next/image";
 import content from "@/data/landing/content.json";
 import Book from "@/app/(landing)/questionChallenge/book";
 import BookContext from "@/app/(landing)/questionChallenge/bookContext";
-import { getQuestionGameData } from "@/server/actions/questions";
+import { getQuestionGameData, getUserStatus } from "@/server/actions/questions";
 import {
   dehydrate,
   HydrationBoundary,
@@ -56,6 +56,10 @@ const QuestionChallenge = async () => {
     query.prefetchQuery({
       queryKey: ["qsData"],
       queryFn: getQuestionGameData,
+    }),
+    query.prefetchQuery({
+      queryKey: ["qsUserData"],
+      queryFn: getUserStatus,
     }),
   ]);
   return (

@@ -14,11 +14,20 @@ import {
 } from "lucide-react";
 import { useBook } from "@/app/(landing)/questionChallenge/bookContext";
 import content from "@/data/landing/content.json";
-import { useQuery } from "@tanstack/react-query";
-import { getQuestion, submitAnswer } from "@/server/actions/questions";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  getQuestion,
+  getUserStatus,
+  submitAnswer,
+} from "@/server/actions/questions";
 import BookSlider from "@/app/(landing)/questionChallenge/bookSlider";
+import { useUser } from "@/authProvider";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const SelectDayPaper = () => {
+  const user = useUser();
+  const router = useRouter();
   const { setQuestion, gameData } = useBook();
   const [id, setId] = useState("");
 
@@ -26,6 +35,11 @@ const SelectDayPaper = () => {
     enabled: false,
     queryKey: ["qs"],
     queryFn: (context) => getQuestion(id),
+  });
+
+  const userState = useQuery({
+    queryFn: () => getUserStatus(),
+    queryKey: ["qsUserData"],
   });
 
   useEffect(() => {
@@ -47,17 +61,26 @@ const SelectDayPaper = () => {
       )}
       <div className="relative mb-auto grid w-full grid-cols-3 gap-2 pe-[12%]">
         <StarsGradient />
-        {new Array(gameData?.totalQuestions).fill(0).map((_, index) => (
+        {gameData?.allQuestionIds.map((id, index) => (
           <StarCard
-            key={index}
-            onClick={() => setId(gameData?.activeQuestionIds[index] || "")}
+            key={id}
+            onClick={() => {
+              if (!user) {
+                router.push("/auth");
+                return;
+              }
+              setId(id);
+            }}
             name={content.days[index]}
             active={index < (gameData?.today || 0)} //activated or not
-            today={
-              gameData?.activeQuestionIds[index] === gameData?.currentDayId
-            } //the current and last day
-            stars={0} //user stars earned
-            passed={false} //user answered this
+            today={id === gameData?.currentDayId} //the current and last day
+            stars={
+              userState.data?.answers.find((answer) => answer.dayId === id)
+                ?.stars || 0
+            } //user stars earned
+            passed={
+              !!userState.data?.answers.find((answer) => answer.dayId === id)
+            } //user answered this
             suggested={false} //first day not answered yet
           />
         ))}
@@ -80,11 +103,10 @@ const QuestionPaper = ({
               <div className="group flex items-center gap-2" key={answer.id}>
                 <label className="flex flex-shrink-0">
                   <input
-                    defaultValue="0"
                     type="radio"
                     className="peer"
                     hidden
-                    name={`q-${question.id}`}
+                    name={`${question.id}`}
                     value={answer.id}
                   />
                   <span className="size-5 rounded-full border-4 border-brown bg-transparent peer-checked:bg-white" />
@@ -102,6 +124,9 @@ const QuestionPaper = ({
 
 const Book = () => {
   const { setPage, page, singlePage, question } = useBook();
+  const submit = useMutation({
+    mutationFn: (data: FormData) => submitAnswer(data),
+  });
   return (
     <div className="relative -ms-24 flex flex-1 select-none lg:ms-0">
       <div className="mx-auto flex w-[200%] max-w-[992px] items-center justify-start md:justify-center">
@@ -118,7 +143,14 @@ const Book = () => {
             onSubmit={async (e) => {
               e.preventDefault();
               const data = new FormData(e.target as HTMLFormElement);
-              await submitAnswer(data);
+              submit.mutate(data, {
+                onError: () =>
+                  toast.error("خطلایی رخ داده است! لطفا مجددا تلاش کنید."),
+                onSuccess(data) {
+                  toast[data?.status ? "success" : "error"](data?.message);
+                  if (data?.status) setPage(0);
+                },
+              });
             }}
           >
             <input hidden name="dayId" value={question?.id} />
@@ -225,7 +257,7 @@ const StarCard = ({
       className={cn(
         "relative flex aspect-square flex-col items-center justify-center gap-1 rounded-2xl border-2 border-dashed border-[#E9A56E] text-[#E9A56E]",
         {
-          "border-none": passed,
+          "pointer-events-none border-none": passed,
           "cursor-pointer": !passed && active,
           "border-solid border-[var(--white-gold)] text-[var(--white-gold)]":
             today && !passed,
@@ -263,7 +295,7 @@ const StarCard = ({
         </div>
       )}
       <span className="text-xs font-semibold text-brown">روز {name}</span>
-      {today && (
+      {today && !passed && (
         <div className="absolute -bottom-3 left-0 right-0 flex items-center justify-center">
           <ChevronUp
             fill="#FFFEB1"

@@ -77,9 +77,10 @@ function RewardCard(props: RewardCardProps) {
           />
         </div>
         <button
-          className="text-sm font-medium"
+          className="text-sm font-medium disabled:opacity-50"
+          disabled={seen.isPending}
           onClick={() => {
-            seen.mutate();
+            if (!props.seen) seen.mutate();
           }}
         >
           مشاهده بیشتر
@@ -101,7 +102,7 @@ function RewardCard(props: RewardCardProps) {
       />
       <div
         className={cn(
-          "absolute -bottom-9 z-10 size-5 rounded-full bg-ripe-mango",
+          "absolute -bottom-9 z-10 size-5 rounded-full  bg-ripe-mango transition-all duration-500",
           {
             "bg-white [box-shadow:0_0_15px_5px_#fff]": props.unlocked,
             "-bottom-[3.8rem]": props.unlocked && !props.seen,
@@ -109,9 +110,12 @@ function RewardCard(props: RewardCardProps) {
         )}
       ></div>
       <div
-        className={cn("absolute -bottom-[5.5rem] z-10 text-lg font-bold", {
-          "-bottom-[7.2rem]": props.unlocked && !props.seen,
-        })}
+        className={cn(
+          "absolute -bottom-[5.5rem] z-10 text-lg font-bold transition-all duration-500",
+          {
+            "-bottom-[7.2rem]": props.unlocked && !props.seen,
+          },
+        )}
       >
         {props.required_points.toLocaleString()}
       </div>

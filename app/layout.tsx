@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { PropsWithChildren } from "react";
@@ -9,7 +8,6 @@ import ClientProviders from "@/app/clientProviders";
 import AuthProvider from "@/authProvider";
 import { getSession } from "@/server/actions/auth";
 
-const fallbackFont = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "جشنواره عیدانه سی تلکام - سی تلکام",
   description: "جشنواره عیدانه سی تلکام, از اول عید تا آخرش جایزه ببر!",

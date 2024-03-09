@@ -22,7 +22,7 @@ model User {
   otps      Otp[]
   answers   Answer[]
   points    Int       @default(0)
-  vouchers  Int       @default(115)
+  vouchers  Int       @default(0)
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
   cards     String[]  @default([])
@@ -54,13 +54,12 @@ model Otp {
 }
 
 model Answer {
-  id         String   @id @default(uuid())
-  userId     String   @map("user_id")
-  dayId      String   @map("day_id")
-  questionId String   @map("question_id")
-  answerId   String   @map("answer_id")
-  isCorrect  Boolean  @map("is_correct")
-  createdAt  DateTime @default(now()) @map("created_at")
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  dayId     String   @map("day_id")
+  answers   String[]
+  stars     Int      @default(0) @db.SmallInt
+  createdAt DateTime @default(now()) @map("created_at")
 
   user User @relation(fields: [userId], references: [id])
 

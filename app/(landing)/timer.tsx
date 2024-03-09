@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { TimerIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { addDays, differenceInSeconds, endOfDay, startOfDay } from "date-fns";
-import { END, START } from "@/lib/consts";
+import { END, endIn, START, startIn } from "@/lib/consts";
 
 type TimerPartProps = {
   time: number;
@@ -38,11 +38,11 @@ function TimeDivider({ className }: React.HTMLAttributes<HTMLDivElement>) {
 
 const Timer = () => {
   const [time, setTime] = useState(0);
-  const started = Date.now() > new Date(START).getTime();
+  const started = startIn();
 
   useEffect(() => {
     if (!started) setTime(differenceInSeconds(START, Date.now()));
-    else setTime(differenceInSeconds(END, Date.now()));
+    else setTime(endIn());
     const interval = setInterval(() => {
       setTime((t) => --t);
     }, 1000);
