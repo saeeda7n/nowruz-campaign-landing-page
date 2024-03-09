@@ -67,7 +67,9 @@ const SelectDayPaper = () => {
               setId(id);
             }}
             name={content.days[index]}
-            active={userState.suggestedIndex > index && gameData?.today > index} //activated or not
+            active={
+              userState?.suggestedIndex > index && gameData?.today > index
+            } //activated or not
             today={id === gameData?.currentDayId} //the current and last day
             stars={
               userState?.answers.find((answer: any) => answer.dayId === id)
@@ -76,7 +78,7 @@ const SelectDayPaper = () => {
             passed={
               !!userState?.answers.find((answer: any) => answer.dayId === id)
             } //user answered this
-            suggested={userState.suggestedId === id && gameData?.today > index} //first day not answered yet
+            suggested={userState?.suggestedId === id && gameData?.today > index} //first day not answered yet
           />
         ))}
       </div>
