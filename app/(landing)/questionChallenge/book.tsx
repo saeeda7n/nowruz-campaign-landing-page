@@ -28,7 +28,7 @@ import { toast } from "sonner";
 const SelectDayPaper = () => {
   const user = useUser();
   const router = useRouter();
-  const { setQuestion, gameData, userState } = useBook();
+  const { setQuestion, page, gameData, userState } = useBook();
   const [id, setId] = useState("");
 
   const question = useQuery({
@@ -38,12 +38,16 @@ const SelectDayPaper = () => {
   });
 
   useEffect(() => {
+    if (page === 0) setId("");
+  }, [page]);
+
+  useEffect(() => {
     if (id) question.refetch();
   }, [id]);
 
   useEffect(() => {
     if (question.data) setQuestion(question.data);
-  }, [question.data]);
+  }, [question.data, id]);
 
   return (
     <>
@@ -64,8 +68,12 @@ const SelectDayPaper = () => {
                 router.push("/auth");
                 return;
               }
-              if (userState?.suggestedIndex > index && gameData?.today > index)
+              if (
+                userState?.suggestedIndex > index &&
+                gameData?.today > index
+              ) {
                 setId(id);
+              }
             }}
             name={content.days[index]}
             active={
