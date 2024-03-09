@@ -22,7 +22,7 @@ export async function getQuestionGameData() {
     today,
     activeQuestionIds,
     allQuestionIds: questions.map(({ id }) => id),
-    currentDayId: activeQuestionIds.at(-1) || "",
+    currentDayId: activeQuestionIds[today - 1] || "",
     totalQuestions: questions.length,
   };
 }
@@ -32,10 +32,12 @@ function getCurrentDay() {
 }
 
 export async function submitAnswer(data: FormData) {
+  const points = { 0: 0, 1: 0, 2: 5, 3: 10 };
   const { user } = await getSession();
   if (!user) return { status: false, message: "لطفا ابتدا وارد شوید." };
   const day = questions.find(({ id }) => id === data.get("dayId"));
   if (!day) return { status: false };
+  console.log(+day.order === getCurrentDay(), day.order, getCurrentDay());
   const participatedBefore = await prisma.answer.findFirst({
     where: { userId: user.id, dayId: day.id },
   });
@@ -50,7 +52,7 @@ export async function submitAnswer(data: FormData) {
   }));
 
   try {
-    let accumulator = 0;
+    let accumulator: 0 | 1 | 2 | 3 = 0;
     let submittedAnswers: string[] = [];
     for (const answer of answers) {
       let isCorrect = false;
@@ -62,14 +64,36 @@ export async function submitAnswer(data: FormData) {
         `${answer.questionId},${String(data.get(answer.questionId))},${String(isCorrect)}`,
       );
     }
-    await prisma.answer.create({
-      data: {
-        stars: accumulator,
-        userId: user.id,
-        dayId: day.id,
-        answers: submittedAnswers,
-      },
+    await prisma.$transaction(async (tx) => {
+      await tx.answer.create({
+        data: {
+          stars: accumulator,
+          userId: user.id,
+          dayId: day.id,
+          answers: submittedAnswers,
+        },
+      });
+      const card =
+        +day.order === getCurrentDay()
+          ? accumulator > 2
+            ? "1000"
+            : (accumulator > 1 && "100") || "0"
+          : "0";
+      await tx.user.update({
+        where: { id: user.id },
+        data: {
+          cards: { push: card },
+          vouchers: {
+            increment:
+              +day.order === getCurrentDay() ? points[accumulator] || 0 : 0,
+          },
+          points: {
+            increment: accumulator * 10,
+          },
+        },
+      });
     });
+
     revalidatePath("/");
     return {
       status: true,
@@ -87,12 +111,16 @@ export async function submitAnswer(data: FormData) {
 export async function getUserStatus() {
   const { user } = await getSession();
   if (!user) return null;
-  const currentDay = getCurrentDay();
   const answers = await prisma.answer.findMany({ where: { userId: user.id } });
-  const suggestedId = questions.filter((day, index) => {
-    const answer = answers.find(({ dayId }) => dayId === day.id);
-  });
+  const lastAnswered =
+    questions
+      .filter((day, index) => answers.find((answer) => answer.dayId === day.id))
+      .sort((a, b) => (+a.order > +b.order ? 1 : -1))
+      .at(-1)?.order || 0;
+  const suggested = questions.at(+lastAnswered);
   return {
+    suggestedId: suggested?.id,
+    suggestedIndex: +(suggested?.order || "0"),
     answers: answers.map(
       ({ userId, answers, id, createdAt, ...answer }) => answer,
     ),

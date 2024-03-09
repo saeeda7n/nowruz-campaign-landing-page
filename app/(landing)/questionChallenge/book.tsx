@@ -67,7 +67,7 @@ const SelectDayPaper = () => {
               setId(id);
             }}
             name={content.days[index]}
-            active={index < (gameData?.today || 0)} //activated or not
+            active={userState.suggestedIndex > index && gameData?.today > index} //activated or not
             today={id === gameData?.currentDayId} //the current and last day
             stars={
               userState?.answers.find((answer: any) => answer.dayId === id)
@@ -76,7 +76,7 @@ const SelectDayPaper = () => {
             passed={
               !!userState?.answers.find((answer: any) => answer.dayId === id)
             } //user answered this
-            suggested={false} //first day not answered yet
+            suggested={userState.suggestedId === id && gameData?.today > index} //first day not answered yet
           />
         ))}
       </div>
@@ -160,7 +160,11 @@ const Book = () => {
                   <QuestionPaper questions={question.questions.slice(2, 3)}>
                     <div className="absolute bottom-[1%] left-0 right-0 flex items-center justify-center">
                       <button className="flex h-12 items-center justify-center gap-2 rounded-2xl bg-[--lighter-brown] px-8 font-bold text-gray-50 [box-shadow:0_4px_0_0_var(--brown)]">
-                        <Send className="fill-gray-50" />
+                        {submit.isPending ? (
+                          <Loader className="animate-spin fill-gray-50" />
+                        ) : (
+                          <Send className="fill-gray-50" />
+                        )}
                         ثبت جواب ها
                       </button>
                     </div>
@@ -208,7 +212,11 @@ const Book = () => {
                   <QuestionPaper questions={question.questions.slice(2, 3)}>
                     <div className="absolute bottom-[1%] left-0 right-0 flex items-center justify-center gap-2">
                       <button className="flex h-12 items-center justify-center gap-2 rounded-2xl bg-[--lighter-brown] px-8 font-bold text-gray-50 [box-shadow:0_4px_0_0_var(--brown)]">
-                        <SendHorizonal className="fill-gray-50" />
+                        {submit.isPending ? (
+                          <Loader className="animate-spin fill-gray-50" />
+                        ) : (
+                          <Send className="fill-gray-50" />
+                        )}
                         ثبت جواب ها
                       </button>
                       <button
