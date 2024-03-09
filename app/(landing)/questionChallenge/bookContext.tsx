@@ -10,7 +10,7 @@ import React, {
 } from "react";
 import { useWindowDimensions } from "@/lib/useScreenSize";
 import { useQuery } from "@tanstack/react-query";
-import { getQuestionGameData } from "@/server/actions/questions";
+import { getQuestionGameData, getUserStatus } from "@/server/actions/questions";
 
 type QuestionProps = {
   id: string;
@@ -36,12 +36,15 @@ type BookContextProps = {
   setQuestion: Dispatch<SetStateAction<QuestionProps | undefined>>;
   gameData:
     | {
+        now: number;
         today: number;
         activeQuestionIds: string[];
-        currentDayId: string | undefined;
+        currentDayId: string | number;
         totalQuestions: number;
+        allQuestionIds: string[];
       }
     | undefined;
+  userState: any | undefined;
 };
 const bookContext = createContext<BookContextProps | null>(null);
 export const useBook = () => useContext(bookContext) as BookContextProps;
@@ -49,6 +52,11 @@ const BookContext = ({ children }: PropsWithChildren) => {
   const { data } = useQuery({
     queryKey: ["qsData"],
     queryFn: () => getQuestionGameData(),
+  });
+
+  const userStatus = useQuery({
+    queryKey: ["qsUserData"],
+    queryFn: () => getUserStatus(),
   });
   const [timeout, setTimeoutId] = useState<any>();
   const [page, setPage] = useState(0);
@@ -90,6 +98,7 @@ const BookContext = ({ children }: PropsWithChildren) => {
         setSinglePage,
         setQuestion,
         gameData: data,
+        userState: userStatus.data,
       }}
     >
       {children}

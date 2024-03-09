@@ -28,18 +28,13 @@ import { toast } from "sonner";
 const SelectDayPaper = () => {
   const user = useUser();
   const router = useRouter();
-  const { setQuestion, gameData } = useBook();
+  const { setQuestion, gameData, userState } = useBook();
   const [id, setId] = useState("");
 
   const question = useQuery({
     enabled: false,
     queryKey: ["qs"],
-    queryFn: (context) => getQuestion(id),
-  });
-
-  const userState = useQuery({
-    queryFn: () => getUserStatus(),
-    queryKey: ["qsUserData"],
+    queryFn: () => getQuestion(id),
   });
 
   useEffect(() => {
@@ -75,11 +70,11 @@ const SelectDayPaper = () => {
             active={index < (gameData?.today || 0)} //activated or not
             today={id === gameData?.currentDayId} //the current and last day
             stars={
-              userState.data?.answers.find((answer) => answer.dayId === id)
+              userState?.answers.find((answer: any) => answer.dayId === id)
                 ?.stars || 0
             } //user stars earned
             passed={
-              !!userState.data?.answers.find((answer) => answer.dayId === id)
+              !!userState?.answers.find((answer: any) => answer.dayId === id)
             } //user answered this
             suggested={false} //first day not answered yet
           />
