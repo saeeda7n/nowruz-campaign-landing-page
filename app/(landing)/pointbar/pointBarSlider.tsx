@@ -55,7 +55,7 @@ function RewardCard(props: RewardCardProps) {
   return (
     <div
       className={cn(
-        "group relative flex select-none flex-col items-center gap-2 transition duration-300",
+        "group relative flex select-none flex-col items-center gap-2 transition duration-500",
         {
           "-translate-y-6": props.unlocked && !props.seen,
           locked: !props.unlocked,
