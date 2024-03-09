@@ -39,7 +39,7 @@ type BookContextProps = {
         now: number;
         today: number;
         activeQuestionIds: string[];
-        currentDayId: string | number;
+        currentDayId: string;
         totalQuestions: number;
         allQuestionIds: string[];
       }

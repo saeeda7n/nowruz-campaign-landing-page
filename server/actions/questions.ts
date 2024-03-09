@@ -22,7 +22,7 @@ export async function getQuestionGameData() {
     today,
     activeQuestionIds,
     allQuestionIds: questions.map(({ id }) => id),
-    currentDayId: activeQuestionIds.at(-1) || 0,
+    currentDayId: activeQuestionIds.at(-1) || "",
     totalQuestions: questions.length,
   };
 }
