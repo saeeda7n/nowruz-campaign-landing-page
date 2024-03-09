@@ -25,6 +25,16 @@ type QuestionProps = {
     }[];
   }[];
 };
+type GameData =
+  | {
+      now: number;
+      today: number;
+      activeQuestionIds: string[];
+      currentDayId: string;
+      totalQuestions: number;
+      allQuestionIds: string[];
+    }
+  | undefined;
 type BookContextProps = {
   page: number;
   allowSwitch: boolean;
@@ -34,30 +44,19 @@ type BookContextProps = {
   setAllowSwitch: Dispatch<SetStateAction<boolean>>;
   setSinglePage: Dispatch<SetStateAction<boolean>>;
   setQuestion: Dispatch<SetStateAction<QuestionProps | undefined>>;
-  gameData:
-    | {
-        now: number;
-        today: number;
-        activeQuestionIds: string[];
-        currentDayId: string;
-        totalQuestions: number;
-        allQuestionIds: string[];
-      }
-    | undefined;
+  gameData: GameData;
   userState: any | undefined;
 };
 const bookContext = createContext<BookContextProps | null>(null);
 export const useBook = () => useContext(bookContext) as BookContextProps;
-const BookContext = ({ children }: PropsWithChildren) => {
-  const { data } = useQuery({
-    queryKey: ["qsData"],
-    queryFn: () => getQuestionGameData(),
-  });
-
-  const userStatus = useQuery({
-    queryKey: ["qsUserData"],
-    queryFn: () => getUserStatus(),
-  });
+const BookContext = ({
+  children,
+  gameData,
+  userState,
+}: PropsWithChildren & {
+  gameData: GameData;
+  userState: any;
+}) => {
   const [timeout, setTimeoutId] = useState<any>();
   const [page, setPage] = useState(0);
   const [allowSwitch, setAllowSwitch] = useState(true);
@@ -97,8 +96,8 @@ const BookContext = ({ children }: PropsWithChildren) => {
         setPage,
         setSinglePage,
         setQuestion,
-        gameData: data,
-        userState: userStatus.data,
+        gameData,
+        userState,
       }}
     >
       {children}

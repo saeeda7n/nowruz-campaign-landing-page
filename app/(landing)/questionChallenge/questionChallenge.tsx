@@ -10,6 +10,7 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import GuidePaper from "@/app/(landing)/questionChallenge/quidePaper";
+import { unstable_noStore } from "next/cache";
 
 function FloatingGiftBoxes() {
   return (
@@ -51,28 +52,20 @@ function FloatingGiftBoxes() {
 }
 
 const QuestionChallenge = async () => {
-  const query = new QueryClient();
-  await Promise.all([
-    query.prefetchQuery({
-      queryKey: ["qsData"],
-      queryFn: getQuestionGameData,
-    }),
-    query.prefetchQuery({
-      queryKey: ["qsUserData"],
-      queryFn: getUserStatus,
-    }),
+  unstable_noStore();
+  const [gameData, userState] = await Promise.all([
+    getQuestionGameData(),
+    getUserStatus(),
   ]);
   return (
     <section className="relative -mt-32">
       <FloatingGiftBoxes />
-      <HydrationBoundary state={dehydrate(query)}>
-        <BookContext>
-          <div className="flex flex-wrap justify-between gap-16">
-            <GuidePaper />
-            <Book />
-          </div>
-        </BookContext>
-      </HydrationBoundary>
+      <BookContext gameData={gameData} userState={userState}>
+        <div className="flex flex-wrap justify-between gap-16">
+          <GuidePaper />
+          <Book />
+        </div>
+      </BookContext>
     </section>
   );
 };
