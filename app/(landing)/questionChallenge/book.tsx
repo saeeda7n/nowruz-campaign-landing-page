@@ -64,13 +64,15 @@ const SelectDayPaper = () => {
                 router.push("/auth");
                 return;
               }
-              setId(id);
+              if (userState?.suggestedIndex > index && gameData?.today > index)
+                setId(id);
             }}
             name={content.days[index]}
             active={
               userState?.suggestedIndex > index && gameData?.today > index
             } //activated or not
             today={id === gameData?.currentDayId} //the current and last day
+            disabled={index >= gameData?.today}
             stars={
               userState?.answers.find((answer: any) => answer.dayId === id)
                 ?.stars || 0
@@ -253,6 +255,7 @@ const StarCard = ({
   suggested,
   passed,
   active,
+  disabled,
   ...props
 }: StartCardProps & React.HTMLAttributes<HTMLDivElement>) => {
   stars = stars || 0;
@@ -268,7 +271,8 @@ const StarCard = ({
             today && !passed,
           "inner-shadow border-solid border-[var(--white-gold)]":
             suggested && active && !passed,
-          "cursor-default opacity-50": !active,
+          "cursor-default": !active,
+          "opacity-50": disabled,
         },
       )}
     >
@@ -346,4 +350,5 @@ type StartCardProps = {
   passed?: boolean;
   suggested?: boolean;
   today?: boolean;
+  disabled?: boolean;
 };
