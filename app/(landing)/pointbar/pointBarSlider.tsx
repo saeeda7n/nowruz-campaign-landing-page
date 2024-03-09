@@ -11,9 +11,12 @@ import "swiper/css/pagination";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Input } from "postcss";
+import { useUser } from "@/authProvider";
+import { useMutation } from "@tanstack/react-query";
+import { seenCard } from "@/server/actions/pointBar";
 
 type RewardCardProps = {
-  id: number;
+  id: string;
   title: string;
   body: string;
   required_points: number;
@@ -46,10 +49,13 @@ function Locked({ className }: { className?: string }) {
 }
 
 function RewardCard(props: RewardCardProps) {
+  const seen = useMutation({
+    mutationFn: () => seenCard(props.id),
+  });
   return (
     <div
       className={cn(
-        "group relative flex select-none flex-col items-center gap-2",
+        "group relative flex select-none flex-col items-center gap-2 transition duration-300",
         {
           "-translate-y-6": props.unlocked && !props.seen,
           locked: !props.unlocked,
@@ -58,7 +64,7 @@ function RewardCard(props: RewardCardProps) {
     >
       <div
         className={cn(
-          "bg-ripe-mango ring-gold reward-card relative flex size-40 flex-col gap-2 rounded-3xl p-2 ring-8 group-[.locked]:pointer-events-none group-[.locked]:opacity-50",
+          "reward-card relative flex size-40 flex-col gap-2 rounded-3xl bg-ripe-mango p-2 ring-8 ring-gold group-[.locked]:pointer-events-none group-[.locked]:opacity-50",
           { "reward-card-second-shadow": props.unlocked && !props.seen },
         )}
       >
@@ -70,7 +76,14 @@ function RewardCard(props: RewardCardProps) {
             alt={props.title}
           />
         </div>
-        <button className="text-sm font-medium">مشاهده بیشتر</button>
+        <button
+          className="text-sm font-medium"
+          onClick={() => {
+            seen.mutate();
+          }}
+        >
+          مشاهده بیشتر
+        </button>
         {props.unlocked ? (
           <>
             <Check />
@@ -88,7 +101,7 @@ function RewardCard(props: RewardCardProps) {
       />
       <div
         className={cn(
-          "bg-ripe-mango absolute -bottom-9 z-10 size-5 rounded-full",
+          "absolute -bottom-9 z-10 size-5 rounded-full bg-ripe-mango",
           {
             "bg-white [box-shadow:0_0_15px_5px_#fff]": props.unlocked,
             "-bottom-[3.8rem]": props.unlocked && !props.seen,
@@ -107,7 +120,8 @@ function RewardCard(props: RewardCardProps) {
 }
 
 const PointBarSlider = () => {
-  const [point, setPoint] = useState(92);
+  const user = useUser();
+  const point = user?.vouchers || 0;
   const [progress, setProgress] = useState(0);
   const [swiper, setSwiper] = useState<any>(null);
   const wrapper = useRef<HTMLDivElement>(null);
@@ -154,19 +168,19 @@ const PointBarSlider = () => {
               {sortedRewards.map((data) => (
                 <RewardCard
                   {...data}
-                  seen={data.required_points < 40}
+                  seen={user?.seenCards.includes(data.id) || false}
                   unlocked={data.required_points <= point}
                   key={data.id}
                 />
               ))}
             </div>
-            <div className="bg-light-brown flex h-9 w-full rounded-full p-1 [box-shadow:0_3px_0_0_#8A3D14]">
+            <div className="flex h-9 w-full rounded-full bg-light-brown p-1 [box-shadow:0_3px_0_0_#8A3D14]">
               <div
                 className="h-full min-w-[3%] max-w-[97%] rounded-full bg-gradient-to-l from-[#FFBC00] to-[#FF9100] transition-all duration-300"
                 style={{ width: `${progress * 100}%` }}
               >
                 <div className="relative h-full w-full">
-                  <div className="bg-ripe-mango absolute -bottom-20 end-0 z-50 flex h-9 -translate-x-1/2 items-center justify-center gap-2 rounded-full px-4 text-xl font-bold">
+                  <div className="absolute -bottom-20 end-0 z-50 flex h-9 -translate-x-1/2 items-center justify-center gap-2 rounded-full bg-ripe-mango px-4 text-xl font-bold">
                     <ChevronDown
                       strokeWidth={6}
                       size={36}

@@ -12,7 +12,7 @@ type TimerPartProps = {
 
 function TimerPart({ time, name, className }: TimerPartProps) {
   if (time > 60) throw new Error("Time cannot be more than 59 passed " + time);
-  const strTime = time > 9 ? String(time) : `0${time}`;
+  const strTime = time < 10 ? `0${Math.floor(time)}` : String(Math.floor(time));
   return (
     <div className={cn("flex flex-col gap-5", className)}>
       <div className="flex gap-3">

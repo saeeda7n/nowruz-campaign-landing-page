@@ -1,57 +1,57 @@
 [
   {
-    "id": 1,
+    "id": "c52c8dc6-e1ed-408f-8dba-9c6e96fcd2aa",
     "title": "شما برنده تخفیف 60 درصدی خرید",
     "body": "ساعت هوشمند سامسونگ گلگسی واچ 6 شدید",
-    "required_points": 10,
+    "required_points": 20,
     "image": "/images/watch.png",
     "attached_link": "http://anylink.com"
   },
   {
-    "id": 2,
+    "id": "874e87f0-b24c-4329-ab0f-ad2cbbda8058",
     "title": "شما برنده تخفیف 60 درصدی خرید",
     "body": "ساعت هوشمند سامسونگ گلگسی واچ 6 شدید",
-    "required_points": 30,
+    "required_points": 40,
     "image": "/images/iphone-13.png",
     "attached_link": "http://anylink.com"
   },
   {
-    "id": 3,
+    "id": "b66640fc-092e-4be6-9441-94d0c05174d6",
     "title": "شما برنده تخفیف 60 درصدی خرید",
     "body": "ساعت هوشمند سامسونگ گلگسی واچ 6 شدید",
-    "required_points": 55,
+    "required_points": 60,
     "image": "/images/watch.png",
     "attached_link": "http://anylink.com"
   },
   {
-    "id": 4,
+    "id": "21d68ee7-d216-48d6-8174-b17140191007",
     "title": "شما برنده تخفیف 60 درصدی خرید",
     "body": "ساعت هوشمند سامسونگ گلگسی واچ 6 شدید",
-    "required_points": 40,
+    "required_points": 80,
     "image": "/images/watch.png",
     "attached_link": "http://anylink.com"
   },
   {
-    "id": 5,
+    "id": "7a78c5a7-87f2-4ada-83fc-4d7f1099e22d",
     "title": "شما برنده تخفیف 60 درصدی خرید",
     "body": "ساعت هوشمند سامسونگ گلگسی واچ 6 شدید",
-    "required_points": 45,
+    "required_points": 100,
     "image": "/images/watch.png",
     "attached_link": "http://anylink.com"
   },
   {
-    "id": 6,
+    "id": "85a49189-0de2-43a8-9904-6a2cc4e1f366",
     "title": "شما برنده تخفیف 60 درصدی خرید",
     "body": "ساعت هوشمند سامسونگ گلگسی واچ 6 شدید",
-    "required_points": 38,
+    "required_points": 110,
     "image": "/images/watch.png",
     "attached_link": "http://anylink.com"
   },
   {
-    "id": 7,
+    "id": "cf07f864-588a-4c5f-a055-ea8b442d3076",
     "title": "شما برنده تخفیف 60 درصدی خرید",
     "body": "ساعت هوشمند سامسونگ گلگسی واچ 6 شدید",
-    "required_points": 170,
+    "required_points": 120,
     "image": "/images/watch.png",
     "attached_link": "http://anylink.com"
   }

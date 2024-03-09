@@ -15,6 +15,8 @@ interface DatabaseUserAttributes {
   createdAt: string;
   updatedAt: string;
   cards: string[];
+  vouchers: number;
+  seenCards: string[];
 }
 
 export const lucia = new Lucia(adapter, {
