@@ -25,8 +25,8 @@ export const useWheel = (
     ctx.rotate(ang + arc / 2);
     ctx.textAlign = "right";
     ctx.fillStyle = i % 2 === 0 ? "#dc2626" : "#fff";
-    ctx.font = "bold 18px sans-serif";
-    ctx.fillText(sector.label, radius - 30, 10);
+    ctx.font = "bold 28px sans-serif";
+    ctx.fillText(sector.label, radius - 60, 10);
     //
     ctx.restore();
   };

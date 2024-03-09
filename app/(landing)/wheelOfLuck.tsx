@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/authProvider";
 import Link from "next/link";
 
-const points = [20, 40, 60, 200, 500, 40, 60, , 200, 20, 20];
+const points = [20, 40, 60, 200, 500, 40, 60, 100];
 
 function CopyReferralCodeButton({ code }: { code?: string }) {
   if (!code) return "";
@@ -174,15 +174,15 @@ function Wheel({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(
-        "wheel relative mb-14 rotate-0 overflow-hidden duration-1000 hover:rotate-[360deg]",
+        "wheel relative mb-14 aspect-square max-w-72 rotate-[22deg] overflow-hidden",
         className,
       )}
     >
       <canvas
         ref={wheelRef}
-        height={288}
-        width={288}
-        className={" rotate-0 transition duration-1000 group-hover:rotate-180"}
+        height={480}
+        width={480}
+        className={"h-full w-full transition duration-1000"}
       />
     </div>
   );
