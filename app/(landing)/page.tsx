@@ -9,6 +9,7 @@ import Pointbar from "@/app/(landing)/pointbar/pointBar";
 import WheelOfLuck from "@/app/(landing)/wheelOfLuck";
 import SpecialOffers from "@/app/(landing)/specialOffers";
 import Footer from "@/app/(landing)/footer";
+import UserRef from "@/app/(landing)/userRef";
 
 function AbsoluteBackground() {
   return (
@@ -30,6 +31,7 @@ const Page = () => {
     <>
       <Header />
       <main className="container">
+        <UserRef />
         <AbsoluteBackground />
         <Hero />
         <Timer />

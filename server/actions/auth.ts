@@ -4,8 +4,9 @@ import { authSchema } from "@/schemas/authSchemas";
 import { lucia, luciaCookieToNextCookie, SessionProps } from "@/lib/auth";
 import { cookies } from "next/headers";
 import { subMinutes } from "date-fns";
+import * as crypto from "crypto";
 
-export async function getAuthOtp(phone: string) {
+export async function getAuthOtp(phone: string, refId?: string) {
   const session = await getSession();
   if (session.user)
     return { status: false, message: "شما قبلا وارد حساب خود شده اید!" };
@@ -24,8 +25,10 @@ export async function getAuthOtp(phone: string) {
         await tx.user.upsert({
           where: { phone },
           create: {
-            refId: Date.now().toString(36).replace("0.", ""),
+            refId: crypto.randomBytes(4).toString("hex"),
             phone,
+            representativeId: (await tx.user.findFirst({ where: { refId } }))
+              ?.id,
             otps: { create: { code } },
           },
           update: {

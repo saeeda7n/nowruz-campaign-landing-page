@@ -19,4 +19,5 @@ export const authSchema = z.object({
     .length(6, "کد تایید باید 6 رقم باشد!")
     .or(z.null())
     .or(z.undefined()),
+  ref: z.string().or(z.null()).or(z.undefined()),
 });

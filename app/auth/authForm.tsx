@@ -21,9 +21,9 @@ import { OTPInput, SlotProps } from "input-otp";
 import { cn } from "@/lib/utils";
 
 const AuthForm = () => {
-  const [ltr, setLtr] = useState(false);
   const getOtp = useMutation({
-    mutationFn: (variables: string) => getAuthOtp(variables),
+    mutationFn: (variables: any) =>
+      getAuthOtp(variables.phone, variables.refId),
   });
   const login = useMutation({
     mutationFn: (variables: { phone: string; code: string }) =>
@@ -34,6 +34,7 @@ const AuthForm = () => {
     defaultValues: {
       phone: "",
       code: undefined,
+      ref: localStorage.getItem("ref"),
     },
   });
 
@@ -113,17 +114,20 @@ const AuthForm = () => {
 
   function onSubmit(values: z.infer<typeof authSchema>) {
     if (!getOtp.data?.status)
-      getOtp.mutate(values.phone, {
-        onError(error) {
-          toast.error("خطایی رخ داده است! لطفا مجددا تلاش کنید.");
+      getOtp.mutate(
+        { phone: values.phone, refId: values.ref },
+        {
+          onError(error) {
+            toast.error("خطایی رخ داده است! لطفا مجددا تلاش کنید.");
+          },
+          onSuccess(data) {
+            if (data.status) {
+              toast.success(data.message);
+              form.setValue("code", "");
+            } else toast.error(data.message);
+          },
         },
-        onSuccess(data) {
-          if (data.status) {
-            toast.success(data.message);
-            form.setValue("code", "");
-          } else toast.error(data.message);
-        },
-      });
+      );
     else if (getOtp.data.status)
       login.mutate(
         { ...values, code: values.code! },

@@ -1,5 +1,6 @@
 import React from "react";
 import AuthForm from "@/app/auth/authForm";
+import crypto from "crypto";
 
 const Page = async () => {
   return (

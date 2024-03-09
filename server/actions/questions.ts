@@ -1,6 +1,7 @@
 "use server";
 import { differenceInDays, startOfDay, subDays } from "date-fns";
 import questions from "@/data/landing/questions.json";
+import rewards from "@/data/landing/rewards.json";
 import { START } from "@/lib/consts";
 import prisma from "@/prisma/prisma";
 import { getSession } from "@/server/actions/auth";
@@ -37,7 +38,6 @@ export async function submitAnswer(data: FormData) {
   if (!user) return { status: false, message: "لطفا ابتدا وارد شوید." };
   const day = questions.find(({ id }) => id === data.get("dayId"));
   if (!day) return { status: false };
-  console.log(+day.order === getCurrentDay(), day.order, getCurrentDay());
   const participatedBefore = await prisma.answer.findFirst({
     where: { userId: user.id, dayId: day.id },
   });
@@ -79,16 +79,23 @@ export async function submitAnswer(data: FormData) {
             ? "1000"
             : (accumulator > 1 && "100") || "0"
           : "0";
+      const vouchers =
+        +day.order === getCurrentDay() ? points[accumulator] || 0 : 0;
+
+      const rewardsPoints = rewards
+        .filter((reward) => reward.required_points <= user.vouchers + vouchers)
+        .filter((reward) => !user.claimedRewards.includes(reward.id))
+        .map((reward) => reward.additional_points)
+        .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
       await tx.user.update({
         where: { id: user.id },
         data: {
           cards: { push: card },
           vouchers: {
-            increment:
-              +day.order === getCurrentDay() ? points[accumulator] || 0 : 0,
+            increment: vouchers,
           },
           points: {
-            increment: accumulator * 10,
+            increment: accumulator * 10 + rewardsPoints,
           },
         },
       });

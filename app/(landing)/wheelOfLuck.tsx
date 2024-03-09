@@ -190,7 +190,7 @@ function Wheel({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
 
 const WheelOfLuck = () => {
   return (
-    <section className="flex flex-wrap items-center gap-10 gap-y-16 py-24 text-brown">
+    <section className="flex flex-col items-center gap-10 gap-y-16 py-24 text-brown lg:flex-row">
       <GameGuideline />
       <WheelOfLuckGame />
     </section>

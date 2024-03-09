@@ -19,7 +19,12 @@ const StartGameButton = () => {
   }, [currentQuestion.data, currentQuestion.dataUpdatedAt]);
   return (
     <button
-      disabled={page > 0 || !allowSwitch || !user}
+      disabled={
+        page > 0 ||
+        !allowSwitch ||
+        !user ||
+        (gameData?.today || 55) < userState?.suggestedIndex
+      }
       onClick={() => currentQuestion.refetch()}
       className="mx-5 flex h-12 flex-1 select-none items-center justify-center rounded-full bg-[#ff9100] font-bold text-gray-50 [box-shadow:0_4px_0_0_#99502F] disabled:bg-orange-300"
     >
