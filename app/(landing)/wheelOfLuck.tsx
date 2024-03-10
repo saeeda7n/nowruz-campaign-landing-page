@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Chip } from "@/app/(landing)/pointbar/pointBar";
 import { Copy, Info, Ticket } from "lucide-react";
 import { toast } from "sonner";
@@ -8,6 +8,9 @@ import { useWheel } from "@/lib/useWheel";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/authProvider";
 import Link from "next/link";
+import { POINTS } from "@/lib/consts";
+import { useMutation } from "@tanstack/react-query";
+import { rollWheel } from "@/server/actions/wheelOfLuck";
 
 const points = [20, 40, 60, 200, 500, 40, 60, 100];
 
@@ -104,12 +107,13 @@ function GameGuideline() {
         <div className="flex flex-col gap-3 rounded-2xl border-2 border-[#FEC421] bg-[#F9DBAD] px-6 py-5">
           <div className="space-y-2">
             <h5 className="text-xs font-semibold sm:text-sm">
-              برای بدست آوردن امتیازات بیشتر شما می توانید دوستان خود را با
-              استفاده از کد روبه رو دعوت کنید
+              برای کسب امتیاز بیشتر کافیست لینک زیر مجموعه گیری را با دوستان خود
+              به اشتراک بگذارید!
             </h5>
             <p className="flex items-center gap-2 text-xs">
               <Info className="hidden sm:block" />
-              با هر دعوت از دوستان خود 20 امتیاز دریافت می کنید
+              با دعوت از هر یک از دوستان خود میتوانید 20 امتیاز کسب کنید, همچنین
+              دوست شما نیز 20 امتیاز دریافت خواهد کرد.
             </p>
           </div>
           <CopyReferralCodeButton code={user?.refId} />
@@ -119,11 +123,9 @@ function GameGuideline() {
   );
 }
 
-function WheelOfLuckGame() {
-  function Turn() {}
-
+function GiftBoxes() {
   return (
-    <div className="relative flex flex-1 items-center justify-center sm:min-w-[28rem]">
+    <>
       <Image
         src="/landing/images/right-gifts.webp"
         alt="Gift box"
@@ -138,6 +140,20 @@ function WheelOfLuckGame() {
         width={340}
         className="absolute -bottom-10 z-20 ms-[42rem]"
       />
+    </>
+  );
+}
+
+function WheelOfLuckGame() {
+  const roll = useMutation({
+    mutationFn: () => rollWheel(),
+  });
+
+  function Turn() {}
+
+  return (
+    <div className="relative flex flex-1 items-center justify-center sm:min-w-[28rem]">
+      <GiftBoxes />
       <div className="relative bottom-0 flex h-[28rem] w-full items-center justify-center">
         <Image
           src="/landing/images/wheel-of-luck.webp"
@@ -147,10 +163,10 @@ function WheelOfLuckGame() {
           draggable={false}
           className="absolute z-10 h-auto w-full max-w-96 sm:h-full sm:w-auto sm:max-w-none"
         />
-        <Wheel />
+        <Wheel roll={roll.data} />
         <div className="absolute -bottom-8 z-50">
           <button
-            onClick={() => Turn()}
+            onClick={() => roll.mutate()}
             className="me-auto mt-8 flex h-14 items-center gap-2 rounded-full bg-red-500 px-16 font-bold text-gray-50 [box-shadow:0_4px_0_0_#821F14] disabled:bg-red-400"
           >
             بزن بریم
@@ -161,20 +177,44 @@ function WheelOfLuckGame() {
   );
 }
 
-function Wheel({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+function Wheel({
+  className,
+  roll,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement> & {
+  roll?: { id: string; point: number };
+}) {
   const p = useMemo(
-    () => points.sort(() => (Math.random() > 0.5 ? 1 : -1)),
+    () => POINTS.sort(() => (Math.random() > 0.5 ? 1 : -1)),
     [],
   ) as number[];
+  const size = 360 / p.length;
+  const [rotate, setRotate] = useState(size / 2);
   const wheelRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    console.log(p);
     useWheel(p, wheelRef);
   }, []);
+
+  useEffect(() => {
+    if (!roll) return;
+    const index = p.indexOf(roll?.point || 0);
+    console.log(index);
+    setRotate((p) => p - (index + 1) * size);
+    console.log(roll);
+  }, [roll]);
   return (
     <div
+      {...props}
+      style={
+        {
+          "--rotate": `${rotate}deg`,
+          transitionDuration: "1s",
+        } as React.CSSProperties
+      }
       className={cn(
-        "wheel relative mb-14 aspect-square max-w-72 rotate-[22deg] overflow-hidden",
+        "wheel relative mb-14 aspect-square max-w-72 rotate-[var(--rotate)] overflow-hidden transition-transform ease-in-out",
         className,
       )}
     >

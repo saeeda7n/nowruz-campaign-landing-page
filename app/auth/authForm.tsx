@@ -34,7 +34,7 @@ const AuthForm = () => {
     defaultValues: {
       phone: "",
       code: undefined,
-      ref: localStorage.getItem("ref"),
+      ref: typeof window !== "undefined" ? localStorage.getItem("ref") : null,
     },
   });
 

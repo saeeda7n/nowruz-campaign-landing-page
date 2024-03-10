@@ -18,6 +18,9 @@ interface DatabaseUserAttributes {
   vouchers: number;
   seenCards: string[];
   claimedRewards: string[];
+  newAccount: boolean;
+  representativeId?: string;
+  fullName: string;
 }
 
 export const lucia = new Lucia(adapter, {

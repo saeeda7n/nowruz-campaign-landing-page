@@ -10,6 +10,8 @@ import WheelOfLuck from "@/app/(landing)/wheelOfLuck";
 import SpecialOffers from "@/app/(landing)/specialOffers";
 import Footer from "@/app/(landing)/footer";
 import UserRef from "@/app/(landing)/userRef";
+import { redirect } from "next/navigation";
+import { getSession } from "@/server/actions/auth";
 
 function AbsoluteBackground() {
   return (
@@ -26,7 +28,9 @@ function AbsoluteBackground() {
   );
 }
 
-const Page = () => {
+const Page = async () => {
+  const { user } = await getSession();
+  if (user && user.newAccount) redirect("/auth/profile");
   return (
     <>
       <Header />

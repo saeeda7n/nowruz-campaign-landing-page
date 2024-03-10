@@ -74,10 +74,13 @@ const Header = () => {
                 </PopoverTrigger>
                 <PopoverContent
                   align="end"
-                  className="dark w-52 border-none bg-black/50 text-gray-50 backdrop-blur"
+                  className="dark w-52 border-none bg-black/70 text-gray-50 backdrop-blur"
                 >
                   <div className="flex items-center justify-between text-sm">
-                    {user.phone}
+                    <div className="flex flex-col gap-1">
+                      <span className="font-medium">{user.fullName}</span>
+                      <span className="text-xs">{user.phone}</span>
+                    </div>
                     {signOut.isPending ? (
                       <Loader2 className="animate-spin" size={16} />
                     ) : (

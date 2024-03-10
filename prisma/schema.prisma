@@ -28,6 +28,7 @@ model User {
   cards          String[]  @default([])
   seenCards      String[]  @default([]) @map("seen_cards")
   claimedRewards String[]  @default([]) @map("claimed_rewards")
+  newAccount     Boolean   @default(true) @map("new_account")
 
   users            User[]  @relation("ref")
   representative   User?   @relation("ref", fields: [representativeId], references: [id])

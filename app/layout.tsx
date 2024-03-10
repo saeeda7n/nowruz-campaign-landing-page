@@ -7,6 +7,7 @@ import { Toaster } from "sonner";
 import ClientProviders from "@/app/clientProviders";
 import AuthProvider from "@/authProvider";
 import { getSession } from "@/server/actions/auth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "جشنواره عیدانه سی تلکام - سی تلکام",
@@ -17,6 +18,7 @@ export default async function RootLayout({
   children,
 }: Readonly<PropsWithChildren>) {
   const session = await getSession();
+
   return (
     <html lang="fa" dir="rtl">
       <body

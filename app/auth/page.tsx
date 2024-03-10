@@ -1,8 +1,11 @@
 import React from "react";
 import AuthForm from "@/app/auth/authForm";
-import crypto from "crypto";
+import { getSession } from "@/server/actions/auth";
+import { redirect } from "next/navigation";
 
 const Page = async () => {
+  const { user } = await getSession();
+  if (user) redirect("/");
   return (
     <div className="mt-auto w-full max-w-96 space-y-10">
       <div className="space-y-1">

@@ -1,11 +1,6 @@
 import React, { PropsWithChildren } from "react";
-import { redirect } from "next/navigation";
-import { getSession } from "@/server/actions/auth";
 
 const Layout = async ({ children }: PropsWithChildren) => {
-  const { session } = await getSession();
-  await getSession();
-  if (session) redirect("/");
   return (
     <div className="flex min-h-lvh justify-center">
       <div className="flex max-w-[31rem] flex-1 flex-col items-center gap-8 px-2 py-16 pb-8 sm:px-8">

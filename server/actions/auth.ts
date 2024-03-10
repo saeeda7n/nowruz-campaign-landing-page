@@ -5,6 +5,44 @@ import { lucia, luciaCookieToNextCookie, SessionProps } from "@/lib/auth";
 import { cookies } from "next/headers";
 import { subMinutes } from "date-fns";
 import * as crypto from "crypto";
+import { revalidatePath } from "next/cache";
+
+export async function setFirstTimeName(name: string) {
+  const { user } = await getSession();
+  if (!user || !user.newAccount)
+    return { status: false, message: "لطفا ابتدا وارد شوید" };
+
+  try {
+    const data = await prisma.$transaction(async (tx) => {
+      const newUser = await tx.user.update({
+        where: { id: user.id, newAccount: true },
+        data: { fullName: name, newAccount: false, points: { increment: 20 } },
+      });
+      let friend;
+      if (user.representativeId)
+        friend = await tx.user.update({
+          where: { id: user.representativeId, newAccount: false },
+          data: { points: { increment: 20 } },
+        });
+      return { newUser, friend };
+    });
+    revalidatePath("/auth/profile");
+    return {
+      status: true,
+      message:
+        `${data.newUser.fullName} عزیز خوش آمدید, حساب شما با موفقیت ایجاد شد.` +
+        (data.friend
+          ? ` شما و ${data.friend?.fullName} هر کدام 20 امتیاز دریافت کدید.`
+          : ""),
+    };
+  } catch (e) {
+    return {
+      status: false,
+      message:
+        "حساب معرف شما فعال نشده است! لطفا از وی بخواهید با کامل کردن پروفایل خود یک حساب فعال ایجاد کند.",
+    };
+  }
+}
 
 export async function getAuthOtp(phone: string, refId?: string) {
   const session = await getSession();

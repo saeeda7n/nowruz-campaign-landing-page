@@ -21,3 +21,7 @@ export const authSchema = z.object({
     .or(z.undefined()),
   ref: z.string().or(z.null()).or(z.undefined()),
 });
+
+export const nameSchema = z.object({
+  name: z.string().min(4).max(64),
+});
