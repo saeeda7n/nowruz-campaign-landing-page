@@ -108,10 +108,13 @@ function ProductCard({
 
 const SpecialOffers = () => {
   return (
-    <section className="mx-[calc(50%-50vw)] overflow-hidden bg-gray-100 py-16">
+    <section
+      id="offers"
+      className="mx-[calc(50%-50vw)] overflow-hidden bg-gray-100 py-16"
+    >
       <div className="container space-y-8">
         <div className="flex flex-wrap items-center justify-between">
-          <div className="text-brown flex gap-2">
+          <div className="flex gap-2 text-brown">
             <PartyPopper />
             <h3 className="text-lg font-bold">محصولات شگفت انگیز</h3>
           </div>

@@ -58,7 +58,7 @@ const QuestionChallenge = async () => {
     getUserStatus(),
   ]);
   return (
-    <section className="relative -mt-32">
+    <section id="game" className="relative -mt-32">
       <FloatingGiftBoxes />
       <BookContext gameData={gameData} userState={userState}>
         <div className="flex flex-wrap justify-between gap-16">

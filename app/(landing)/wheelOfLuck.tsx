@@ -6,11 +6,11 @@ import { toast } from "sonner";
 import Image from "next/image";
 import { useWheel } from "@/lib/useWheel";
 import { cn } from "@/lib/utils";
-import { useAuth } from "@/authProvider";
+import { useAuth, useUser } from "@/authProvider";
 import Link from "next/link";
 import { POINTS } from "@/lib/consts";
-import { useMutation } from "@tanstack/react-query";
-import { rollWheel } from "@/server/actions/wheelOfLuck";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { invitedUsers, rollWheel } from "@/server/actions/wheelOfLuck";
 
 const points = [20, 40, 60, 200, 500, 40, 60, 100];
 
@@ -42,7 +42,10 @@ function CopyReferralCodeButton({ code }: { code?: string }) {
 
 function Header() {
   const { user } = useAuth();
-  const invited = 0;
+  const invited = useQuery({
+    queryFn: () => invitedUsers(),
+    queryKey: ["invited"],
+  });
   return (
     <div className="flex flex-wrap items-center justify-between gap-y-5">
       <div className="space-y-2">
@@ -52,8 +55,8 @@ function Header() {
         <div className="ms-auto hidden flex-wrap justify-end gap-4 gap-y-2 sm:flex">
           <Chip className="border-gold text-brown">
             <span className="text-xs">
-              {invited > 0
-                ? "افراد دعوت شده توسط شما 4 نفر"
+              {(invited?.data || 0) > 0
+                ? `افراد دعوت شده توسط شما ${invited.data} نفر`
                 : "شما تا کنون کسی را دعوت نکرده اید :("}
             </span>
           </Chip>
@@ -145,11 +148,27 @@ function GiftBoxes() {
 }
 
 function WheelOfLuckGame() {
+  const user = useUser();
   const roll = useMutation({
     mutationFn: () => rollWheel(),
   });
+  const [disabled, setDisabled] = useState(false);
 
-  function Turn() {}
+  function Turn() {
+    roll.mutate(undefined, {
+      onError() {
+        toast.error("خطایی رخ داده است! لطفا مجددا تلاش کنید");
+      },
+      onSuccess(data: any) {
+        if (data.id) {
+          setDisabled(true);
+          setTimeout(() => setDisabled(false), 10_000);
+        } else if (data.status === false) {
+          toast.message(data.message);
+        }
+      },
+    });
+  }
 
   return (
     <div className="relative flex flex-1 items-center justify-center sm:min-w-[28rem]">
@@ -165,12 +184,32 @@ function WheelOfLuckGame() {
         />
         <Wheel roll={roll.data} />
         <div className="absolute -bottom-8 z-50">
-          <button
-            onClick={() => roll.mutate()}
-            className="me-auto mt-8 flex h-14 items-center gap-2 rounded-full bg-red-500 px-16 font-bold text-gray-50 [box-shadow:0_4px_0_0_#821F14] disabled:bg-red-400"
-          >
-            بزن بریم
-          </button>
+          {user ? (
+            user.points >= 100 ? (
+              <button
+                disabled={disabled || roll.isPending}
+                onClick={Turn}
+                className="me-auto mt-8 flex h-14 items-center gap-2 rounded-full bg-red-500 px-16 font-bold text-gray-50 [box-shadow:0_4px_0_0_#821F14] disabled:bg-red-400"
+              >
+                بزن بریم
+              </button>
+            ) : (
+              <button
+                disabled={disabled || roll.isPending}
+                onClick={Turn}
+                className="me-auto mt-8 flex h-14 items-center gap-2 rounded-full bg-red-500 px-16 font-bold text-gray-50 [box-shadow:0_4px_0_0_#821F14] disabled:bg-red-400"
+              >
+                افزایش امتیاز
+              </button>
+            )
+          ) : (
+            <Link
+              href="/auth"
+              className="me-auto mt-8 flex h-14 items-center gap-2 rounded-full bg-red-500 px-16 font-bold text-gray-50 [box-shadow:0_4px_0_0_#821F14] disabled:bg-red-400"
+            >
+              وارد شوید
+            </Link>
+          )}
         </div>
       </div>
     </div>
@@ -182,7 +221,7 @@ function Wheel({
   roll,
   ...props
 }: React.HTMLAttributes<HTMLDivElement> & {
-  roll?: { id: string; point: number };
+  roll?: any;
 }) {
   const p = useMemo(
     () => POINTS.sort(() => (Math.random() > 0.5 ? 1 : -1)),
@@ -193,16 +232,17 @@ function Wheel({
   const wheelRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    console.log(p);
     useWheel(p, wheelRef);
   }, []);
 
   useEffect(() => {
-    if (!roll) return;
-    const index = p.indexOf(roll?.point || 0);
-    console.log(index);
-    setRotate((p) => p - (index + 1) * size);
-    console.log(roll);
+    if (!roll && !roll?.value && rotate) {
+      setRotate(size / 2);
+      return;
+    }
+
+    const index = p.indexOf(roll?.value || 0);
+    setRotate((p) => index * -size - size / 2 + 360 * 10);
   }, [roll]);
   return (
     <div
@@ -210,11 +250,11 @@ function Wheel({
       style={
         {
           "--rotate": `${rotate}deg`,
-          transitionDuration: "1s",
+          transitionDuration: `${roll ? "10s" : "0s"}`,
         } as React.CSSProperties
       }
       className={cn(
-        "wheel relative mb-14 aspect-square max-w-72 rotate-[var(--rotate)] overflow-hidden transition-transform ease-in-out",
+        "wheel relative mb-14 aspect-square max-w-72 rotate-[var(--rotate)] overflow-hidden transition-transform ease-out",
         className,
       )}
     >
@@ -230,7 +270,10 @@ function Wheel({
 
 const WheelOfLuck = () => {
   return (
-    <section className="flex flex-col items-center gap-10 gap-y-16 py-24 text-brown lg:flex-row">
+    <section
+      id="wheel"
+      className="flex flex-col items-center gap-10 gap-y-16 py-24 text-brown lg:flex-row"
+    >
       <GameGuideline />
       <WheelOfLuckGame />
     </section>

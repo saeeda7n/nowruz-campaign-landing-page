@@ -22,15 +22,15 @@ import { authSignOut } from "@/server/actions/auth";
 import Link from "next/link";
 
 const items = [
-  { name: "عیدانه", url: "", icon: null },
-  { name: "مسابقه", url: "", icon: null },
+  { name: "عیدانه", url: "#hero", icon: null },
+  { name: "مسابقه", url: "#game", icon: null },
   {
     name: "امتیازات",
-    url: "",
+    url: "#points",
     icon: null,
   },
-  { name: " گردونه شانس", url: "", icon: null },
-  { name: "محصولات شگفت انگیز", url: "", icon: <PartyPopper /> },
+  { name: " گردونه شانس", url: "#wheel", icon: null },
+  { name: "محصولات شگفت انگیز", url: "#offers", icon: <PartyPopper /> },
 ];
 const Header = () => {
   const [open, setOpen] = useState(false);
@@ -61,7 +61,7 @@ const Header = () => {
                 key={item.name}
               >
                 {item.icon}
-                <a href="">{item.name}</a>
+                <a href={item.url}>{item.name}</a>
               </li>
             ))}
           </ul>

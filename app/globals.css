@@ -87,3 +87,8 @@
 .paper.visible {
     transition: visibility step-end 0.2s, z-index step-end 0s;
 }
+
+
+html {
+    scroll-behavior: smooth;
+}

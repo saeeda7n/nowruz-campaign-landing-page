@@ -16,7 +16,11 @@ export async function setFirstTimeName(name: string) {
     const data = await prisma.$transaction(async (tx) => {
       const newUser = await tx.user.update({
         where: { id: user.id, newAccount: true },
-        data: { fullName: name, newAccount: false, points: { increment: 20 } },
+        data: {
+          fullName: name,
+          newAccount: false,
+          points: { increment: user.representativeId ? 20 : 0 },
+        },
       });
       let friend;
       if (user.representativeId)
