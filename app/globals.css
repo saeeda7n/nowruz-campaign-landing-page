@@ -92,3 +92,15 @@
 html {
     scroll-behavior: smooth;
 }
+
+@keyframes openIn {
+    0% {
+        scale: 0.5
+    }
+    55% {
+        scale: 1.05;
+    }
+    100% {
+        scale: 1;
+    }
+}

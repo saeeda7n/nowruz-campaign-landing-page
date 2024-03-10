@@ -29,6 +29,7 @@ export async function rollWheel() {
           userId: user.id,
         },
       });
+      //todo send sms
       return discountCode;
     });
     console.log(discountCode);

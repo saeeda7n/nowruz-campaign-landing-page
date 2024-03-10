@@ -11,6 +11,14 @@ import Link from "next/link";
 import { POINTS } from "@/lib/consts";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { invitedUsers, rollWheel } from "@/server/actions/wheelOfLuck";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const points = [20, 40, 60, 200, 500, 40, 60, 100];
 

@@ -64,7 +64,7 @@ export async function submitAnswer(data: FormData) {
         `${answer.questionId},${String(data.get(answer.questionId))},${String(isCorrect)}`,
       );
     }
-    await prisma.$transaction(async (tx) => {
+    const earnedRewards = await prisma.$transaction(async (tx) => {
       await tx.answer.create({
         data: {
           stars: accumulator,
@@ -99,12 +99,14 @@ export async function submitAnswer(data: FormData) {
           },
         },
       });
+      return { card, points: accumulator * 10, stars: accumulator };
     });
 
     revalidatePath("/");
     return {
       status: true,
       message: `پاسخ شما ثبت شد, شما ${accumulator} پاسخ صحیح داده اید`,
+      earnedRewards,
     };
   } catch (e) {
     return {

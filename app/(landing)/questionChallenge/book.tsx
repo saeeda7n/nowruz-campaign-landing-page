@@ -24,6 +24,15 @@ import BookSlider from "@/app/(landing)/questionChallenge/bookSlider";
 import { useUser } from "@/authProvider";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { DialogProps } from "@radix-ui/react-dialog";
 
 const SelectDayPaper = () => {
   const user = useUser();
@@ -129,11 +138,97 @@ const QuestionPaper = ({
   );
 };
 
+function ResultDialog({
+  result,
+  ...props
+}: DialogProps & {
+  result: { card: string; points: number; stars: number };
+}) {
+  return (
+    <Dialog {...props}>
+      <DialogContent>
+        {result && (
+          <div className="flex flex-col gap-8 pb-6 pt-4 text-center text-brown">
+            <div className="mb-4 flex items-end justify-center">
+              <img
+                className="-mb-3 w-20 first:-me-7 last:-ms-7"
+                src={
+                  result.stars > 1
+                    ? "/icons/star-filled.svg"
+                    : "/icons/star.svg"
+                }
+              />
+              <img
+                className="z-50 w-28 first:-me-7 last:-ms-7"
+                src={
+                  result.stars > 2
+                    ? "/icons/star-filled.svg"
+                    : "/icons/star.svg"
+                }
+              />
+              <img
+                className="-mb-3 w-20 first:-me-7 last:-ms-7"
+                src={
+                  result.stars > 0
+                    ? "/icons/star-filled.svg"
+                    : "/icons/star.svg"
+                }
+              />
+            </div>
+            <p className="text-2xl font-black sm:text-3xl">
+              شما {result.stars} پاسخ صحیح داده اید
+            </p>
+            <div className="flex items-end justify-around gap-5">
+              <div className="max-w-36 space-y-2">
+                <div className="text-3xl font-black sm:text-5xl">
+                  {result.points}
+                </div>
+                <p className="text-xs font-bold sm:text-sm">
+                  امتیاز بدست آمده برای گردانه شانس
+                </p>
+              </div>
+              <div className="max-w-36 space-y-2 text-xs font-medium">
+                {result.card === "1000" && (
+                  <img
+                    src="/landing/images/gold.webp"
+                    className="mx-auto h-12 w-auto sm:h-16"
+                    alt=""
+                  />
+                )}
+                {result.card === "100" && (
+                  <img
+                    src="/landing/images/silver.webp"
+                    className="mx-auto h-12 w-auto sm:h-16"
+                    alt=""
+                  />
+                )}
+                {["1000", "100"].includes(result.card) ? (
+                  <p className="text-xs font-bold sm:text-sm">
+                    شما یک کارت {result.card} آفرین بدست آوردید.
+                  </p>
+                ) : (
+                  <p className="text-xs font-bold sm:text-sm">
+                    شما تنها با پاسخ دادن به سوالات مربوط به همان روز میتوانید
+                    کارت های 100 و 1000 آفرید بدست آورید.
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 const Book = () => {
   const { setPage, page, singlePage, question } = useBook();
   const submit = useMutation({
     mutationFn: (data: FormData) => submitAnswer(data),
   });
+  const [dialog, setDialog] = useState(false);
+  const [result, setResult] = useState<any>(null);
+
   return (
     <div className="relative -ms-24 flex flex-1 select-none lg:ms-0">
       <div className="mx-auto flex w-[200%] max-w-[992px] items-center justify-start md:justify-center">
@@ -144,22 +239,9 @@ const Book = () => {
           height={738}
           className="ms-auto  max-w-[992px] [filter:drop-shadow(0_23px_46px_#581C01)] md:w-auto"
         />
+        <ResultDialog onOpenChange={setDialog} open={dialog} result={result} />
         <div className="absolute inset-0 flex">
-          <form
-            className="relative flex-1"
-            onSubmit={async (e) => {
-              e.preventDefault();
-              const data = new FormData(e.target as HTMLFormElement);
-              submit.mutate(data, {
-                onError: () =>
-                  toast.error("خطلایی رخ داده است! لطفا مجددا تلاش کنید."),
-                onSuccess(data) {
-                  toast[data?.status ? "success" : "error"](data?.message);
-                  if (data?.status) setPage(0);
-                },
-              });
-            }}
-          >
+          <form className="relative flex-1" onSubmit={onSubmit}>
             <input hidden name="dayId" value={question?.id} />
             <Paper
               show={[0, 1].includes(page)}
@@ -252,6 +334,22 @@ const Book = () => {
       </div>
     </div>
   );
+
+  function onSubmit(e: any) {
+    e.preventDefault();
+    const data = new FormData(e.target as HTMLFormElement);
+    submit.mutate(data, {
+      onError: () => toast.error("خطلایی رخ داده است! لطفا مجددا تلاش کنید."),
+      onSuccess(data) {
+        toast[data?.status ? "success" : "error"](data?.message);
+        if (data?.status) {
+          setPage(0);
+          setResult(data.earnedRewards);
+          setDialog(true);
+        }
+      },
+    });
+  }
 };
 
 export default Book;
