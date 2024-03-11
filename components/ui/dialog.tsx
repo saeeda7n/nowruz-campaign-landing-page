@@ -20,7 +20,7 @@ const DialogOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      "fixed inset-0 z-[999999] bg-white/20 backdrop-blur  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      "fixed inset-0 z-[9999999] bg-white/20 backdrop-blur  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
       className,
     )}
     {...props}
@@ -37,12 +37,13 @@ const DialogContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        "group fixed left-[50%] top-[50%] z-[999999] grid w-11/12 max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 p-6 duration-300 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:w-full sm:rounded-lg",
+        "group fixed left-[50%] top-[50%] z-[9999999] grid w-11/12 max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 p-6 duration-300 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:w-full sm:rounded-lg",
+        className,
       )}
       {...props}
     >
       <div className="absolute inset-0 rounded-3xl border group-data-[state=open]:animate-[openIn_0.3s] group-data-[state=open]:bg-background"></div>
-      <div className={cn("relative flex w-full flex-1 flex-col", className)}>
+      <div className={cn("relative flex w-full flex-1 flex-col")}>
         {children}
       </div>
       <DialogPrimitive.Close className="absolute -end-3.5 -top-3.5 size-10 rounded-full  border bg-white p-2 disabled:pointer-events-none sm:-end-7 sm:-top-7 sm:size-14  sm:p-3">

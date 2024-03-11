@@ -32,9 +32,12 @@ export async function rollWheel() {
       //todo send sms
       return discountCode;
     });
-    console.log(discountCode);
     revalidatePath("/");
-    return discountCode;
+    return {
+      status: true,
+      message: "کد تخفیف با موفقیت ایجاد شد",
+      data: discountCode,
+    };
   } catch (e) {
     return {
       status: false,

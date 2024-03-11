@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Chip } from "@/app/(landing)/pointbar/pointBar";
-import { Copy, Info, Ticket } from "lucide-react";
+import { Copy, Gift, Info, Ticket } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
 import { useWheel } from "@/lib/useWheel";
@@ -19,6 +19,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { DialogProps } from "@radix-ui/react-dialog";
 
 const points = [20, 40, 60, 200, 500, 40, 60, 100];
 
@@ -161,6 +162,7 @@ function WheelOfLuckGame() {
     mutationFn: () => rollWheel(),
   });
   const [disabled, setDisabled] = useState(false);
+  const [dialog, setDialog] = useState(false);
 
   function Turn() {
     roll.mutate(undefined, {
@@ -168,9 +170,12 @@ function WheelOfLuckGame() {
         toast.error("خطایی رخ داده است! لطفا مجددا تلاش کنید");
       },
       onSuccess(data: any) {
-        if (data.id) {
+        if (data?.data?.id) {
           setDisabled(true);
-          setTimeout(() => setDisabled(false), 10_000);
+          setTimeout(() => {
+            setDisabled(false);
+            setDialog(true);
+          }, 10_000);
         } else if (data.status === false) {
           toast.message(data.message);
         }
@@ -181,6 +186,11 @@ function WheelOfLuckGame() {
   return (
     <div className="relative flex flex-1 items-center justify-center sm:min-w-[28rem]">
       <GiftBoxes />
+      <ResultDialog
+        onOpenChange={setDialog}
+        open={dialog}
+        code={roll?.data?.data?.code || ""}
+      />
       <div className="relative bottom-0 flex h-[28rem] w-full items-center justify-center">
         <Image
           src="/landing/images/wheel-of-luck.webp"
@@ -244,12 +254,12 @@ function Wheel({
   }, []);
 
   useEffect(() => {
-    if (!roll && !roll?.value && rotate) {
+    if (!roll && !roll?.data?.value && rotate) {
       setRotate(size / 2);
       return;
     }
 
-    const index = p.indexOf(roll?.value || 0);
+    const index = p.indexOf(roll?.data?.value || 0);
     setRotate((p) => index * -size - size / 2 + 360 * 10);
   }, [roll]);
   return (
@@ -273,6 +283,54 @@ function Wheel({
         className={"h-full w-full transition duration-1000"}
       />
     </div>
+  );
+}
+
+function ResultDialog({
+  code,
+  ...props
+}: DialogProps & {
+  code: string;
+}) {
+  return (
+    <Dialog {...props}>
+      <DialogContent>
+        <div className="flex-1 items-center justify-center rounded-2xl py-5 text-center">
+          <div className="flex flex-col justify-center">
+            <div className="flex items-center justify-center gap-3 text-gold">
+              <span className="mt-2 text-5xl font-bold">60%</span>
+              <Gift className="size-14" />
+            </div>
+            <button
+              onClick={() => {
+                navigator.clipboard
+                  .writeText(code)
+                  .then(() => toast.message("کد تخفیف با موفقیت کپی شد."));
+              }}
+              className="mx-auto mt-5 flex h-11 items-center justify-center gap-3 rounded-full bg-[#FEC421]/40 px-5 text-lg font-medium text-brown"
+            >
+              <Copy />
+              {code}
+            </button>
+            <div className="mt-5">
+              <p className="text-base font-bold">
+                شما برنده تخفیف 60 درصدی خرید
+              </p>
+              <p>برای خرید از فروشگاه سی تلکام شدید</p>
+            </div>
+            <p className="mt-3 text-xs font-bold">
+              ارسال رایگان برای تمامی محصولات فروشگاه سی تلکام
+            </p>
+            <a
+              href="$"
+              className="mx-auto mt-5 flex h-10 items-center rounded-full bg-[--ripe-mango] px-5 text-sm font-bold text-brown"
+            >
+              خرید را شروع کنید
+            </a>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 

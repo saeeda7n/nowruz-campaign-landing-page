@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { FreeMode } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { ChevronDown, Ticket } from "lucide-react";
+import { ChevronDown, Gift, Ticket } from "lucide-react";
 import rewards from "@/data/landing/rewards.json";
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -14,6 +14,8 @@ import { Input } from "postcss";
 import { useUser } from "@/authProvider";
 import { useMutation } from "@tanstack/react-query";
 import { seenCard } from "@/server/actions/pointBar";
+import { DialogProps } from "@radix-ui/react-dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 type RewardCardProps = {
   id: string;
@@ -48,7 +50,10 @@ function Locked({ className }: { className?: string }) {
   );
 }
 
-function RewardCard(props: RewardCardProps) {
+function RewardCard({
+  onClickWatch,
+  ...props
+}: RewardCardProps & { onClickWatch: any }) {
   const seen = useMutation({
     mutationFn: () => seenCard(props.id),
   });
@@ -81,6 +86,7 @@ function RewardCard(props: RewardCardProps) {
           disabled={seen.isPending}
           onClick={() => {
             if (!props.seen) seen.mutate();
+            onClickWatch && onClickWatch(props);
           }}
         >
           مشاهده بیشتر
@@ -123,9 +129,48 @@ function RewardCard(props: RewardCardProps) {
   );
 }
 
+function ResultDialog({ ...props }: DialogProps) {
+  return (
+    <Dialog {...props}>
+      <DialogContent className="md:min-w-[46rem]">
+        <div className="flex flex-col-reverse gap-5 md:flex-row">
+          <div className="flex-1 items-center justify-center rounded-2xl border bg-[#F8FAFC] py-5 text-center">
+            <div className="flex flex-col justify-center">
+              <Gift className="mx-auto size-20 text-gold" />
+              <span className="text-3xl font-bold">تبریک</span>
+              <div className="mt-5">
+                <p className="text-sm font-bold">
+                  شما برنده تخفیف 60 درصدی خرید
+                </p>
+                <p>ساعت هوشمند سامسونگ گلگسی واچ 6 شدید</p>
+              </div>
+              <p className="mt-3 text-xs font-bold">
+                ارسال رایگان برای تمامی محصولات فروشگاه سی تلکام
+              </p>
+              <a
+                href="$"
+                className="mx-auto mt-5 flex h-10 items-center rounded-full bg-[--ripe-mango] px-5 text-sm font-bold text-brown"
+              >
+                خرید را شروع کنید
+              </a>
+            </div>
+          </div>
+          <div className="flex w-full items-center justify-center rounded-2xl border p-5 md:w-56">
+            <img
+              src="/images/watch.png"
+              className="h-auto w-full max-w-44 [filter:drop-shadow(0_0_32px_var(--ripe-mango))]"
+            />
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 const PointBarSlider = () => {
   const user = useUser();
   const point = user?.vouchers || 0;
+  const [dialog, setDialog] = useState(false);
   const [progress, setProgress] = useState(0);
   const [swiper, setSwiper] = useState<any>(null);
   const wrapper = useRef<HTMLDivElement>(null);
@@ -159,6 +204,7 @@ const PointBarSlider = () => {
   }, [progress]);
   return (
     <>
+      <ResultDialog onOpenChange={setDialog} open={dialog} />
       <Swiper
         onInit={(s) => setSwiper(s)}
         slidesPerView="auto"
@@ -172,6 +218,10 @@ const PointBarSlider = () => {
               {sortedRewards.map((data) => (
                 <RewardCard
                   {...data}
+                  onClickWatch={(props: any) => {
+                    setDialog(true);
+                    console.log(props);
+                  }}
                   seen={user?.seenCards.includes(data.id) || false}
                   unlocked={data.required_points <= point}
                   key={data.id}
