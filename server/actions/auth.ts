@@ -64,13 +64,15 @@ export async function getAuthOtp(phone: string, refId?: string) {
   try {
     await prisma.$transaction(
       async (tx) => {
-        const representative = await tx.user.findFirst({ where: { refId } });
+        const representative = refId
+          ? await tx.user.findFirst({ where: { refId } })
+          : null;
         await tx.user.upsert({
           where: { phone },
           create: {
             refId: crypto.randomBytes(4).toString("hex"),
             phone,
-            representativeId: representative ? representative.id : null,
+            representativeId: representative && representative.id,
             otps: { create: { code } },
           },
           update: {
