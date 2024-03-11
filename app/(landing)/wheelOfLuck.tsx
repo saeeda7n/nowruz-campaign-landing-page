@@ -162,6 +162,7 @@ function WheelOfLuckGame() {
     mutationFn: () => rollWheel(),
   });
   const [disabled, setDisabled] = useState(false);
+  const [pointDialog, setPointDialog] = useState(false);
   const [dialog, setDialog] = useState(false);
 
   function Turn() {
@@ -191,6 +192,9 @@ function WheelOfLuckGame() {
         open={dialog}
         code={roll?.data?.data?.code || ""}
       />
+
+      <PointDialog onOpenChange={setPointDialog} open={pointDialog} />
+
       <div className="relative bottom-0 flex h-[28rem] w-full items-center justify-center">
         <Image
           src="/landing/images/wheel-of-luck.webp"
@@ -213,8 +217,7 @@ function WheelOfLuckGame() {
               </button>
             ) : (
               <button
-                disabled={disabled || roll.isPending}
-                onClick={Turn}
+                onClick={() => setPointDialog(true)}
                 className="me-auto mt-8 flex h-14 items-center gap-2 rounded-full bg-red-500 px-16 font-bold text-gray-50 [box-shadow:0_4px_0_0_#821F14] disabled:bg-red-400"
               >
                 افزایش امتیاز
@@ -328,6 +331,44 @@ function ResultDialog({
               خرید را شروع کنید
             </a>
           </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function PointDialog({ ...props }: DialogProps) {
+  return (
+    <Dialog {...props}>
+      <DialogContent>
+        <div className="flex-1 space-y-4 rounded-2xl py-5">
+          <p className="text-lg font-medium">
+            ظاهرا امتیاز کافی برای ایجاد کد تخفیف ندارید!
+          </p>
+          <p>
+            برای چرخوندن گردونه شانس نیاز به 100 امتیاز دارید. برای افزایش
+            امتیاز میتونی با دعوت از دوستات امتیاز خودتو افزایش بدی یا با پاسخ
+            دادن به سوالات هر روز به امتیاز خودت اضافه بکنه.
+            <br />
+            <br />
+            برای کپی لینک از دعوت از دوستات میتونی{" "}
+            <a
+              className="text-blue-800 underline"
+              onClick={() => props.onOpenChange && props.onOpenChange(false)}
+              href="#wheel"
+            >
+              اینجارو کلیک
+            </a>{" "}
+            کنی یا اگر هنوز به همه سوالات جواب ندادی میتونی{" "}
+            <a
+              href="#game"
+              onClick={() => props.onOpenChange && props.onOpenChange(false)}
+              className="text-blue-800 underline"
+            >
+              اینجارو کلیک
+            </a>{" "}
+            بکنی.
+          </p>
         </div>
       </DialogContent>
     </Dialog>
