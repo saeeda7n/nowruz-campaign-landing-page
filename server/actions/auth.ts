@@ -88,6 +88,7 @@ export async function getAuthOtp(phone: string, refId?: string) {
 
     return { message: "کد ورود یک بار مصرف برای شمار ارسال شد.", status: true };
   } catch (e) {
+    console.log(e);
     return {
       status: false,
       message: "خطایی رخ داده است! لطفا دوباره تلاش کنید.",

@@ -220,7 +220,6 @@ const PointBarSlider = () => {
                   {...data}
                   onClickWatch={(props: any) => {
                     setDialog(true);
-                    console.log(props);
                   }}
                   seen={user?.seenCards.includes(data.id) || false}
                   unlocked={data.required_points <= point}
