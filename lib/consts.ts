@@ -1,7 +1,7 @@
 import { addDays, differenceInSeconds } from "date-fns";
 
 export const START = "2024/3/9";
-export const END = "2024/3/11";
+export const END = "2024/3/18";
 
 export const startIn = () => Date.now() > new Date(START).getTime();
 export const endIn = () => differenceInSeconds(addDays(END, 1), Date.now());
