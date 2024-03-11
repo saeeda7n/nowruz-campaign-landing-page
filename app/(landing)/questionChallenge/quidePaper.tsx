@@ -50,7 +50,7 @@ function GameGuidelineHelpCard({ title, body }: GameGuidelineHelpCardProps) {
 
 export default function GuidePaper() {
   return (
-    <div className="flex flex-col gap-5 self-center overflow-hidden pb-2 2xl:w-[520px]">
+    <div className="flex flex-col gap-5 self-center overflow-hidden pb-2 2xl:max-w-[520px]">
       <div className="relative flex-1">
         <img
           draggable={false}

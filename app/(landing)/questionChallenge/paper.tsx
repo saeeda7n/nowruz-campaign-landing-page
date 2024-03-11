@@ -78,13 +78,13 @@ const Paper = ({ front, rear, show, back, page, ...props }: Props) => {
   return (
     <div
       className={cn(
-        "paper invisible relative -me-[1.5%] -mt-[0.4%] flex-1 select-none",
+        "paper invisible relative -me-[1.5%] -mt-[0.4%] flex-1 select-none 2xl:mt-[2%]",
         { visible: show },
       )}
       ref={scope}
     >
       <div className="paper absolute inset-0 origin-left">
-        <div className="relative ms-[20%] flex w-[81%] max-w-[25.3rem] overflow-hidden md:ms-auto md:flex-row-reverse">
+        <div className="relative ms-[20%] flex w-[81%] max-w-[24.3rem] overflow-hidden md:ms-auto md:flex-row-reverse">
           <Image
             draggable="false"
             className="pointer-events-none z-30"

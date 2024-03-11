@@ -342,10 +342,10 @@ function PointDialog({ ...props }: DialogProps) {
     <Dialog {...props}>
       <DialogContent>
         <div className="flex-1 space-y-4 rounded-2xl py-5">
-          <p className="text-lg font-medium">
+          <p className="text-lg font-bold">
             ظاهرا امتیاز کافی برای ایجاد کد تخفیف ندارید!
           </p>
-          <p>
+          <p className="text-sm">
             برای چرخوندن گردونه شانس نیاز به 100 امتیاز دارید. برای افزایش
             امتیاز میتونی با دعوت از دوستات امتیاز خودتو افزایش بدی یا با پاسخ
             دادن به سوالات هر روز به امتیاز خودت اضافه بکنه.
@@ -353,7 +353,7 @@ function PointDialog({ ...props }: DialogProps) {
             <br />
             برای کپی لینک از دعوت از دوستات میتونی{" "}
             <a
-              className="text-blue-800 underline"
+              className="font-medium text-blue-800 underline"
               onClick={() => props.onOpenChange && props.onOpenChange(false)}
               href="#wheel"
             >
@@ -363,7 +363,7 @@ function PointDialog({ ...props }: DialogProps) {
             <a
               href="#game"
               onClick={() => props.onOpenChange && props.onOpenChange(false)}
-              className="text-blue-800 underline"
+              className="font-medium text-blue-800 underline"
             >
               اینجارو کلیک
             </a>{" "}
@@ -379,7 +379,7 @@ const WheelOfLuck = () => {
   return (
     <section
       id="wheel"
-      className="flex flex-col items-center gap-10 gap-y-16 py-24 text-brown lg:flex-row"
+      className="flex flex-col items-center gap-10 gap-y-16 pb-24 pt-16 text-brown lg:flex-row"
     >
       <GameGuideline />
       <WheelOfLuckGame />

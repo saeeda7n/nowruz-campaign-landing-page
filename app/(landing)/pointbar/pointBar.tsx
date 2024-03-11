@@ -56,7 +56,7 @@ const PointBar = () => {
   return (
     <section
       id="points"
-      className="flex flex-col gap-12 overflow-hidden py-16 pt-24 text-brown"
+      className="flex flex-col gap-12 overflow-hidden py-16  pb-0 pt-24 text-brown md:pb-16"
     >
       <Header />
       <div className="min-h-96 pt-12">

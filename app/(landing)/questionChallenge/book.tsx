@@ -231,13 +231,13 @@ const Book = () => {
 
   return (
     <div className="relative -ms-24 flex flex-1 select-none lg:ms-0">
-      <div className="mx-auto flex w-[200%] max-w-[992px] items-center justify-start md:justify-center">
+      <div className="mx-auto flex w-[200%] max-w-[955px] items-center justify-start md:justify-center">
         <Image
           src="/landing/images/open-book.png"
           alt="Open book"
           width={1070}
           height={738}
-          className="ms-auto  max-w-[992px] [filter:drop-shadow(0_23px_46px_#581C01)] md:w-auto"
+          className="ms-auto max-w-[955px] [filter:drop-shadow(0_23px_46px_#581C01)] md:w-auto"
         />
         <ResultDialog onOpenChange={setDialog} open={dialog} result={result} />
         <div className="absolute inset-0 flex">
