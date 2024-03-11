@@ -12,7 +12,7 @@ const Layout = async ({ children }: PropsWithChildren) => {
           draggable={false}
           alt="Auth page banner"
           className="sticky top-0 h-full max-h-lvh w-full object-cover object-center"
-          src="https://cdn.dribbble.com/userupload/4240282/file/original-afd59f15f2118b634107b4c5696813ae.png"
+          src="/images/auth.webp"
         />
       </div>
     </div>
