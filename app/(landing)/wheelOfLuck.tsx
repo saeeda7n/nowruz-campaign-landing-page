@@ -345,7 +345,7 @@ function PointDialog({ ...props }: DialogProps) {
             دادن به سوالات هر روز به امتیاز خودت اضافه بکنه.
             <br />
             <br />
-            برای کپی لینک از دعوت از دوستات میتونی{" "}
+            برای کپی لینک دعوت از دوستات میتونی{" "}
             <a
               className="font-medium text-blue-800 underline"
               onClick={() => props.onOpenChange && props.onOpenChange(false)}

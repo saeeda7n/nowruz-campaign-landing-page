@@ -36,7 +36,7 @@ export async function setFirstTimeName(name: string) {
       message:
         `${data.newUser.fullName} عزیز خوش آمدید, حساب شما با موفقیت ایجاد شد.` +
         (data.friend
-          ? ` شما و ${data.friend?.fullName} هر کدام 20 امتیاز دریافت کدید.`
+          ? ` شما و ${data.friend?.fullName} هر کدام 20 امتیاز دریافت کردید.`
           : ""),
     };
   } catch (e) {
