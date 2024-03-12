@@ -11,24 +11,18 @@ import Link from "next/link";
 import { POINTS } from "@/lib/consts";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { invitedUsers, rollWheel } from "@/server/actions/wheelOfLuck";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { DialogProps } from "@radix-ui/react-dialog";
 
 const points = [20, 40, 60, 200, 500, 40, 60, 100];
 
 function CopyReferralCodeButton({ code }: { code?: string }) {
   if (!code) return "";
+  const url = typeof window !== "undefined" ? window.location.origin : "";
   return (
     <div className="flex flex-col gap-2 sm:flex-row">
       <button
-        onClick={() => copy(`https://ctelecom.com/nowroz?ref=${code}`)}
+        onClick={() => copy(`${url}?ref=${code}`)}
         className="flex h-10 items-center gap-2 rounded-full  bg-white/30 px-5 text-sm font-medium"
       >
         <Copy size={16} />
