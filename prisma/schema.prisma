@@ -14,26 +14,28 @@ datasource db {
 }
 
 model User {
-  id               String         @id @default(uuid())
-  refId            String         @unique @map("ref_id")
-  phone            String         @unique
-  fullName         String?        @map("full_name")
+  id               String    @id @default(uuid())
+  refId            String    @unique @map("ref_id")
+  phone            String    @unique
+  fullName         String?   @map("full_name")
   sessions         Session[]
   otps             Otp[]
   answers          Answer[]
-  points           Int            @default(0)
-  vouchers         Int            @default(0)
-  createdAt        DateTime       @default(now()) @map("created_at")
-  updatedAt        DateTime?      @updatedAt @map("updated_at")
-  cards            String[]       @default([])
-  seenCards        String[]       @default([]) @map("seen_cards")
-  claimedRewards   String[]       @default([]) @map("claimed_rewards")
-  newAccount       Boolean        @default(true) @map("new_account")
-  discountCodes    DiscountCode[]
-  representativeId String?        @map("representative_id")
+  points           Int       @default(0)
+  vouchers         Int       @default(0)
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime? @updatedAt @map("updated_at")
+  cards            String[]  @default([])
+  seenCards        String[]  @default([]) @map("seen_cards")
+  claimedRewards   String[]  @default([]) @map("claimed_rewards")
+  newAccount       Boolean   @default(true) @map("new_account")
+  representativeId String?   @map("representative_id")
+  isAdmin          Boolean   @default(false) @map("is_admin")
 
-  users          User[] @relation("ref")
-  representative User?  @relation("ref", fields: [representativeId], references: [id])
+  discountCodes  DiscountCode[]
+  users          User[]         @relation("ref")
+  representative User?          @relation("ref", fields: [representativeId], references: [id])
+  messages       TextMessages[]
 
   @@map("users")
 }
@@ -76,7 +78,7 @@ model Answer {
 
 model DiscountCode {
   id        String   @id @default(uuid())
-  userId    String
+  userId    String   @map("user_id")
   code      String
   value     Int
   createdAt DateTime @default(now()) @map("created_at")
@@ -84,4 +86,15 @@ model DiscountCode {
   user User @relation(fields: [userId], references: [id])
 
   @@map("discount_codes")
+}
+
+model TextMessages {
+  id          String    @id @default(uuid())
+  userId      String    @map("user_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  deliveredAt DateTime? @map("delivered_at")
+  message     String
+  reciver     User      @relation(fields: [userId], references: [id])
+
+  @@map("text_messages")
 }

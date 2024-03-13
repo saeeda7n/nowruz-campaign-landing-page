@@ -1,9 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import "swiper/css";
 import "swiper/css/navigation";
+import { useUser } from "@/authProvider";
+import rewards from "@/data/landing/rewards.json";
 
 function SpecialRewardSliderCard() {
   return (
@@ -21,10 +23,52 @@ function SpecialRewardSliderCard() {
   );
 }
 
-export default function BookSlider() {
+function Slider() {
+  const user = useUser();
+  const items = useMemo(() => {
+    return rewards
+      .filter((reward) => reward.additional_points === 0)
+      .filter((reward) => reward.required_points <= (user?.vouchers || 0));
+  }, [user, user?.vouchers]);
   const swiper = useRef<SwiperRef>(null);
   const [canNext, setCanNext] = useState(false);
   const [canPrev, setCanPrev] = useState(false);
+  return (
+    <Swiper
+      ref={swiper}
+      slidesPerView={1}
+      className="relative w-full"
+      onSlideChange={setActionButtons}
+      onInit={setActionButtons}
+    >
+      {items.map((reward) => (
+        <SwiperSlide key={reward.id}>
+          <SpecialRewardSliderCard />
+        </SwiperSlide>
+      ))}
+
+      <div className="pointer-events-none absolute inset-0 z-50 flex items-center justify-between pb-[15%] ">
+        <NextButton onClick={prev} disabled={!canPrev} />
+        <PrevButton onClick={next} disabled={!canNext} />
+      </div>
+    </Swiper>
+  );
+
+  function setActionButtons(swiper: any) {
+    setCanNext(swiper.activeIndex < swiper.slides.length - 1);
+    setCanPrev(swiper.activeIndex > 0);
+  }
+
+  function next() {
+    swiper.current?.swiper.slideNext();
+  }
+
+  function prev() {
+    swiper.current?.swiper.slidePrev();
+  }
+}
+
+export default function BookSlider() {
   return (
     <div className="ms-[3%] flex max-w-96 flex-1 items-center justify-center">
       <div className="relative -mt-[16%] max-w-[22rem]">
@@ -46,28 +90,7 @@ export default function BookSlider() {
                     بعد از 13روز شما قادر به دریافت جوایز خود هستید
                   </p>
                 </div>
-                <Swiper
-                  ref={swiper}
-                  slidesPerView={1}
-                  className="relative w-full"
-                  onSlideChange={setActionButtons}
-                  onInit={setActionButtons}
-                >
-                  <SwiperSlide>
-                    <SpecialRewardSliderCard />
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <SpecialRewardSliderCard />
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <SpecialRewardSliderCard />
-                  </SwiperSlide>
-
-                  <div className="pointer-events-none absolute inset-0 z-50 flex items-center justify-between pb-[15%] ">
-                    <NextButton onClick={prev} disabled={!canPrev} />
-                    <PrevButton onClick={next} disabled={!canNext} />
-                  </div>
-                </Swiper>
+                <Slider />
               </div>
             </div>
           </div>
@@ -75,19 +98,6 @@ export default function BookSlider() {
       </div>
     </div>
   );
-
-  function setActionButtons(swiper: any) {
-    setCanNext(swiper.activeIndex < swiper.slides.length - 1);
-    setCanPrev(swiper.activeIndex > 0);
-  }
-
-  function next() {
-    swiper.current?.swiper.slideNext();
-  }
-
-  function prev() {
-    swiper.current?.swiper.slidePrev();
-  }
 }
 
 function NextButton({

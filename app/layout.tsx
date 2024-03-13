@@ -8,6 +8,8 @@ import ClientProviders from "@/app/clientProviders";
 import AuthProvider from "@/authProvider";
 import { getSession } from "@/server/actions/auth";
 import { redirect } from "next/navigation";
+import { setClientId } from "@/server/actions/setClientId";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
   title: "جشنواره عیدانه سی تلکام - سی تلکام",
@@ -32,6 +34,7 @@ export default async function RootLayout({
           />
         </AuthProvider>
       </body>
+      <GoogleAnalytics gaId="G-VMXMCE08ZN" />
     </html>
   );
 }

@@ -269,7 +269,7 @@ function Wheel({
         } as React.CSSProperties
       }
       className={cn(
-        "wheel relative mb-14 aspect-square max-w-72 rotate-[var(--rotate)] overflow-hidden transition-transform ease-out",
+        "wheel relative mb-10 aspect-square w-full max-w-72 rotate-[var(--rotate)] overflow-hidden p-11 transition-transform ease-out sm:mb-14 sm:p-0",
         className,
       )}
     >
@@ -277,7 +277,7 @@ function Wheel({
         ref={wheelRef}
         height={480}
         width={480}
-        className={"h-full w-full transition duration-1000"}
+        className={"h-auto w-full"}
       />
     </div>
   );
@@ -345,7 +345,7 @@ function PointDialog({ ...props }: DialogProps) {
             دادن به سوالات هر روز به امتیاز خودت اضافه بکنه.
             <br />
             <br />
-            برای کپی لینک دعوت از دوستات میتونی{" "}
+            برای کپی لینک از دعوت از دوستات میتونی{" "}
             <a
               className="font-medium text-blue-800 underline"
               onClick={() => props.onOpenChange && props.onOpenChange(false)}

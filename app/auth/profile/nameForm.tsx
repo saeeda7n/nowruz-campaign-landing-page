@@ -70,7 +70,6 @@ const NameForm = () => {
   );
 
   function onSubmit(values: z.infer<typeof nameSchema>) {
-    console.log(values);
     setName.mutate(values.name, {
       onError(e) {
         toast.error("خطایی رخ داده است! لطفا مجددا تلاش کنید.");
