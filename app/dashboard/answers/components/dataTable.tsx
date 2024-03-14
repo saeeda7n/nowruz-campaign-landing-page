@@ -1,12 +1,13 @@
 "use client";
 import React, { useState } from "react";
+import contents from "@/data/landing/content.json";
+import questions from "@/data/landing/questions.json";
 import {
   useReactTable,
   getCoreRowModel,
   getPaginationRowModel,
   flexRender,
 } from "@tanstack/react-table";
-import { getUsers } from "@/server/actions/dashboard/users";
 import {
   Table,
   TableBody,
@@ -25,17 +26,19 @@ import {
   ChevronsRight,
 } from "lucide-react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { getDiscounts } from "@/server/actions/dashboard/discounts";
+import { getAnswers } from "@/server/actions/dashboard/answers";
 
 const columns = [
-  { header: "کد تخفیف", accessorKey: "code" },
-  { header: "شماره تلفن سازنده", accessorKey: "user.phone" },
-  { header: "نام سازنده", accessorKey: "user.fullName" },
+  { header: "ثبت شده توسط", accessorKey: "user.fullName" },
   {
-    header: "ارزش کد تخفیف",
-    accessorKey: "value",
-    cell: (data: any) => data.getValue().toLocaleString(),
+    header: "پاسخ سوالات روز",
+    accessorKey: "dayId",
+    cell: (data: any) => {
+      const index = +questions.find((q) => q.id === data.getValue())!.order;
+      return contents.days[index - 1];
+    },
   },
+  { header: "تعداد پاسخ صحیح", accessorKey: "stars" },
   {
     header: "ایجاد شده در",
     accessorKey: "createdAt",
@@ -44,26 +47,26 @@ const columns = [
   },
 ];
 
-const DataTable = (data: Awaited<ReturnType<typeof getDiscounts>>) => {
+const DataTable = (data: Awaited<ReturnType<typeof getAnswers>>) => {
   const [pagination, setPagination] = useState({
     pageIndex: 0, //initial page index
     pageSize: 20, //default page size
   });
 
-  const discountQuery = useQuery({
-    queryFn: () => getDiscounts({ pageIndex: pagination.pageIndex }),
+  const answersQuery = useQuery({
+    queryFn: () => getAnswers({ pageIndex: pagination.pageIndex }),
     queryKey: ["messages", pagination],
     placeholderData: keepPreviousData,
     initialData: data,
   });
 
   const table = useReactTable({
-    data: discountQuery.data?.discounts || [],
+    data: answersQuery.data?.answers || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     manualPagination: true,
-    rowCount: discountQuery.data?.total || 0,
+    rowCount: answersQuery.data?.total || 0,
     state: { pagination },
     onPaginationChange: setPagination,
   });

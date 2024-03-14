@@ -6,7 +6,6 @@ import {
   getPaginationRowModel,
   flexRender,
 } from "@tanstack/react-table";
-import { getUsers } from "@/server/actions/dashboard/users";
 import {
   Table,
   TableBody,

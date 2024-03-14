@@ -1,12 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   useReactTable,
   getCoreRowModel,
   getPaginationRowModel,
   flexRender,
 } from "@tanstack/react-table";
-import { getUsers } from "@/server/actions/dashboard/users";
 import {
   Table,
   TableBody,

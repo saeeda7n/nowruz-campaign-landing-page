@@ -39,6 +39,7 @@ function TimeDivider({ className }: React.HTMLAttributes<HTMLDivElement>) {
 const Timer = () => {
   const [time, setTime] = useState(0);
   const started = startIn();
+  const ended = Date.now() > endOfDay(END).getTime();
 
   useEffect(() => {
     if (!started) setTime(differenceInSeconds(START, Date.now()));
@@ -56,19 +57,34 @@ const Timer = () => {
   const days = (time / 60 / 60 / 24) % 59;
   return (
     <div className="mx-auto mt-8 flex min-h-[32rem] max-w-[1180px] flex-col gap-10 rounded-b-3xl bg-[#020836] py-16 sm:min-h-[38rem] sm:gap-10 md:min-h-[40rem] md:gap-y-12">
-      <div className="flex items-center justify-center gap-2 px-5 text-[4vw] text-gray-50 sm:text-2xl md:text-3xl">
-        <TimerIcon size={36} />
-        <h2>زمان {started ? "پایان" : "شروع"} مسابقه پیک نوروزی سی تلکام</h2>
-      </div>
-      <div className="mx-auto flex select-none gap-2 text-3xl text-gray-50 sm:text-5xl md:text-6xl">
-        <TimerPart name="ثانیه" time={seconds} className="hidden sm:flex" />
-        <TimeDivider className="hidden sm:flex" />
-        <TimerPart name="دقیقه" time={minutes} />
-        <TimeDivider />
-        <TimerPart name="ساعت" time={hours} />
-        <TimeDivider />
-        <TimerPart name="روز" time={days} />
-      </div>
+      {}
+      {ended ? (
+        <div className="flex flex-col gap-4 text-center text-4xl font-black text-gray-50">
+          مسابقه نوروزی به پایان رسیده و ما در حال اهدای جوایز هستیم
+          <div className="mx-auto flex items-center gap-1 bg-white px-5 py-2 ">
+            <div className="text-orange-400 underline">سی</div>
+            <div className="text-blue-800 underline">تلکام</div>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className="flex items-center justify-center gap-2 px-5 text-[4vw] text-gray-50 sm:text-2xl md:text-3xl">
+            <TimerIcon size={36} />
+            <h2>
+              زمان {started ? "پایان" : "شروع"} مسابقه پیک نوروزی سی تلکام
+            </h2>
+          </div>
+          <div className="mx-auto flex select-none gap-2 text-3xl text-gray-50 sm:text-5xl md:text-6xl">
+            <TimerPart name="ثانیه" time={seconds} className="hidden sm:flex" />
+            <TimeDivider className="hidden sm:flex" />
+            <TimerPart name="دقیقه" time={minutes} />
+            <TimeDivider />
+            <TimerPart name="ساعت" time={hours} />
+            <TimeDivider />
+            <TimerPart name="روز" time={days} />
+          </div>
+        </>
+      )}
     </div>
   );
 };

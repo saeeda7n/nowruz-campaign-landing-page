@@ -3,14 +3,14 @@ import prisma from "@/prisma/prisma";
 import { QueryOptions } from "@/server/types";
 import { unstable_noStore } from "next/cache";
 
-export async function getDiscounts({ pageIndex, pageSize }: QueryOptions = {}) {
+export async function getAnswers({ pageIndex, pageSize }: QueryOptions = {}) {
   unstable_noStore();
 
   pageIndex = pageIndex || 0;
   pageSize = pageSize || 20;
   const [total, data] = await prisma.$transaction([
-    prisma.discountCode.count(),
-    prisma.discountCode.findMany({
+    prisma.answer.count(),
+    prisma.answer.findMany({
       take: pageSize,
       skip: pageSize * pageIndex,
       orderBy: { createdAt: "desc" },
@@ -22,7 +22,7 @@ export async function getDiscounts({ pageIndex, pageSize }: QueryOptions = {}) {
     }),
   ]);
   return {
-    discounts: data,
+    answers: data,
     total,
     pageIndex,
     pageSize,

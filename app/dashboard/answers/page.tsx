@@ -1,10 +1,10 @@
 import React from "react";
-import { MessageCircleQuestion, TicketPercent } from "lucide-react";
-import { getDiscounts } from "@/server/actions/dashboard/discounts";
-import DataTable from "@/app/dashboard/discounts/components/dataTable";
+import { MessageCircleQuestion } from "lucide-react";
+import { getAnswers } from "@/server/actions/dashboard/answers";
+import DataTable from "@/app/dashboard/answers/components/dataTable";
 
 const Page = async () => {
-  const data = await getDiscounts();
+  const data = await getAnswers();
   return (
     <div>
       <div className="flex flex-col gap-y-5 rounded-2xl border bg-white px-8 py-4">
