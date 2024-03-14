@@ -21,6 +21,7 @@ interface DatabaseUserAttributes {
   newAccount: boolean;
   representativeId?: string;
   fullName: string;
+  isAdmin: boolean;
 }
 
 export const lucia = new Lucia(adapter, {

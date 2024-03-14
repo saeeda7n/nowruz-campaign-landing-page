@@ -2,7 +2,12 @@ import React from "react";
 import NameForm from "@/app/auth/profile/nameForm";
 import { getSession } from "@/server/actions/auth";
 import { redirect } from "next/navigation";
+import type { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "جشنواره عیدانه سی تلکام - ثبت نام",
+  description: "جشنواره عیدانه سی تلکام, از اول عید تا آخرش جایزه ببر!",
+};
 const Page = async () => {
   const { user } = await getSession();
   if (user && !user.newAccount) redirect("/");

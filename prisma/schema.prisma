@@ -94,7 +94,7 @@ model TextMessages {
   createdAt   DateTime  @default(now()) @map("created_at")
   deliveredAt DateTime? @map("delivered_at")
   message     String
-  reciver     User      @relation(fields: [userId], references: [id])
+  receiver    User      @relation(fields: [userId], references: [id])
 
   @@map("text_messages")
 }

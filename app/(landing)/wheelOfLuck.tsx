@@ -373,7 +373,7 @@ const WheelOfLuck = () => {
   return (
     <section
       id="wheel"
-      className="flex flex-col items-center gap-10 gap-y-16 pb-24 pt-16 text-brown lg:flex-row"
+      className="flex flex-col items-center gap-10 gap-y-0 pb-24 pt-16 text-brown lg:flex-row"
     >
       <GameGuideline />
       <WheelOfLuckGame />
