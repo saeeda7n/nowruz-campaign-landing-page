@@ -1,5 +1,6 @@
 import React, { PropsWithChildren } from "react";
 import Link from "next/link";
+import { Loader } from "lucide-react";
 
 const items = [
   {
@@ -63,7 +64,7 @@ const Layout = ({ children, ...props }: PropsWithChildren) => {
       </div>
       <div className="flex flex-1">
         <DashboardSidebar />
-        <div className="container py-8">{children}</div>
+        <div className="container flex flex-col py-8">{children}</div>
       </div>
     </div>
   );
