@@ -28,3 +28,11 @@ export async function getAnswers({ pageIndex, pageSize }: QueryOptions = {}) {
     pageSize,
   };
 }
+
+export async function getAnswersChart() {
+  const data = await prisma.answer.findMany({
+    orderBy: { createdAt: "asc" },
+    select: { createdAt: true },
+  });
+  return { data };
+}

@@ -3,36 +3,34 @@ import prisma from "@/prisma/prisma";
 import { QueryOptions } from "@/server/types";
 import { unstable_noStore } from "next/cache";
 
-export async function getDiscounts({ pageIndex, pageSize }: QueryOptions = {}) {
+export async function getRedirects({ pageIndex, pageSize }: QueryOptions = {}) {
   unstable_noStore();
 
   pageIndex = pageIndex || 0;
   pageSize = pageSize || 20;
   const [total, data] = await prisma.$transaction([
-    prisma.discountCode.count(),
-    prisma.discountCode.findMany({
+    prisma.clickRecords.count(),
+    prisma.clickRecords.findMany({
       take: pageSize,
       skip: pageSize * pageIndex,
       orderBy: { createdAt: "desc" },
       include: {
-        user: {
-          select: { fullName: true, phone: true },
-        },
+        user: { select: { phone: true, id: true, fullName: true } },
       },
     }),
   ]);
   return {
-    discounts: data,
+    messages: data,
     total,
     pageIndex,
     pageSize,
   };
 }
 
-export async function getDiscountsChart() {
-  const data = await prisma.discountCode.findMany({
+export async function getRedirectsChart() {
+  const data = await prisma.clickRecords.findMany({
     orderBy: { createdAt: "asc" },
-    select: { createdAt: true },
+    select: { createdAt: true, referenceId: true },
   });
   return { data };
 }

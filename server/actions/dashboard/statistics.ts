@@ -8,6 +8,7 @@ export async function getDashboardData() {
     usersCount,
     discountCodeCount,
     answersCount,
+    redirectsCount,
     latestUsers,
     latestTextMessages,
     latestDiscountCodes,
@@ -16,6 +17,7 @@ export async function getDashboardData() {
     prisma.user.count(),
     prisma.discountCode.count(),
     prisma.answer.count(),
+    prisma.clickRecords.count(),
     prisma.user.findMany({
       select: { id: true, phone: true, fullName: true, createdAt: true },
       take: 7,
@@ -37,6 +39,7 @@ export async function getDashboardData() {
     usersCount,
     discountCodeCount,
     answersCount,
+    redirectsCount,
     latestUsers,
     latestTextMessages,
     latestDiscountCodes,

@@ -26,3 +26,11 @@ export async function getMessages({ pageIndex, pageSize }: QueryOptions = {}) {
     pageSize,
   };
 }
+
+export async function getMessagesChart() {
+  const data = await prisma.textMessages.findMany({
+    orderBy: { createdAt: "asc" },
+    select: { createdAt: true },
+  });
+  return { data };
+}

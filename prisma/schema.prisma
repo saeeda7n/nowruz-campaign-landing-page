@@ -36,6 +36,7 @@ model User {
   users          User[]         @relation("ref")
   representative User?          @relation("ref", fields: [representativeId], references: [id])
   messages       TextMessages[]
+  ClickRecords   ClickRecords[]
 
   @@map("users")
 }
@@ -97,4 +98,17 @@ model TextMessages {
   receiver    User      @relation(fields: [userId], references: [id])
 
   @@map("text_messages")
+}
+
+model ClickRecords {
+  id          String   @id @default(uuid())
+  userId      String?  @map("user_id")
+  user        User?    @relation(fields: [userId], references: [id])
+  referenceId String   @map("reference_id")
+  model       String
+  createdAt   DateTime @default(now()) @map("created_at")
+  ip          String?
+  geo         Json?
+
+  @@map("click_records")
 }

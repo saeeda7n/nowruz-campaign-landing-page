@@ -27,3 +27,11 @@ export async function getUsers({ pageIndex, pageSize }: QueryOptions = {}) {
     pageSize,
   };
 }
+
+export async function getUsersChart() {
+  const data = await prisma.user.findMany({
+    orderBy: { createdAt: "asc" },
+    select: { createdAt: true },
+  });
+  return { data };
+}

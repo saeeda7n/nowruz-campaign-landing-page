@@ -3,6 +3,7 @@ import { getDashboardData } from "@/server/actions/dashboard/statistics";
 import { formatDistance } from "date-fns";
 import { faIR } from "date-fns/locale";
 import {
+  LinkIcon,
   Mail,
   MessageCircleQuestion,
   TicketPercent,
@@ -22,7 +23,7 @@ const Page = async () => {
   const statistics = await getDashboardData();
   return (
     <div className="space-y-5">
-      <div className="grid grid-cols-4 gap-5">
+      <div className="grid grid-cols-5 gap-5">
         <div className="space-y-4 rounded-2xl border bg-white px-8 py-4">
           <div className="flex items-center justify-between">
             <span className="text-sm font-semibold">کاربران</span>
@@ -32,7 +33,7 @@ const Page = async () => {
             <div className="text-lg font-bold">
               {statistics.usersCount.toLocaleString()} نفر
             </div>
-            <p className="text-xs text-gray-400">کاربران عوض شده تاکنون</p>
+            <p className="text-xs text-gray-400">کاربران عضو شده تاکنون</p>
           </div>
         </div>
 
@@ -60,6 +61,21 @@ const Page = async () => {
             </div>
             <p className="text-xs text-gray-400">
               کد های تخفیف ایجاد شده تاکنون
+            </p>
+          </div>
+        </div>
+
+        <div className="space-y-4 rounded-2xl border bg-white px-8 py-4">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-semibold">ارجاعات به فروشگاه</span>
+            <LinkIcon size="16" className="opacity-80" />
+          </div>
+          <div className="">
+            <div className="text-lg font-bold">
+              {statistics.redirectsCount.toLocaleString()} کلیک
+            </div>
+            <p className="text-xs text-gray-400">
+              تعداد دفعال ارجاع به فروشگاه سی تلکام
             </p>
           </div>
         </div>

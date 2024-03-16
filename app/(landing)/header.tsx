@@ -8,6 +8,7 @@ import {
   UserRound,
   Power,
   Loader2,
+  LayoutDashboardIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -68,33 +69,41 @@ const Header = () => {
 
           <div className="flex h-full items-center gap-3">
             {user ? (
-              <Popover>
-                <PopoverTrigger>
-                  <UserRound />
-                </PopoverTrigger>
-                <PopoverContent
-                  align="end"
-                  className="dark w-52 border-none bg-black/70 text-gray-50 backdrop-blur"
-                >
-                  <div className="flex items-center justify-between text-sm">
-                    <div className="flex flex-col gap-1">
-                      <span className="font-medium">{user.fullName}</span>
-                      <span className="text-xs">{user.phone}</span>
+              <>
+                <Popover>
+                  <PopoverTrigger>
+                    <UserRound />
+                  </PopoverTrigger>
+                  <PopoverContent
+                    align="end"
+                    className="dark w-52 border-none bg-black/70 text-gray-50 backdrop-blur"
+                  >
+                    <div className="flex items-center justify-between text-sm">
+                      <div className="flex flex-col gap-1">
+                        <span className="font-medium">{user.fullName}</span>
+                        <span className="text-xs">{user.phone}</span>
+                      </div>
+                      {signOut.isPending ? (
+                        <Loader2 className="animate-spin" size={16} />
+                      ) : (
+                        <Power
+                          role={"button"}
+                          onClick={() => signOut.mutate()}
+                          className="text-red-600"
+                          size={16}
+                          strokeWidth={3}
+                        />
+                      )}
                     </div>
-                    {signOut.isPending ? (
-                      <Loader2 className="animate-spin" size={16} />
-                    ) : (
-                      <Power
-                        role={"button"}
-                        onClick={() => signOut.mutate()}
-                        className="text-red-600"
-                        size={16}
-                        strokeWidth={3}
-                      />
-                    )}
-                  </div>
-                </PopoverContent>
-              </Popover>
+                  </PopoverContent>
+                </Popover>
+                {user.isAdmin && (
+                  <Link prefetch={false} href="/dashboard">
+                    {" "}
+                    <LayoutDashboardIcon />
+                  </Link>
+                )}
+              </>
             ) : (
               <Link href="/auth">
                 <UserRound role={"button"} onClick={() => signOut.mutate()} />

@@ -23,7 +23,7 @@
   ],
   "special_offers": [
     {
-      "id": 1,
+      "id": "0e6dffde-6ecd-4d87-8346-52183b639302",
       "title": "Samsung s22",
       "price": 42000000,
       "discount": 23,
@@ -43,7 +43,7 @@
       "freeDelivery": true
     },
     {
-      "id": 4,
+      "id": "af550dc4-6ea4-44e5-a5ad-6cb26f26036f",
       "title": "Iphone 13",
       "price": 35000000,
       "discount": 8,
@@ -71,7 +71,7 @@
       "freeDelivery": true
     },
     {
-      "id": 5,
+      "id": "8ccbabd8-bd44-48e7-81d8-f61f7c291746",
       "title": "Iphone 13",
       "price": 35000000,
       "discount": 15,
@@ -99,7 +99,7 @@
       "freeDelivery": true
     },
     {
-      "id": 6,
+      "id": "5cd089bf-c592-4df3-a6f1-0ebf3c7188d2",
       "title": "Iphone 13",
       "price": 35000000,
       "discount": 8,
@@ -123,7 +123,7 @@
       "freeDelivery": true
     },
     {
-      "id": 7,
+      "id": "4412d04f-438e-4abc-b314-7589982c5f79",
       "title": "Iphone 13",
       "price": 35000000,
       "discount": 3,
@@ -143,7 +143,7 @@
       "freeDelivery": true
     },
     {
-      "id": 8,
+      "id": "ed218206-135d-48f5-bf92-25b3411f82e7",
       "title": "Iphone 13",
       "price": 35000000,
       "discount": 5,

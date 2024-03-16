@@ -1,19 +1,19 @@
 import React from "react";
 import { MessageCircleQuestion } from "lucide-react";
-import { getAnswers } from "@/server/actions/dashboard/answers";
-import DataTable from "@/app/dashboard/answers/components/dataTable";
+import Chart from "@/app/dashboard/answers/statistics/chart";
+import { getAnswersChart } from "@/server/actions/dashboard/answers";
 
 const Page = async () => {
-  const data = await getAnswers();
+  const data = await getAnswersChart();
   return (
     <div className="flex flex-col gap-y-5 rounded-2xl border bg-white px-8 py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-sm font-semibold">
           <MessageCircleQuestion size="18" />
-          پاسخ های ثبت شده
+          نمودار شرکت کاربران در سوالات
         </div>
       </div>
-      <DataTable {...data} />
+      <Chart {...data} />
     </div>
   );
 };

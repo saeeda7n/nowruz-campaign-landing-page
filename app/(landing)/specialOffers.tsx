@@ -20,6 +20,7 @@ type Colors = {
   cssColor: string;
 };
 type ProductCardProps = {
+  id: string;
   title: string;
   price: number;
   discount: number;
@@ -31,6 +32,7 @@ type ProductCardProps = {
 };
 
 function ProductCard({
+  id,
   title,
   colors,
   body,
@@ -96,7 +98,7 @@ function ProductCard({
           </div>
         </div>
         <a
-          href={attachedUrl}
+          href={`/api/redirects?m=specialOffers&i=${id}`}
           className="ms-auto flex size-12 items-center justify-center rounded-full bg-orange-600 text-gray-50"
         >
           <MoveLeft strokeWidth={3} />
@@ -132,7 +134,7 @@ const SpecialOffers = () => {
           >
             {content.special_offers.map(({ id, ...product }) => (
               <SwiperSlide className="!w-[19rem]" key={id}>
-                <ProductCard {...product} />
+                <ProductCard {...product} id={id} />
               </SwiperSlide>
             ))}
           </Swiper>
