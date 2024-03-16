@@ -98,7 +98,7 @@ function ProductCard({
           </div>
         </div>
         <a
-          href={`/api/redirects?m=specialOffers&i=${id}`}
+          href={`/api/redirects?m=specialOffers&i=${id}&title=${title}`}
           className="ms-auto flex size-12 items-center justify-center rounded-full bg-orange-600 text-gray-50"
         >
           <MoveLeft strokeWidth={3} />
