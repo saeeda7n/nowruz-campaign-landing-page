@@ -44,6 +44,7 @@ const Chart = ({ data }: Awaited<ReturnType<typeof getDiscountsChart>>) => {
             type="monotone"
             dataKey="count"
             name="کد تخفیف ایجاد شده"
+            strokeWidth={2}
             stroke="#8884d8"
           />
           <XAxis dataKey="label" string={"asd"} />

@@ -1,6 +1,6 @@
 import React from "react";
 import { LinkIcon } from "lucide-react";
-import Chart from "@/app/dashboard/answers/statistics/chart";
+import Chart from "@/app/dashboard/redirects/statistics/chart";
 import { getRedirectsChart } from "@/server/actions/dashboard/redirects";
 
 const Page = async () => {

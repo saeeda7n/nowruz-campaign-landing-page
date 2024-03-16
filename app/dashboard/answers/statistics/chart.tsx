@@ -1,6 +1,6 @@
 "use client";
-import React, { useMemo } from "react";
-import { format, differenceInDays, addDays, startOfDay } from "date-fns";
+import React from "react";
+import { format, differenceInDays, addDays } from "date-fns";
 import {
   Line,
   LineChart,
@@ -10,80 +10,49 @@ import {
   YAxis,
 } from "recharts";
 import { START } from "@/lib/consts";
-import { getRedirectsChart } from "@/server/actions/dashboard/redirects";
-import content from "@/data/landing/content.json";
+import { getAnswersChart } from "@/server/actions/dashboard/answers";
 
-const colors = [
-  "#4a148c",
-  "#f50057",
-  "#673ab7",
-  "#7cb342",
-  "#2979ff",
-  "#283593",
-  "#1565c0",
-  "#00e676",
-  "#7c4dff",
-  "#f50057",
-  "#c62828",
-];
+const Chart = ({ data }: Awaited<ReturnType<typeof getAnswersChart>>) => {
+  const duration = differenceInDays(Date.now(), START) + 1;
+  let array: any[] = [];
 
-function getProductName(_id: string) {
-  return content.special_offers.find(({ id }) => id === _id)?.title || "نامشخص";
-}
+  new Array(duration).fill(0).forEach((_, index) => {
+    array[format(addDays(START, index), "yyyy/MM/dd") as any] = 0;
+  });
 
-const Chart = ({ data }: Awaited<ReturnType<typeof getRedirectsChart>>) => {
-  const { array, keys } = useMemo(() => {
-    const duration = differenceInDays(Date.now(), START) + 1;
-    const keys: any = {};
-    let mappedData: any = {};
-    const array: any[] = [];
-    data.forEach(({ referenceId, createdAt }) => {
-      keys[referenceId] = 0;
-      const index = format(startOfDay(createdAt), "yyyy/MM/dd") as any;
-      if (mappedData[index])
-        if (mappedData[index][referenceId]) {
-          mappedData[index][referenceId]++;
-        } else {
-          mappedData[index] = { ...mappedData[index], [referenceId]: 1 };
-        }
-      else {
-        mappedData[index] = { [referenceId]: 1 };
-      }
+  data
+    .map((d) => format(d.createdAt, "yyyy/MM/dd"))
+    .forEach((d: any) => ++array[d]);
+
+  const result = [];
+  for (const c in array) {
+    result.push({
+      label: c,
+      count: array[c],
     });
-    new Array(duration).fill(0).forEach((_, index) => {
-      const label = format(addDays(START, index), "yyyy/MM/dd") as any;
-      mappedData[label] = { ...keys, ...mappedData[label] };
-      array.push({
-        ...mappedData[label],
-        label,
-      });
-    });
-    return { array, keys };
-  }, [data]);
+  }
 
   return (
     <div className="space-y-2">
       <ResponsiveContainer width={"100%"} height={400}>
-        <LineChart data={array}>
-          {Object.keys(keys).map((key, index) => (
-            <Line
-              type="monotone"
-              strokeWidth={2}
-              dataKey={key}
-              name={getProductName(key)}
-              stroke={colors[index]}
-            />
-          ))}
-
+        <LineChart data={result}>
+          <Line
+            type="monotone"
+            dataKey="count"
+            name="پاسخ کاربران"
+            strokeWidth={2}
+            stroke="#8884d8"
+          />
           <XAxis dataKey="label" />
           <Tooltip />
           <YAxis />
         </LineChart>
       </ResponsiveContainer>
       <div className="text-sm font-medium">
-        رکورد های ثبت شده تاکنون: {data.length} رکورد{" "}
+        پاسخ های ثبت شده تاکنون: {data.length} عدد{" "}
       </div>
     </div>
   );
 };
+
 export default Chart;

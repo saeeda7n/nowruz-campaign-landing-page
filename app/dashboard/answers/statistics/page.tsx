@@ -1,7 +1,7 @@
 import React from "react";
 import { MessageCircleQuestion } from "lucide-react";
-import Chart from "@/app/dashboard/answers/statistics/chart";
 import { getAnswersChart } from "@/server/actions/dashboard/answers";
+import Chart from "@/app/dashboard/answers/statistics/chart";
 
 const Page = async () => {
   const data = await getAnswersChart();

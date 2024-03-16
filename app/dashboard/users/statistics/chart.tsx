@@ -41,6 +41,7 @@ const Chart = ({ data }: Awaited<ReturnType<typeof getUsersChart>>) => {
             dataKey="count"
             name="عضو جدید"
             stroke="#8884d8"
+            strokeWidth={2}
           />
           <XAxis dataKey="label" />
           <Tooltip />
