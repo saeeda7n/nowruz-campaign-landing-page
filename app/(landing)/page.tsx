@@ -10,6 +10,7 @@ import WheelOfLuck from "@/app/(landing)/wheelOfLuck";
 import SpecialOffers from "@/app/(landing)/specialOffers";
 import Footer from "@/app/(landing)/footer";
 import UserRef from "@/app/(landing)/userRef";
+import { getSession } from "@/server/actions/auth";
 
 function AbsoluteBackground() {
   return (

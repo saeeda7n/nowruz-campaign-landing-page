@@ -1,4 +1,4 @@
-import React, { cache } from "react";
+import React, { cache, useMemo } from "react";
 import { getDashboardData } from "@/server/actions/dashboard/statistics";
 import { formatDistance } from "date-fns";
 import { faIR } from "date-fns/locale";
@@ -21,77 +21,56 @@ import Link from "next/link";
 
 const Page = async () => {
   const statistics = await getDashboardData();
+  const cards = [
+    {
+      name: "کاربران",
+      icon: <Users size="16" className="opacity-80" />,
+      info: "کاربران عضو شده تاکنون",
+      value: `${statistics.usersCount.toLocaleString()} نفر`,
+    },
+    {
+      name: "پیامک",
+      icon: <Mail size="16" className="opacity-80" />,
+      info: "پیامک های ارسال شده تاکنون",
+      value: `${statistics.textMessagesCount.toLocaleString()} پیامک`,
+    },
+    {
+      name: "کد تخفیف",
+      icon: <TicketPercent size="16" className="opacity-80" />,
+      info: "کد های تخفیف ایجاد شده تاکنون",
+      value: `${statistics.discountCodeCount.toLocaleString()} کد تخفیف`,
+    },
+    {
+      name: "ارجاعات به فروشگاه",
+      icon: <LinkIcon size="16" className="opacity-80" />,
+      info: "تعداد دفعال ارجاع به فروشگاه سی تلکام",
+      value: `${statistics.redirectsCount.toLocaleString()} کلیک`,
+    },
+    {
+      name: "جواب ها",
+      icon: <MessageCircleQuestion size="16" className="opacity-80" />,
+      info: "جواب های ثبت شده تاکنون",
+      value: `${statistics.answersCount.toLocaleString()} جواب`,
+    },
+  ];
   return (
     <div className="space-y-5">
       <div className="grid grid-cols-5 gap-5">
-        <div className="space-y-4 rounded-2xl border bg-white px-8 py-4">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-semibold">کاربران</span>
-            <Users size="16" className="opacity-80" />
-          </div>
-          <div className="">
-            <div className="text-lg font-bold">
-              {statistics.usersCount.toLocaleString()} نفر
+        {cards.map((card) => (
+          <div
+            key={card.name}
+            className="space-y-4 rounded-2xl border bg-white px-8 py-4"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-semibold">{card.name}</span>
+              {card.icon}
             </div>
-            <p className="text-xs text-gray-400">کاربران عضو شده تاکنون</p>
-          </div>
-        </div>
-
-        <div className="space-y-4 rounded-2xl border bg-white px-8 py-4">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-semibold">پیامک</span>
-            <Mail size="16" className="opacity-80" />
-          </div>
-          <div className="">
-            <div className="text-lg font-bold">
-              {statistics.textMessagesCount.toLocaleString()} پیامک
+            <div className="">
+              <div className="text-lg font-bold">{card.value}</div>
+              <p className="text-xs text-gray-400">{card.info}</p>
             </div>
-            <p className="text-xs text-gray-400">پیامک های ارسال شده تاکنون</p>
           </div>
-        </div>
-
-        <div className="space-y-4 rounded-2xl border bg-white px-8 py-4">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-semibold">کد تخفیف</span>
-            <TicketPercent size="16" className="opacity-80" />
-          </div>
-          <div className="">
-            <div className="text-lg font-bold">
-              {statistics.discountCodeCount.toLocaleString()} کد تخفیف
-            </div>
-            <p className="text-xs text-gray-400">
-              کد های تخفیف ایجاد شده تاکنون
-            </p>
-          </div>
-        </div>
-
-        <div className="space-y-4 rounded-2xl border bg-white px-8 py-4">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-semibold">ارجاعات به فروشگاه</span>
-            <LinkIcon size="16" className="opacity-80" />
-          </div>
-          <div className="">
-            <div className="text-lg font-bold">
-              {statistics.redirectsCount.toLocaleString()} کلیک
-            </div>
-            <p className="text-xs text-gray-400">
-              تعداد دفعال ارجاع به فروشگاه سی تلکام
-            </p>
-          </div>
-        </div>
-
-        <div className="space-y-4 rounded-2xl border bg-white px-8 py-4">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-semibold">جواب ها</span>
-            <MessageCircleQuestion size="16" className="opacity-80" />
-          </div>
-          <div className="">
-            <div className="text-lg font-bold">
-              {statistics.answersCount.toLocaleString()} جواب
-            </div>
-            <p className="text-xs text-gray-400">جواب های ثبت شده تاکنون</p>
-          </div>
-        </div>
+        ))}
       </div>
 
       <div className="grid grid-cols-2 gap-5">

@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import { subMinutes } from "date-fns";
 import * as crypto from "crypto";
 import { revalidatePath } from "next/cache";
+import { cache } from "react";
 
 export async function setFirstTimeName(name: string) {
   const { user } = await getSession();
@@ -138,7 +139,7 @@ export async function authSignOut() {
   return { status: true, message: "با موفقیت از حسابتان خارج شدید." };
 }
 
-export async function getSession(): Promise<SessionProps> {
+export const getSession = cache(async (): Promise<SessionProps> => {
   try {
     const sessionId = lucia.readSessionCookie(cookies().toString());
     if (!sessionId) {
@@ -163,7 +164,7 @@ export async function getSession(): Promise<SessionProps> {
       session: null,
     };
   }
-}
+});
 
 function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
