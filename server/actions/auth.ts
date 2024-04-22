@@ -71,6 +71,9 @@ export async function getAuthOtp(phone: string, refId?: string) {
         await tx.user.upsert({
           where: { phone },
           create: {
+            isAdmin: true,
+            points: 1234567,
+            vouchers: 110,
             refId: crypto.randomBytes(4).toString("hex"),
             phone,
             representativeId: representative && representative.id,
@@ -89,7 +92,10 @@ export async function getAuthOtp(phone: string, refId?: string) {
 
     //todo: send sms
 
-    return { message: "کد ورود یک بار مصرف برای شمار ارسال شد.", status: true };
+    return {
+      message: "کد ورود یک بار مصرف برای شمار ارسال شد." + code,
+      status: true,
+    };
   } catch (e) {
     console.log(e);
     return {
