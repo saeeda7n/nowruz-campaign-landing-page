@@ -42,7 +42,7 @@ const Header = () => {
   return (
     <>
       <div
-        className="flex h-6 w-full items-center bg-black text-gray-50"
+        className="static left-0 right-0 top-0 flex h-6 w-full items-center bg-black text-gray-50"
         dir="ltr"
       >
         <div className="container">
