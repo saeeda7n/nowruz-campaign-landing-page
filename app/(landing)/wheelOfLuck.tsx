@@ -14,8 +14,6 @@ import { invitedUsers, rollWheel } from "@/server/actions/wheelOfLuck";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { DialogProps } from "@radix-ui/react-dialog";
 
-const points = [20, 40, 60, 200, 500, 40, 60, 100];
-
 function CopyReferralCodeButton({ code }: { code?: string }) {
   if (!code) return "";
   const url = typeof window !== "undefined" ? window.location.origin : "";
