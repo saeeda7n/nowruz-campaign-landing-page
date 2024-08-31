@@ -90,8 +90,6 @@ export async function getAuthOtp(phone: string, refId?: string) {
       { timeout: 10_000 },
     );
 
-    //todo: send sms
-
     return {
       message: "کد ورود یک بار مصرف برای شمار ارسال شد." + code,
       status: true,
